@@ -10,7 +10,7 @@ const UI_COPY = {
       tagline: 'Junior AI Automation & Product Engineer',
       title: 'ignacio',
       availability: 'Disponible para pasantías y roles trainee',
-      kicker: 'Estudiante de Gestión IT en UADE. Construyo herramientas desplegadas con Python, FastAPI, automatización de procesos y asistentes de IA.',
+      kicker: 'Estudiante de Gestión IT. Construyo herramientas desplegadas con Python, FastAPI, automatización de procesos y asistentes de IA.',
       description: 'Busco una pasantía o rol trainee donde pueda aportar criterio operativo, aprendizaje rápido y capacidad real de convertir procesos repetitivos en software útil.',
       projectsCta: 'Ver proyectos',
       agentsCta: 'Ver sistema de trabajo',
@@ -30,7 +30,7 @@ const UI_COPY = {
       prompt: 'Comandos: about, skills, projects, agents, contact, clear',
       unknown: 'Comando no encontrado',
       help: 'Comandos: about, skills, projects, agents, contact, clear',
-      about: 'ignacio - estudiante de Gestión IT en UADE que combina experiencia operativa, producto y automatización para construir software útil.',
+      about: 'ignacio - estudiante de Gestión IT que combina experiencia operativa, producto y automatización para construir software útil.',
       skills: 'Python, FastAPI, TypeScript, SQL, Linux, Git, Playwright, automatización de procesos y desarrollo asistido por IA.',
       projects: 'Proyectos principales: JobBot, Agents System, Motor Estadístico Predictivo y Pisculichi Labs. El archivo completo muestra 9 piezas desplegadas o revisables.',
       agents: 'Uso asistentes de IA como parte de un flujo ordenado: plan, construcción, revisión, pruebas, documentación y publicación.',
@@ -65,7 +65,7 @@ const UI_COPY = {
     },
     about: {
       title: 'Sobre mí',
-      p1: 'Estudio Gestión IT en UADE y estoy construyendo mi primera experiencia profesional en tecnología. Mezclo criterio de producto y contexto operativo para convertir procesos repetitivos en software útil.',
+      p1: 'Estudio Gestión IT y estoy construyendo mi primera experiencia profesional en tecnología. Mezclo criterio de producto y contexto operativo para convertir procesos repetitivos en software útil.',
       p2: 'Trabajo con Python, FastAPI, SQL, Linux, Git y asistentes de IA para construir dashboards, bots, automatizaciones y prototipos desplegados. Me importa más entregar trabajo revisable que parecer senior.',
       p3: 'Mi experiencia en atención al cliente y operaciones me dio presión real, caja, inventario y auditorías. Quiero llevar esa base a soporte IT, QA trainee, automatización o startups.'
     },
@@ -137,7 +137,7 @@ const UI_COPY = {
       tagline: 'Junior AI Automation & Product Engineer',
       title: 'ignacio',
       availability: 'Available for internships and trainee roles',
-      kicker: 'IT Management student at UADE. I build deployed tools with Python, FastAPI, process automation and AI assistants.',
+      kicker: 'IT Management student. I build deployed tools with Python, FastAPI, process automation and AI assistants.',
       description: 'I am looking for an internship or trainee role where I can contribute operational judgment, fast learning and the ability to turn repetitive workflows into useful software.',
       projectsCta: 'View projects',
       agentsCta: 'View workflow system',
@@ -157,7 +157,7 @@ const UI_COPY = {
       prompt: 'Commands: about, skills, projects, agents, contact, clear',
       unknown: 'Command not found',
       help: 'Commands: about, skills, projects, agents, contact, clear',
-      about: 'ignacio - IT Management student at UADE combining operations, product and automation to build useful software.',
+      about: 'ignacio - IT Management student combining operations, product and automation to build useful software.',
       skills: 'Python, FastAPI, TypeScript, SQL, Linux, Git, Playwright, process automation and applied AI.',
       projects: 'Main projects: JobBot, Agents System, Sports Predictive Analytics Engine and Pisculichi Labs. The full archive shows 9 deployed or reviewable pieces.',
       agents: 'I use AI assistants inside an ordered workflow: planning, building, review, tests, documentation and shipping.',
@@ -192,7 +192,7 @@ const UI_COPY = {
     },
     about: {
       title: 'About me',
-      p1: 'I am an IT Management student at UADE building my first professional path in technology. I combine product judgment and operational context to turn repetitive processes into useful software.',
+      p1: 'I am an IT Management student building my first professional path in technology. I combine product judgment and operational context to turn repetitive processes into useful software.',
       p2: 'I work with Python, FastAPI, SQL, Linux, Git and AI assistants to build dashboards, bots, automations and deployed prototypes. I care more about shipping reviewable work than looking senior.',
       p3: 'My customer service and operations background gave me real pressure, cash handling, inventory and audits. I want to bring that base into IT support, QA trainee, automation or startups.'
     },

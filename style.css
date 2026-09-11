@@ -24,7 +24,7 @@
   --workflow-bg: rgba(255,255,255,0.02);
   --workflow-hover: rgba(255,255,255,0.06);
   --stage-bg: rgba(9, 9, 11, 0.94);
-  --shadow-strong: rgba(0, 0, 0, 0.5);
+  --shadow-strong: rgba(3, 26, 20, 0.55);
   --button-primary-bg: #ededed;
   --button-primary-text: #09090b;
   
@@ -65,7 +65,7 @@
   --workflow-bg: rgba(24,24,27,0.035);
   --workflow-hover: rgba(24,24,27,0.075);
   --stage-bg: rgba(255, 255, 255, 0.94);
-  --shadow-strong: rgba(24, 24, 27, 0.14);
+  --shadow-strong: rgba(6, 61, 46, 0.16);
   --button-primary-bg: #18181b;
   --button-primary-text: #ffffff;
 }
@@ -612,13 +612,54 @@ nav.nav-menu {
   filter: saturate(0.96) contrast(1.04);
 }
 
+.hero-signal {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: radial-gradient(circle at 32% 28%, color-mix(in srgb, var(--accent-green) 32%, var(--bg-card)), var(--bg-card) 72%);
+  border: 1px solid var(--border);
+  box-shadow: 0 16px 48px color-mix(in srgb, var(--shadow-strong) 70%, transparent);
+}
+
+.hero-signal-glyph {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display), monospace;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--accent-green);
+}
+
+.hero-signal-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  animation: heroSignalPulse 2.6s ease-out infinite;
+}
+
+@keyframes heroSignalPulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-green) 45%, transparent); }
+  70% { box-shadow: 0 0 0 12px color-mix(in srgb, var(--accent-green) 0%, transparent); }
+  100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-green) 0%, transparent); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-signal-ring { animation: none; }
+}
+
 
 .terminal-card {
   border: 1px solid var(--border);
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--bg-card) 78%, transparent), color-mix(in srgb, var(--bg) 88%, transparent)),
     radial-gradient(circle at 18% 0%, rgba(16, 185, 129, 0.16), transparent 32%);
-  border-radius: 10px;
+  border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 18px 60px color-mix(in srgb, var(--shadow-strong) 70%, transparent);
   backdrop-filter: blur(18px);
@@ -829,6 +870,42 @@ nav.nav-menu {
   font-style: italic;
   padding: 4px 10px;
   max-width: 18ch;
+}
+
+@media (max-width: 640px) {
+  .proof-strip {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 6px;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    scrollbar-width: none;
+  }
+
+  .proof-strip::-webkit-scrollbar {
+    display: none;
+  }
+
+  .proof-strip .proof-item,
+  .proof-strip > p {
+    flex: 0 0 auto;
+    width: 74vw;
+    max-width: 260px;
+    scroll-snap-align: start;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px 16px;
+    background: color-mix(in srgb, var(--bg-card) 60%, transparent);
+  }
+
+  .proof-strip .proof-item:first-child {
+    border-left: 1px solid var(--border);
+    padding-left: 16px;
+  }
 }
 
 .orchestration-chain {
@@ -2686,6 +2763,11 @@ button.carousel-proof {
   white-space: nowrap;
   border-bottom: 1px solid transparent;
   transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.certification-link--static {
+  opacity: 0.55;
+  cursor: default;
 }
 
 .certification-link:hover,
@@ -4217,7 +4299,7 @@ footer.app-footer {
   --workflow-bg: rgba(255,255,255,0.02);
   --workflow-hover: rgba(255,255,255,0.06);
   --stage-bg: rgba(9, 9, 11, 0.94);
-  --shadow-strong: rgba(0, 0, 0, 0.5);
+  --shadow-strong: rgba(3, 26, 20, 0.55);
   --button-primary-bg: #ededed;
   --button-primary-text: #09090b;
   
@@ -4258,7 +4340,7 @@ footer.app-footer {
   --workflow-bg: rgba(24,24,27,0.035);
   --workflow-hover: rgba(24,24,27,0.075);
   --stage-bg: rgba(255, 255, 255, 0.94);
-  --shadow-strong: rgba(24, 24, 27, 0.14);
+  --shadow-strong: rgba(6, 61, 46, 0.16);
   --button-primary-bg: #18181b;
   --button-primary-text: #ffffff;
 }
@@ -4805,13 +4887,54 @@ nav.nav-menu {
   filter: saturate(0.96) contrast(1.04);
 }
 
+.hero-signal {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: radial-gradient(circle at 32% 28%, color-mix(in srgb, var(--accent-green) 32%, var(--bg-card)), var(--bg-card) 72%);
+  border: 1px solid var(--border);
+  box-shadow: 0 16px 48px color-mix(in srgb, var(--shadow-strong) 70%, transparent);
+}
+
+.hero-signal-glyph {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display), monospace;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--accent-green);
+}
+
+.hero-signal-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  animation: heroSignalPulse 2.6s ease-out infinite;
+}
+
+@keyframes heroSignalPulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-green) 45%, transparent); }
+  70% { box-shadow: 0 0 0 12px color-mix(in srgb, var(--accent-green) 0%, transparent); }
+  100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-green) 0%, transparent); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-signal-ring { animation: none; }
+}
+
 
 .terminal-card {
   border: 1px solid var(--border);
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--bg-card) 78%, transparent), color-mix(in srgb, var(--bg) 88%, transparent)),
     radial-gradient(circle at 18% 0%, rgba(16, 185, 129, 0.16), transparent 32%);
-  border-radius: 10px;
+  border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 18px 60px color-mix(in srgb, var(--shadow-strong) 70%, transparent);
   backdrop-filter: blur(18px);
@@ -5022,6 +5145,42 @@ nav.nav-menu {
   font-style: italic;
   padding: 4px 10px;
   max-width: 18ch;
+}
+
+@media (max-width: 640px) {
+  .proof-strip {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 6px;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    scrollbar-width: none;
+  }
+
+  .proof-strip::-webkit-scrollbar {
+    display: none;
+  }
+
+  .proof-strip .proof-item,
+  .proof-strip > p {
+    flex: 0 0 auto;
+    width: 74vw;
+    max-width: 260px;
+    scroll-snap-align: start;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px 16px;
+    background: color-mix(in srgb, var(--bg-card) 60%, transparent);
+  }
+
+  .proof-strip .proof-item:first-child {
+    border-left: 1px solid var(--border);
+    padding-left: 16px;
+  }
 }
 
 .orchestration-chain {
@@ -6879,6 +7038,11 @@ button.carousel-proof {
   white-space: nowrap;
   border-bottom: 1px solid transparent;
   transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.certification-link--static {
+  opacity: 0.55;
+  cursor: default;
 }
 
 .certification-link:hover,
