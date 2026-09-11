@@ -9,6 +9,7 @@ const UI_COPY = {
     hero: {
       tagline: 'Junior AI Automation & Product Engineer',
       title: 'ignacio',
+      rolePrefix: 'Construyo',
       availability: 'Disponible para pasantías y roles trainee',
       kicker: 'Estudiante de Gestión IT. Construyo herramientas desplegadas con Python, FastAPI, automatización de procesos y asistentes de IA.',
       description: 'Busco una pasantía o rol trainee donde pueda aportar criterio operativo, aprendizaje rápido y capacidad real de convertir procesos repetitivos en software útil.',
@@ -136,6 +137,7 @@ const UI_COPY = {
     hero: {
       tagline: 'Junior AI Automation & Product Engineer',
       title: 'ignacio',
+      rolePrefix: 'Building',
       availability: 'Available for internships and trainee roles',
       kicker: 'IT Management student. I build deployed tools with Python, FastAPI, process automation and AI assistants.',
       description: 'I am looking for an internship or trainee role where I can contribute operational judgment, fast learning and the ability to turn repetitive workflows into useful software.',
@@ -904,6 +906,106 @@ function setupSideQuests() {
   buildChips(); buildStrip(); render();
 }
 
+const HERO_ROLE_WORDS = {
+  es: ['automatizaciones', 'dashboards', 'bots', 'agentes de IA', 'APIs'],
+  en: ['automations', 'dashboards', 'bots', 'AI agents', 'APIs']
+};
+let heroRoleIndex = 0;
+let heroRoleTimer = null;
+
+function tickHeroRoleWord() {
+  const el = document.getElementById('hero-role-word');
+  if (!el) return;
+  const words = HERO_ROLE_WORDS[currentLang] || HERO_ROLE_WORDS.es;
+  heroRoleIndex = (heroRoleIndex + 1) % words.length;
+  el.classList.add('is-swapping');
+  setTimeout(() => {
+    el.textContent = words[heroRoleIndex];
+    el.classList.remove('is-swapping');
+  }, 220);
+}
+
+function initHeroRoleRotator() {
+  const el = document.getElementById('hero-role-word');
+  if (!el) return;
+  const words = HERO_ROLE_WORDS[currentLang] || HERO_ROLE_WORDS.es;
+  el.textContent = words[0];
+  if (heroRoleTimer) clearInterval(heroRoleTimer);
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  heroRoleTimer = setInterval(tickHeroRoleWord, 2400);
+}
+
+function initNavbarScroll() {
+  const header = document.querySelector('header.app-header');
+  if (!header) return;
+  let ticking = false;
+  function update() {
+    header.classList.toggle('is-scrolled', window.scrollY > 60);
+    ticking = false;
+  }
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
+  update();
+}
+
+function initScrollReveal() {
+  const targets = document.querySelectorAll('[data-reveal]');
+  if (!targets.length) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+    targets.forEach((el) => el.classList.add('is-visible'));
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const delay = Number(el.dataset.revealDelay || 0);
+      setTimeout(() => el.classList.add('is-visible'), delay);
+      const video = el.tagName === 'VIDEO' ? el : el.querySelector('video');
+      if (video) video.play?.().catch(() => {});
+      observer.unobserve(el);
+    });
+  }, { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
+  targets.forEach((el, i) => {
+    if (!el.dataset.revealDelay) el.dataset.revealDelay = String((i % 4) * 80);
+    observer.observe(el);
+  });
+}
+
+function initCounters() {
+  const counters = document.querySelectorAll('[data-counter]');
+  if (!counters.length) return;
+  const animate = (el) => {
+    const target = Number(el.dataset.counter || 0);
+    const suffix = el.dataset.counterSuffix || '';
+    const duration = 1100;
+    const start = performance.now();
+    function frame(now) {
+      const progress = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(eased * target) + suffix;
+      if (progress < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  };
+  if (!('IntersectionObserver' in window)) {
+    counters.forEach(animate);
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      animate(entry.target);
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.4 });
+  counters.forEach((el) => observer.observe(el));
+}
+
 function setupPreferenceControls() {
   applyStaticCopy();
   setupTerminal();
@@ -915,6 +1017,7 @@ function setupPreferenceControls() {
       safeStorageSet('portfolio-lang', currentLang);
       applyStaticCopy();
       rebuildLocalizedEcosystem();
+      initHeroRoleRotator();
     });
   });
 
@@ -1364,7 +1467,7 @@ function renderProjectPreview(project, index, mode = 'active') {
   const previewClass = mode === 'hover' ? 'hover' : 'active';
   const videoSrc = project.loop || project.video;
   return `
-    <article class="project-preview ${previewClass}" data-project-id="${project.id}">
+    <article class="project-preview ${previewClass}" data-project-id="${project.id}" data-reveal="zoom" data-reveal-delay="${index * 90}">
       <figure class="project-preview-media project-media-container" data-project-id="${project.id}" ${project.video ? `data-video="${project.video}" tabindex="0" role="button" aria-label="${escapeHtml(project.title)} video preview"` : ''}>
         ${projectImage(project, index, 'preview')}
         ${videoSrc ? `<video class="project-media-video" muted loop playsinline preload="none" src="${videoSrc}"></video>` : ''}
@@ -1408,7 +1511,7 @@ function renderProjectCarousel() {
       const targetAttr = project.href && !project.href.startsWith('#') ? ' target="_blank" rel="noopener noreferrer"' : '';
       const videoSrc = project.loop || project.video;
       return `
-      <${tag} class="archive-row ${index < 4 ? 'archive-row-featured' : 'archive-row-secondary'}" data-project-id="${project.id}"${hrefAttr}${targetAttr}>
+      <${tag} class="archive-row ${index < 4 ? 'archive-row-featured' : 'archive-row-secondary'}" data-project-id="${project.id}" data-reveal="${index % 2 === 0 ? 'left' : 'right'}"${hrefAttr}${targetAttr}>
         <span class="archive-number">${String(index + 1).padStart(2, '0')}</span>
         <span class="archive-thumb project-media-container" tabindex="0" ${project.video ? `data-video="${project.video}" role="button" aria-label="${escapeHtml(project.title)} video preview"` : ''}>
           ${projectImage(project, index, 'archive')}
@@ -1429,6 +1532,7 @@ function renderProjectCarousel() {
   }
 
   setupProjectVideoReveal();
+  initScrollReveal();
 }
 
 const projectVideoRevealState = { canReveal: null };
@@ -1890,6 +1994,10 @@ document.addEventListener('DOMContentLoaded', () => {
   setupProjectCarousel();
   setupAiOpsHero();
   setupGithubContributions();
+  initHeroRoleRotator();
+  initNavbarScroll();
+  initScrollReveal();
+  initCounters();
   // Navigation tabs
   const navTabs = document.querySelectorAll('.nav-tab');
   const viewSections = document.querySelectorAll('.view-section');

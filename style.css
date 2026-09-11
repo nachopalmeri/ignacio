@@ -1665,10 +1665,26 @@ button.carousel-proof {
 }
 
 .featured-project-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  display: flex;
   gap: 16px;
   align-items: stretch;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 4px 20px;
+  margin: -4px -4px 0;
+  scroll-padding-left: 4px;
+}
+
+.featured-project-grid .project-preview {
+  flex: 0 0 min(78vw, 320px);
+  scroll-snap-align: start;
+}
+
+@media (min-width: 860px) {
+  .featured-project-grid .project-preview {
+    flex-basis: min(38vw, 340px);
+  }
 }
 
 .featured-project-grid .project-preview {
@@ -6022,10 +6038,26 @@ button.carousel-proof {
 }
 
 .featured-project-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  display: flex;
   gap: 16px;
   align-items: stretch;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 4px 20px;
+  margin: -4px -4px 0;
+  scroll-padding-left: 4px;
+}
+
+.featured-project-grid .project-preview {
+  flex: 0 0 min(78vw, 320px);
+  scroll-snap-align: start;
+}
+
+@media (min-width: 860px) {
+  .featured-project-grid .project-preview {
+    flex-basis: min(38vw, 340px);
+  }
 }
 
 .featured-project-grid .project-preview {
@@ -8715,3 +8747,240 @@ footer.app-footer {
 
 .side-quests-reveal .sq-head h3{color:#f7efe0}
 .side-quests-reveal .sq-head{position:relative;z-index:2}
+
+/* ═══════════════════ SCROLL STORYTELLING (heyato-inspired) ═══════════════════ */
+
+[data-reveal] {
+  opacity: 0;
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  will-change: opacity, transform;
+}
+
+[data-reveal="up"] { transform: translateY(28px); }
+[data-reveal="left"] { transform: translateX(-36px); }
+[data-reveal="right"] { transform: translateX(36px); }
+[data-reveal="zoom"] { transform: scale(0.92); }
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translate(0, 0) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Hero role rotator */
+.hero-role-rotator {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 2px 0 10px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.hero-role-word {
+  color: var(--accent-green);
+  font-weight: 800;
+  display: inline-block;
+  transition: opacity 0.22s var(--ease), transform 0.22s var(--ease);
+}
+
+.hero-role-word.is-swapping {
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+/* Floating pill navbar. `position: sticky` is inert on this page: `html, body`
+   both carry `overflow-x: hidden` (see the base reset above), which turns body
+   into a scroll container that never actually receives the scroll offset in
+   Chromium/WebKit, so a sticky descendant just scrolls away with the page.
+   `position: fixed` sidesteps that entirely — it anchors to the viewport
+   regardless of ancestor overflow. body.js-fixed-header-pad compensates the
+   layout space the header no longer reserves once taken out of flow. */
+header.app-header {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  border-bottom: 0;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  padding-top: 12px;
+  transition: padding-top 0.35s var(--ease);
+}
+
+body {
+  padding-top: 88px;
+}
+
+@media (max-width: 900px) {
+  body {
+    padding-top: 80px;
+  }
+}
+
+.header-container {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--header-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 0 20px;
+  height: 64px;
+  transition: box-shadow 0.35s var(--ease), background 0.35s var(--ease), border-color 0.35s var(--ease);
+}
+
+header.app-header.is-scrolled {
+  padding-top: 10px;
+}
+
+header.app-header.is-scrolled .header-container {
+  box-shadow: 0 16px 44px color-mix(in srgb, var(--shadow-strong) 60%, transparent);
+  background: color-mix(in srgb, var(--header-bg) 94%, var(--bg-card));
+}
+
+.nav-cta {
+  max-width: 0;
+  overflow: hidden;
+  opacity: 0;
+  filter: blur(6px);
+  padding-left: 0;
+  padding-right: 0;
+  border-width: 0;
+  white-space: nowrap;
+  transition: max-width 0.4s var(--ease), opacity 0.3s var(--ease), filter 0.3s var(--ease), padding 0.4s var(--ease), border-width 0.3s var(--ease);
+}
+
+header.app-header.is-scrolled .nav-cta {
+  max-width: 220px;
+  opacity: 1;
+  filter: blur(0);
+  padding-left: 16px;
+  padding-right: 16px;
+  border-width: 1px;
+}
+
+/* Counters row */
+.counters-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: clamp(20px, 4vw, 40px);
+}
+
+.counter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--bg-card) 60%, transparent);
+}
+
+.counter-item strong {
+  font-family: var(--font-heading);
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.counter-item span {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+@media (max-width: 640px) {
+  .counters-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Reverse-direction marquee (variety) */
+.hero-marquee--reverse .hero-marquee-track {
+  animation-direction: reverse;
+  animation-duration: 34s;
+}
+
+.hero-marquee--reverse .hero-marquee-track span {
+  background: linear-gradient(145deg, color-mix(in srgb, var(--accent-amber) 20%, var(--bg-card)), color-mix(in srgb, var(--accent-green) 14%, var(--bg-card)));
+  border-color: color-mix(in srgb, var(--accent-amber) 24%, var(--border));
+}
+
+/* FAQ section (deliberately warm, cream surface — heyato's "FAQ crema") */
+.faq-section {
+  margin: clamp(48px, 8vw, 96px) auto;
+  padding: clamp(28px, 5vw, 48px);
+  border-radius: 28px;
+  background: #fdf6e8;
+  border: 1px solid #ecdfc0;
+}
+
+.faq-section .section-title {
+  color: #1c1c1c;
+}
+
+.faq-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.faq-item {
+  border: 1px solid #ecdfc0;
+  border-radius: 14px;
+  background: #fffdf7;
+  padding: 4px 18px;
+}
+
+.faq-item summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 14px 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  color: #1c1c1c;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.faq-item summary::-webkit-details-marker { display: none; }
+
+.faq-item summary::after {
+  content: '+';
+  flex-shrink: 0;
+  font-size: 20px;
+  font-weight: 400;
+  color: #93887b;
+  transition: transform 0.25s var(--ease);
+}
+
+.faq-item[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.faq-item p {
+  margin: 0 0 16px;
+  color: #52493c;
+  font-size: 13.5px;
+  line-height: 1.6;
+}

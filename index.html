@@ -32,6 +32,7 @@
       </nav>
 
       <div class="header-actions">
+        <a href="#/projects" class="btn btn-primary nav-cta" data-i18n="hero.projectsCta">Ver proyectos</a>
         <div class="toggle-group" aria-label="Language selector">
           <button class="toggle-btn active" data-lang-btn="es">ES</button>
           <button class="toggle-btn" data-lang-btn="en">EN</button>
@@ -71,6 +72,10 @@
           <div class="hero-tagline" data-i18n="hero.tagline">Junior AI Automation & Product Engineer</div>
           <p class="hero-availability" data-i18n="hero.availability">Disponible para pasantías y roles trainee</p>
           <h1 data-i18n="hero.title">ignacio</h1>
+          <p class="hero-role-rotator" aria-live="off">
+            <span data-i18n="hero.rolePrefix">Construyo</span>
+            <span id="hero-role-word" class="hero-role-word">automatizaciones</span>
+          </p>
           <p class="hero-kicker" data-i18n="hero.kicker">Estudiante de Gestión IT. Construyo herramientas desplegadas con Python, FastAPI, automatización de procesos y asistentes de IA.</p>
           <p class="hero-description" data-i18n="hero.description">
             Busco una pasantía o rol trainee donde pueda aportar criterio operativo, aprendizaje rápido y capacidad real de convertir procesos repetitivos en software útil.
@@ -123,10 +128,28 @@
         </div>
         <p data-i18n="orchestration.body">Señales rápidas para recruiters: proyectos desplegados, backend real y contexto operativo.</p>
       </div>
+      <div class="container counters-row" aria-label="Evidencia numérica">
+        <div class="counter-item" data-reveal="zoom">
+          <strong><span data-counter="4"></span>+</strong>
+          <span>Proyectos desplegados</span>
+        </div>
+        <div class="counter-item" data-reveal="zoom" data-reveal-delay="80">
+          <strong><span data-counter="3"></span></strong>
+          <span>Certificaciones</span>
+        </div>
+        <div class="counter-item" data-reveal="zoom" data-reveal-delay="160">
+          <strong><span data-counter="6"></span>+</strong>
+          <span>Tecnologías core</span>
+        </div>
+        <div class="counter-item" data-reveal="zoom" data-reveal-delay="240">
+          <strong><span data-counter="100" data-counter-suffix="%"></span></strong>
+          <span>Código propio y revisable</span>
+        </div>
+      </div>
     </section>
 
     <section class="container grid-2col about-section">
-      <div class="bio-info">
+      <div class="bio-info" data-reveal="up">
         <h2 class="section-title" data-i18n="about.title">Sobre mí</h2>
         <div class="bio-text">
           <p data-i18n="about.p1">Estudio Gestión IT y estoy construyendo mi primera experiencia profesional en tecnología. Mezclo criterio de producto y contexto operativo para convertir procesos repetitivos en software útil.</p>
@@ -134,7 +157,7 @@
           <p data-i18n="about.p3">Mi experiencia en atención al cliente y operaciones me dio presión real, caja, inventario y auditorías. Quiero llevar esa base a soporte IT, QA trainee, automatización o startups.</p>
         </div>
 
-        <div class="certifications-block">
+        <div class="certifications-block" data-reveal="left">
           <h3 class="certifications-heading" data-i18n="certifications.title">Certificaciones</h3>
           <ul class="certifications-list">
             <li class="certification-item">
@@ -225,7 +248,7 @@
     <section class="container stack-section">
       <h2 class="section-title" data-i18n="stack.title">Stack y herramientas</h2>
       <div class="stack-categories">
-        <div class="stack-category">
+        <div class="stack-category" data-reveal="zoom">
           <h3><span class="category-icon adopt"></span> <span data-i18n="stack.core">Uso principal</span></h3>
           <div class="tag-cloud">
             <span class="tech-badge">Python</span>
@@ -236,7 +259,7 @@
             <span class="tech-badge">Git</span>
           </div>
         </div>
-        <div class="stack-category">
+        <div class="stack-category" data-reveal="zoom" data-reveal-delay="90">
           <h3><span class="category-icon trial"></span> <span data-i18n="stack.product">Producto y datos</span></h3>
           <div class="tag-cloud">
             <span class="tech-badge">Dashboards</span>
@@ -248,7 +271,7 @@
             <span class="tech-badge">Inventory & Cash Flow Auditing</span>
           </div>
         </div>
-        <div class="stack-category">
+        <div class="stack-category" data-reveal="zoom" data-reveal-delay="180">
           <h3><span class="category-icon assess"></span> <span data-i18n="stack.ai">AI-Assisted Development</span></h3>
           <div class="tag-cloud">
             <span class="tech-badge">AI-assisted workflows</span>
@@ -263,7 +286,7 @@
     </section>
 
     <section class="container github-activity" aria-labelledby="github-activity-title">
-      <div class="github-activity-copy">
+      <div class="github-activity-copy" data-reveal="up">
         <p class="eyebrow" data-i18n="github.eyebrow">Actividad verificable</p>
         <h2 id="github-activity-title" data-i18n="github.title">GitHub como bitácora de trabajo</h2>
         <p data-i18n="github.body">Actividad pública del perfil nachopalmeri: demos, repos y continuidad real.</p>
@@ -334,6 +357,48 @@
           <small>Reglas, agentes, verificación visual y handoffs documentados.</small>
         </a>
       </div>
+      <div class="hero-marquee hero-marquee--reverse" aria-hidden="true">
+        <div class="hero-marquee-track">
+          <span>Red Hat RH124</span>
+          <span>Cisco CCNA 1</span>
+          <span>Claude Code certified</span>
+          <span>Código 100% propio</span>
+          <span>CI con GitHub Actions</span>
+          <span>Testeado con Playwright</span>
+          <span>Red Hat RH124</span>
+          <span>Cisco CCNA 1</span>
+          <span>Claude Code certified</span>
+          <span>Código 100% propio</span>
+          <span>CI con GitHub Actions</span>
+          <span>Testeado con Playwright</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="container faq-section" aria-labelledby="faq-title">
+      <h2 id="faq-title" class="section-title" data-reveal="up">Preguntas frecuentes</h2>
+      <div class="faq-list" data-reveal="up">
+        <details class="faq-item">
+          <summary>¿Por qué te presentás como "junior" si ya tenés proyectos desplegados?</summary>
+          <p>Porque es verdad: es mi primera experiencia profesional en tecnología. Los proyectos muestran que puedo entregar software real, no que tenga años de experiencia senior.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Por qué no hay foto ni apellido en esta página?</summary>
+          <p>Es una versión pensada para compartir en redes sin exponer mi identidad completa. El portfolio con mi nombre completo y foto está en otro link, disponible si lo pedís.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Usás IA para programar? ¿Eso cuenta como trampa?</summary>
+          <p>Uso asistentes de IA como parte de mi flujo de trabajo (planificar, construir, revisar, testear, documentar) — igual que cualquier developer hoy usa su IDE, linter o Stack Overflow. El criterio de qué construir y cómo revisar sigue siendo mío.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Cómo puedo revisar tu código?</summary>
+          <p>Todos los proyectos tienen link a su repo público de GitHub y a la demo desplegada. Preferí mirar el código antes que confiar en el marketing de esta página.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Cuál es tu disponibilidad?</summary>
+          <p>Busco pasantía o rol trainee, full-time o part-time según el equipo. Con base en Buenos Aires, Argentina, y cómodo trabajando remoto.</p>
+        </details>
+      </div>
     </section>
 
   </main>
@@ -352,7 +417,7 @@
 
   <main id="agents-section" class="view-section">
     <div class="container">
-      <div class="agents-intro">
+      <div class="agents-intro" data-reveal="up">
         <div>
           <p class="eyebrow" data-i18n="agents.eyebrow">Sistema real del repo</p>
           <h2 data-i18n="agents.title">Sistema de trabajo</h2>
