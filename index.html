@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ignacio - Junior AI Automation & Product Engineer</title>
+  <meta name="description" content="Portfolio de ignacio: automatización, producto, soporte operativo y proyectos desplegados con evidencia real.">
+  <meta property="og:title" content="ignacio - Junior AI Automation & Product Engineer">
+  <meta property="og:description" content="Portfolio de ignacio: automatización, producto, soporte operativo y proyectos desplegados con evidencia real.">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="container header-container">
+      <a href="#/" class="logo">
+        <div class="logo-icon"></div>
+        <span class="logo-text">ignacio</span>
+        <span class="logo-tag">Automation / IA</span>
+      </a>
+
+      <nav class="nav-menu" aria-label="Primary navigation">
+        <button class="nav-tab active" data-tab="overview" data-i18n="nav.overview">Overview</button>
+        <button class="nav-tab" data-tab="projects" data-i18n="nav.projects">Proyectos</button>
+        <button class="nav-tab" data-tab="agents" data-i18n="nav.agents">Sistema de trabajo</button>
+      </nav>
+
+      <div class="header-actions">
+        <div class="toggle-group" aria-label="Language selector">
+          <button class="toggle-btn active" data-lang-btn="es">ES</button>
+          <button class="toggle-btn" data-lang-btn="en">EN</button>
+        </div>
+        <button id="theme-toggle" class="icon-toggle" type="button" aria-label="Toggle theme" title="Toggle theme">
+          <span class="theme-icon theme-sun"></span>
+          <span class="theme-icon theme-moon"></span>
+        </button>
+        <div class="header-socials">
+          <a href="https://github.com/nachopalmeri" target="_blank" rel="noopener noreferrer" class="social-link" title="GitHub" aria-label="GitHub">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/ignacio-palmeri-64035b378/" target="_blank" rel="noopener noreferrer" class="social-link" title="LinkedIn" aria-label="LinkedIn">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="overview-section" class="view-section active">
+    <section class="hero ai-ops-hero">
+      <div class="hero-glow"></div>
+      <canvas id="ai-ops-canvas" class="ai-ops-canvas" aria-hidden="true"></canvas>
+      <div class="ai-ops-fallback" aria-hidden="true">
+        <span>Python</span>
+        <span>FastAPI</span>
+        <span>Next.js</span>
+        <span>PostgreSQL</span>
+        <span>GitHub Actions</span>
+        <span>Vercel</span>
+        <span>Linux</span>
+        <span>AI Automation</span>
+      </div>
+      <div class="container hero-command-center">
+        <div class="hero-copy">
+          <div class="hero-tagline" data-i18n="hero.tagline">Junior AI Automation & Product Engineer</div>
+          <p class="hero-availability" data-i18n="hero.availability">Disponible para pasantías y roles trainee</p>
+          <h1 data-i18n="hero.title">ignacio</h1>
+          <p class="hero-kicker" data-i18n="hero.kicker">Estudiante de Gestión IT en UADE. Construyo herramientas desplegadas con Python, FastAPI, automatización de procesos y asistentes de IA.</p>
+          <p class="hero-description" data-i18n="hero.description">
+            Busco una pasantía o rol trainee donde pueda aportar criterio operativo, aprendizaje rápido y capacidad real de convertir procesos repetitivos en software útil.
+          </p>
+          <div class="hero-actions">
+            <a href="#/projects" class="btn btn-primary" data-i18n="hero.projectsCta">Ver proyectos</a>
+            <a href="https://github.com/nachopalmeri" target="_blank" rel="noopener noreferrer" class="btn btn-link" data-i18n="hero.githubCta">GitHub</a>
+          </div>
+          <aside class="hero-command hero-dock" aria-label="Profile signal">
+            <div class="profile-status" data-i18n="hero.status">Disponible para Trainee / Junior</div>
+          </aside>
+        </div>
+      </div>
+      <div class="container proof-strip" aria-label="Recruiter proof signals">
+        <div class="proof-item">
+          <span data-i18n="proof.shipped.label">Proyectos desplegados</span>
+          <strong data-i18n="proof.shipped.body">JobBot, Agents System y motor predictivo.</strong>
+        </div>
+        <div class="proof-item">
+          <span data-i18n="proof.stack.label">Stack defendible</span>
+          <strong data-i18n="proof.stack.body">Python, FastAPI, PostgreSQL, Linux y GitHub Actions.</strong>
+        </div>
+        <div class="proof-item">
+          <span data-i18n="proof.ops.label">Contexto operativo</span>
+          <strong data-i18n="proof.ops.body">Caja, inventario, auditorías y mejora de procesos.</strong>
+        </div>
+        <p data-i18n="orchestration.body">Señales rápidas para recruiters: proyectos desplegados, backend real y contexto operativo.</p>
+      </div>
+    </section>
+
+    <section class="container grid-2col about-section">
+      <div class="bio-info">
+        <h2 class="section-title" data-i18n="about.title">Sobre mí</h2>
+        <div class="bio-text">
+          <p data-i18n="about.p1">Estudio Gestión IT en UADE y estoy construyendo mi primera experiencia profesional en tecnología. Mezclo criterio de producto y contexto operativo para convertir procesos repetitivos en software útil.</p>
+          <p data-i18n="about.p2">Trabajo con Python, FastAPI, SQL, Linux, Git y asistentes de IA para construir dashboards, bots, automatizaciones y prototipos desplegados. Me importa más entregar trabajo revisable que parecer senior.</p>
+          <p data-i18n="about.p3">Mi experiencia en atención al cliente y operaciones me dio presión real, caja, inventario y auditorías. Quiero llevar esa base a soporte IT, QA trainee, automatización o startups.</p>
+        </div>
+
+        <div class="certifications-block">
+          <h3 class="certifications-heading" data-i18n="certifications.title">Certificaciones</h3>
+          <ul class="certifications-list">
+            <li class="certification-item">
+              <span class="certification-logo" aria-hidden="true"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M16.009 13.386c1.577 0 3.86-.326 3.86-2.202a1.765 1.765 0 0 0-.04-.431l-.94-4.08c-.216-.898-.406-1.305-1.982-2.093-1.223-.625-3.888-1.658-4.676-1.658-.733 0-.947.946-1.822.946-.842 0-1.467-.706-2.255-.706-.757 0-1.25.515-1.63 1.576 0 0-1.06 2.99-1.197 3.424a.81.81 0 0 0-.028.245c0 1.162 4.577 4.974 10.71 4.974m4.101-1.435c.218 1.032.218 1.14.218 1.277 0 1.765-1.984 2.745-4.593 2.745-5.895.004-11.06-3.451-11.06-5.734a2.326 2.326 0 0 1 .19-.925C2.746 9.415 0 9.794 0 12.217c0 3.969 9.405 8.861 16.851 8.861 5.71 0 7.149-2.582 7.149-4.62 0-1.605-1.387-3.425-3.887-4.512"/></svg></span>
+              <div class="certification-info">
+                <strong data-i18n="certifications.rh.title">RH124 / System Administrator</strong>
+                <span data-i18n="certifications.rh.issuer">Red Hat</span>
+              </div>
+              <a class="certification-link" href="https://www.credly.com/badges/761f7f8d-41c7-4e1e-8dda-1e29830e4e85" target="_blank" rel="noopener noreferrer" data-i18n="certifications.cta">Ver credencial</a>
+            </li>
+            <li class="certification-item">
+              <span class="certification-logo" aria-hidden="true"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M16.331 18.171V17.06l-.022.01c-.25.121-.522.19-.801.203a1.186 1.186 0 01-.806-.237 1.038 1.038 0 01-.352-.498 1.21 1.21 0 01-.023-.667c.052-.225.178-.426.357-.569.16-.134.355-.218.562-.242a1.85 1.85 0 011.061.198l.024.013v-1.117l-.051-.014a2.862 2.862 0 00-1.011-.132 2.34 2.34 0 00-.903.206c-.287.132-.54.327-.739.571a2.221 2.221 0 00-.04 2.705c.295.378.709.645 1.175.756.491.12 1.006.102 1.487-.052l.082-.023M5.336 18.171V17.06l-.022.01c-.25.121-.522.19-.801.203a1.183 1.183 0 01-.806-.237 1.03 1.03 0 01-.351-.498 1.202 1.202 0 01-.024-.667c.052-.225.177-.426.357-.569.16-.134.355-.218.562-.242a1.85 1.85 0 011.061.198l.024.013v-1.117l-.051-.014a2.862 2.862 0 00-1.011-.132 2.344 2.344 0 00-.903.206 2.08 2.08 0 00-.74.571 2.224 2.224 0 00-.041 2.705 2.11 2.11 0 001.176.756c.491.12 1.005.102 1.487-.052l.083-.023M9.26 17.249l-.004.957.07.012c.22.041.441.069.664.085.195.019.391.022.587.012.187-.014.372-.049.551-.104.21-.06.405-.163.571-.305a1.16 1.16 0 00.333-.478 1.31 1.31 0 00-.007-.96 1.068 1.068 0 00-.298-.414 1.261 1.261 0 00-.438-.255l-.722-.268a.388.388 0 01-.197-.188.245.245 0 01.008-.219.382.382 0 01.154-.142.798.798 0 01.257-.074c.153-.022.308-.021.46.005.18.02.358.051.533.096l.038.008v-.883l-.069-.015a4.749 4.749 0 00-.543-.097 2.844 2.844 0 00-.714-.003c-.3.027-.585.143-.821.33-.16.126-.281.293-.351.484-.104.29-.105.608 0 .899.054.145.14.274.252.381.097.093.207.173.327.236.157.084.324.149.497.195.057.017.114.035.17.054l.085.031.024.01c.084.03.162.078.226.14.045.042.08.094.101.151a.325.325 0 01.001.161.339.339 0 01-.166.198.856.856 0 01-.275.086 2.032 2.032 0 01-.427.021 5.208 5.208 0 01-.557-.074 9.195 9.195 0 01-.287-.067l-.033-.006zm-2.475.995h1.05v-4.167h-1.05v4.167zm12.162-2.936a1.095 1.095 0 011.541.158 1.094 1.094 0 01-.157 1.541l-.017.014a1.096 1.096 0 01-1.367-1.713m-1.525.854a2.193 2.193 0 002.666 2.107 2.139 2.139 0 00.701-3.937 2.207 2.207 0 00-3.367 1.83M22.961 10.728a.52.52 0 001.039 0V9.573a.52.52 0 00-1.039 0v1.155M20.117 10.728a.522.522 0 001.041 0V8.139a.521.521 0 00-1.04 0v2.589M17.231 11.771a.521.521 0 001.039 0V6.17a.52.52 0 00-1.039 0v5.601M14.393 10.728a.521.521 0 001.04 0V8.139a.52.52 0 00-1.039 0v2.589M11.494 10.728a.522.522 0 001.039 0V9.573a.52.52 0 00-1.039 0v1.155M8.624 10.728a.52.52 0 001.039 0V8.139a.52.52 0 00-1.039 0v2.589M5.737 11.771a.52.52 0 001.039 0V6.17a.52.52 0 00-1.039 0v5.601M2.876 10.728a.522.522 0 001.04 0V8.139a.52.52 0 00-1.039 0v2.589M0 10.728a.521.521 0 001.039 0V9.573a.52.52 0 00-1.039 0v1.155"/></svg></span>
+              <div class="certification-info">
+                <strong data-i18n="certifications.cisco.title">CCNA 1</strong>
+                <span data-i18n="certifications.cisco.issuer">Cisco Networking Academy</span>
+              </div>
+              <a class="certification-link" href="https://www.credly.com/badges/c83c0cbc-b9a8-4280-b3d3-2afcbef7dd0a" target="_blank" rel="noopener noreferrer" data-i18n="certifications.cta">Ver credencial</a>
+            </li>
+            <li class="certification-item">
+              <span class="certification-logo" aria-hidden="true"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.5409Zm-.3712 10.2232 2.2914-5.9456 2.2914 5.9456Z"/></svg></span>
+              <div class="certification-info">
+                <strong data-i18n="certifications.anthropic.title">Claude Code in Action</strong>
+                <span data-i18n="certifications.anthropic.issuer">Anthropic</span>
+              </div>
+              <a class="certification-link" href="https://www.credly.com/users/ignacio-palmeri.a13864b6" target="_blank" rel="noopener noreferrer" data-i18n="certifications.cta">Ver credencial</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="container project-carousel-section" aria-labelledby="project-carousel-title">
+      <div class="section-heading-row">
+        <h2 id="project-carousel-title" class="section-title" data-i18n="projects.title">Proyectos destacados</h2>
+        <p class="section-deck" data-i18n="projects.featuredBody">Cuatro piezas: producto, trabajo, analytics y lab.</p>
+      </div>
+      <div id="project-carousel" class="project-carousel" tabindex="0" aria-live="polite">
+        <div class="project-static-fallback" aria-label="Featured projects fallback">
+          <a class="project-static-card" href="https://jobbot-lime.vercel.app" target="_blank" rel="noopener noreferrer">
+            <span class="project-static-kicker">JobBot</span>
+            <strong>Full-stack automation SaaS</strong>
+            <p>Next.js, FastAPI, PostgreSQL, auth, webhooks, Telegram y pagos.</p>
+            <div class="project-static-tags">
+              <span>Python</span>
+              <span>FastAPI</span>
+              <span>Next.js</span>
+            </div>
+            <span class="project-static-link">Abrir proyecto</span>
+          </a>
+          <a class="project-static-card" href="#/agents">
+            <span class="project-static-kicker">Agents System</span>
+            <strong>Workflow system</strong>
+            <p>Mapa visual de agentes, reglas, memoria y rutas de trabajo.</p>
+            <div class="project-static-tags">
+              <span>Agents</span>
+              <span>Playwright</span>
+              <span>Workflow</span>
+            </div>
+            <span class="project-static-link">Explorar sistema</span>
+          </a>
+          <a class="project-static-card" href="https://prode-mundial-2026-ten-omega.vercel.app" target="_blank" rel="noopener noreferrer">
+            <span class="project-static-kicker">Motor Estadístico Predictivo</span>
+            <strong>Sports analytics engine</strong>
+            <p>Python, fuentes múltiples, matrices Poisson y dashboard.</p>
+            <div class="project-static-tags">
+              <span>Python</span>
+              <span>Analytics</span>
+              <span>Vercel</span>
+            </div>
+            <span class="project-static-link">Abrir proyecto</span>
+          </a>
+          <a class="project-static-card" href="https://polytools-omega.vercel.app" target="_blank" rel="noopener noreferrer">
+            <span class="project-static-kicker">Pisculichi Labs</span>
+            <strong>Product lab</strong>
+            <p>Experimentos de bots, alertas y herramientas web.</p>
+            <div class="project-static-tags">
+              <span>HTML</span>
+              <span>Bots</span>
+              <span>Product</span>
+            </div>
+            <span class="project-static-link">Abrir proyecto</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="container stack-section">
+      <h2 class="section-title" data-i18n="stack.title">Stack y herramientas</h2>
+      <div class="stack-categories">
+        <div class="stack-category">
+          <h3><span class="category-icon adopt"></span> <span data-i18n="stack.core">Uso principal</span></h3>
+          <div class="tag-cloud">
+            <span class="tech-badge">Python</span>
+            <span class="tech-badge">FastAPI</span>
+            <span class="tech-badge">JavaScript</span>
+            <span class="tech-badge">TypeScript</span>
+            <span class="tech-badge">Linux</span>
+            <span class="tech-badge">Git</span>
+          </div>
+        </div>
+        <div class="stack-category">
+          <h3><span class="category-icon trial"></span> <span data-i18n="stack.product">Producto y datos</span></h3>
+          <div class="tag-cloud">
+            <span class="tech-badge">Dashboards</span>
+            <span class="tech-badge">Telegram Bots</span>
+            <span class="tech-badge">SQL</span>
+            <span class="tech-badge">Automation</span>
+            <span class="tech-badge">Business Process Modeling</span>
+            <span class="tech-badge">Corporate Finance Fundamentals</span>
+            <span class="tech-badge">Inventory & Cash Flow Auditing</span>
+          </div>
+        </div>
+        <div class="stack-category">
+          <h3><span class="category-icon assess"></span> <span data-i18n="stack.ai">AI-Assisted Development</span></h3>
+          <div class="tag-cloud">
+            <span class="tech-badge">AI-assisted workflows</span>
+            <span class="tech-badge">Playwright</span>
+            <span class="tech-badge">Obsidian</span>
+            <span class="tech-badge">README handoffs</span>
+            <span class="tech-badge">Prompted code review</span>
+            <span class="tech-badge">IA aplicada</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container github-activity" aria-labelledby="github-activity-title">
+      <div class="github-activity-copy">
+        <p class="eyebrow" data-i18n="github.eyebrow">Actividad verificable</p>
+        <h2 id="github-activity-title" data-i18n="github.title">GitHub como bitácora de trabajo</h2>
+        <p data-i18n="github.body">Actividad pública del perfil nachopalmeri: demos, repos y continuidad real.</p>
+        <a class="github-profile-link" data-github-profile-link href="https://github.com/nachopalmeri" target="_blank" rel="noopener noreferrer" data-i18n="github.profileLink">Ver perfil de GitHub →</a>
+      </div>
+
+      <div class="github-calendar-panel">
+        <p id="github-calendar-status" class="github-calendar-status" data-github-status role="status" aria-live="polite" data-i18n="github.loading">Cargando actividad de GitHub…</p>
+        <p class="github-calendar-fallback" data-github-fallback data-i18n="github.fallback" hidden>La actividad pública se muestra cuando está disponible.</p>
+        <div class="github-calendar-scroll" data-github-calendar-scroll role="region" aria-label="Calendario de contribuciones públicas" data-i18n-aria="github.calendarLabel" tabindex="0">
+          <div class="github-calendar" data-github-calendar data-state="loading">
+            <div class="github-calendar-summary">
+              <strong data-github-total>1,324 contribuciones en el último año</strong>
+              <div class="github-calendar-years" aria-label="Año">
+                <span class="github-year-btn active">2026</span>
+                <span class="github-year-btn">2025</span>
+              </div>
+            </div>
+            <div class="github-calendar-months" data-github-months aria-hidden="true"></div>
+            <div class="github-calendar-grid-wrap">
+              <div class="github-calendar-weekdays" aria-hidden="true">
+                <span></span>
+                <span>Mon</span>
+                <span></span>
+                <span>Wed</span>
+                <span></span>
+                <span>Fri</span>
+                <span></span>
+              </div>
+              <div class="github-calendar-weeks" data-github-weeks></div>
+            </div>
+            <div class="github-calendar-footer">
+              <a href="https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/managing-contribution-settings-on-your-profile/why-are-my-contributions-not-showing-up-on-my-profile" target="_blank" rel="noopener noreferrer" class="github-learn-link">Learn how we count contributions</a>
+              <div class="github-calendar-legend" aria-label="Less to more contributions" data-i18n-aria="github.legendLabel">
+                <span data-i18n="github.less">Less</span>
+                <span class="github-legend-scale" aria-hidden="true">
+                  <i class="level-0"></i>
+                  <i class="level-1"></i>
+                  <i class="level-2"></i>
+                  <i class="level-3"></i>
+                  <i class="level-4"></i>
+                </span>
+                <span data-i18n="github.more">More</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="github-scroll-hint" data-github-scroll-hint data-i18n="github.scrollHint">Deslizá el calendario para ver el año completo.</p>
+      <div class="github-snake" data-github-snake>
+        <img class="sq-snake-dark" src="https://raw.githubusercontent.com/nachopalmeri/nachopalmeri/output/snake-dark.svg" alt="La viborita comiéndose las contribuciones del año" loading="lazy" decoding="async" />
+        <img class="sq-snake-light" src="https://raw.githubusercontent.com/nachopalmeri/nachopalmeri/output/snake.svg" alt="La viborita comiéndose las contribuciones del año" loading="lazy" decoding="async" />
+      </div>
+      </div>
+      <div class="github-activity-grid">
+        <a class="github-card" href="https://github.com/nachopalmeri/jobbot" target="_blank" rel="noopener noreferrer">
+          <span class="github-card-label">JobBot</span>
+          <strong>Backend + producto</strong>
+          <small>Auth, webhooks, pagos, Telegram y despliegue full-stack.</small>
+        </a>
+        <a class="github-card" href="https://github.com/nachopalmeri/prode-mundial-2026" target="_blank" rel="noopener noreferrer">
+          <span class="github-card-label">Analytics</span>
+          <strong>Modelo + pipeline</strong>
+          <small>Fuentes, probabilidad, simulaciones y dashboard desplegado.</small>
+        </a>
+        <a class="github-card" href="https://github.com/nachopalmeri/agents-system" target="_blank" rel="noopener noreferrer">
+          <span class="github-card-label">Agents System</span>
+          <strong>Workflow real</strong>
+          <small>Reglas, agentes, verificación visual y handoffs documentados.</small>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <main id="projects-section" class="view-section">
+    <div class="container projects-container">
+      <div class="section-heading-row">
+        <h2 class="section-title" data-i18n="projects.archiveTitle">Archivo de proyectos</h2>
+        <p class="section-deck" data-i18n="projects.archiveBody">Los primeros cuatro son el núcleo. El resto muestra rango: CLI, deportes, comercio local y landings desplegadas.</p>
+        <a href="https://github.com/nachopalmeri" target="_blank" rel="noopener noreferrer" class="section-link" data-i18n="projects.github">Ver GitHub</a>
+      </div>
+
+      <div id="project-archive" class="project-archive" aria-live="polite"></div>
+    </div>
+  </main>
+
+  <main id="agents-section" class="view-section">
+    <div class="container">
+      <div class="agents-intro">
+        <div>
+          <p class="eyebrow" data-i18n="agents.eyebrow">Sistema real del repo</p>
+          <h2 data-i18n="agents.title">Sistema de trabajo</h2>
+        </div>
+        <p data-i18n="agents.description">Sistema local que uso para construir, revisar y documentar proyectos con asistentes de IA. No es un producto: es mi forma de trabajar con más orden, pruebas y contexto.</p>
+      </div>
+
+      <section class="workflow-proof" aria-labelledby="workflow-proof-title">
+        <div class="workflow-proof-copy">
+          <p class="eyebrow" data-i18n="agents.workflowsTitle">Flujos de trabajo</p>
+          <h3 id="workflow-proof-title" data-i18n="agents.proofTitle">Cómo lo uso en proyectos reales</h3>
+          <p data-i18n="agents.proofBody">El grafo muestra roles de trabajo, no cargos ni claims senior. La señal útil es el método: planear, construir, revisar, probar y documentar.</p>
+        </div>
+        <div class="workflow-steps" aria-label="Workflow steps">
+          <span data-i18n="agents.steps.plan">Plan</span>
+          <span data-i18n="agents.steps.build">Build</span>
+          <span data-i18n="agents.steps.review">Review</span>
+          <span data-i18n="agents.steps.test">Test</span>
+          <span data-i18n="agents.steps.ship">Ship</span>
+        </div>
+        <div class="workflow-cases">
+          <article><span>01</span><strong data-i18n="agents.workflow1.label">JobBot feature</strong></article>
+          <article><span>02</span><strong data-i18n="agents.workflow2.label">Portfolio verification</strong></article>
+          <article><span>03</span><strong data-i18n="agents.workflow3.label">README handoff</strong></article>
+        </div>
+        <div id="eco-wfp" class="eco-wfp" aria-label="Workflow launcher">
+          <div>
+            <h3 data-i18n="agents.workflowsTitle">Workflows documentados</h3>
+            <p data-i18n="agents.workflowsBody">Diagrama basado en archivos reales de ~/.agents. Visualiza rutas de trabajo; no ejecuta archivos markdown.</p>
+          </div>
+          <div id="eco-wf-list" class="wf-list" aria-label="Selected workflows"></div>
+        </div>
+      </section>
+
+      <div id="eco-viewport">
+        <div class="eco-grid-bg"></div>
+        <canvas id="eco-canvas-under" class="eco-canvas"></canvas>
+        <canvas id="eco-canvas-over" class="eco-canvas"></canvas>
+        <div id="eco-graph-wrapper"></div>
+        <div id="eco-sub-universe"></div>
+
+        <div id="eco-stats-badge" class="eco-stats-badge" data-i18n="agents.stats">
+          19 roles reales - Workflows documentados - Memoria local activa
+        </div>
+
+        <button id="eco-back-btn"><span>&larr;</span> <span data-i18n="agents.back">Volver a la red</span></button>
+        <div id="eco-hint" class="eco-hint" data-i18n="agents.hint">Click en un agente para explorar - Simula un flujo documentado del sistema</div>
+
+        <div id="eco-stage" class="eco-stage">
+          <div id="eco-stage-badge" class="stage-badge">Director</div>
+          <div id="eco-stage-text" class="stage-text" data-i18n="agents.stageIdle">Esperando workflow</div>
+          <div id="eco-stage-step" class="stage-step">0 / 0</div>
+        </div>
+
+        <div id="eco-hud" class="eco-hud">
+          <div class="hud-header">
+            <div id="eco-hud-dot" class="hud-dot"></div>
+            <div id="eco-hud-name" class="hud-name"></div>
+            <div id="eco-hud-role" class="hud-role"></div>
+          </div>
+          <div id="eco-hud-body" class="hud-body"></div>
+          <div id="eco-hud-meta" class="eco-meta"></div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="container footer-container">
+      <div class="footer-text" data-i18n="footer.text">
+        2026 ignacio.
+      </div>
+      <div class="footer-socials">
+        <a href="https://github.com/nachopalmeri" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://www.linkedin.com/in/ignacio-palmeri-64035b378/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="mailto:ignaciopalmeri1@gmail.com" data-i18n="footer.contact">Contacto</a>
+        <button type="button" id="side-quests-toggle" class="side-quests-toggle" aria-expanded="false" aria-controls="side-quests-reveal" data-i18n="sideQuests.toggle">Side Quests</button>
+      </div>
+    </div>
+  </footer>
+
+  <div id="side-quests-reveal" class="side-quests-reveal" aria-hidden="true">
+    <div class="sq-flash" aria-hidden="true"></div>
+    <button type="button" id="side-quests-close" class="side-quests-close" aria-label="Cerrar">✕</button>
+    <div class="sq-head">
+      <span class="sq-eyebrow" data-i18n="sideQuests.eyebrow">Fuera del código</span>
+      <h3 data-i18n="sideQuests.heading">Side Quests</h3>
+    </div>
+<script type="application/json" id="sq-diary">[{"slug": "showgirls", "name": "Showgirls", "year": "1995", "poster": "project-assets/side-quests/posters/showgirls.jpg", "watched": "Monday August 17, 2026"}, {"slug": "braveheart", "name": "Braveheart", "year": "1995", "poster": "project-assets/side-quests/posters/braveheart.jpg", "watched": "Sunday August 2, 2026"}, {"slug": "obsession-2025", "name": "Obsession", "year": "2025", "poster": "project-assets/side-quests/posters/obsession-2025.jpg", "watched": "Tuesday July 28, 2026"}, {"slug": "the-odyssey-2026", "name": "The Odyssey", "year": "2026", "poster": "project-assets/side-quests/posters/the-odyssey-2026.jpg", "watched": "Saturday July 25, 2026"}, {"slug": "ted", "name": "Ted", "year": "2012", "poster": "project-assets/side-quests/posters/ted.jpg", "watched": "Friday July 24, 2026"}, {"slug": "the-hunger-games-the-ballad-of-songbirds-snakes", "name": "The Hunger Games: The Ballad of Songbirds & Snakes", "year": "2023", "poster": "project-assets/side-quests/posters/the-hunger-games-the-ballad-of-songbirds-snakes.jpg", "watched": "Friday July 17, 2026"}, {"slug": "the-hunger-games-mockingjay-part-2", "name": "The Hunger Games: Mockingjay – Part 2", "year": "2015", "poster": "project-assets/side-quests/posters/the-hunger-games-mockingjay-part-2.jpg", "watched": "Thursday July 16, 2026"}, {"slug": "the-hunger-games-mockingjay-part-1", "name": "The Hunger Games: Mockingjay – Part 1", "year": "2014", "poster": "project-assets/side-quests/posters/the-hunger-games-mockingjay-part-1.jpg", "watched": "Sunday July 12, 2026"}, {"slug": "the-hunger-games-catching-fire", "name": "The Hunger Games: Catching Fire", "year": "2013", "poster": "project-assets/side-quests/posters/the-hunger-games-catching-fire.jpg", "watched": "Friday July 10, 2026"}, {"slug": "the-hunger-games", "name": "The Hunger Games", "year": "2012", "poster": "project-assets/side-quests/posters/the-hunger-games.jpg", "watched": "Thursday July 9, 2026"}, {"slug": "the-perks-of-being-a-wallflower", "name": "The Perks of Being a Wallflower", "year": "2012", "poster": "project-assets/side-quests/posters/the-perks-of-being-a-wallflower.jpg", "watched": "Sunday July 5, 2026"}, {"slug": "the-prestige", "name": "The Prestige", "year": "2006", "poster": "project-assets/side-quests/posters/the-prestige.jpg", "watched": "Saturday July 4, 2026"}, {"slug": "el-sueno-de-los-heroes", "name": "El sueño de los héroes", "year": "1997", "poster": "project-assets/side-quests/posters/el-sueno-de-los-heroes.jpg", "watched": "Monday June 29, 2026"}, {"slug": "trainspotting", "name": "Trainspotting", "year": "1996", "poster": "project-assets/side-quests/posters/trainspotting.jpg", "watched": "Saturday June 20, 2026"}, {"slug": "her", "name": "Her", "year": "2013", "poster": "project-assets/side-quests/posters/her.jpg", "watched": "Friday June 19, 2026"}, {"slug": "ex-machina-2015", "name": "Ex Machina", "year": "2015", "poster": "project-assets/side-quests/posters/ex-machina-2015.jpg", "watched": "Sunday June 14, 2026"}, {"slug": "the-spanish-prisoner", "name": "The Spanish Prisoner", "year": "1997", "poster": "project-assets/side-quests/posters/the-spanish-prisoner.jpg", "watched": "Saturday June 13, 2026"}, {"slug": "eastern-promises", "name": "Eastern Promises", "year": "2007", "poster": "project-assets/side-quests/posters/eastern-promises.jpg", "watched": "Friday June 12, 2026"}, {"slug": "return-of-the-jedi", "name": "Return of the Jedi", "year": "1983", "poster": "project-assets/side-quests/posters/return-of-the-jedi.jpg", "watched": "Wednesday June 10, 2026"}, {"slug": "my-2-cents", "name": "My 2 Cents", "year": "2026", "poster": "project-assets/side-quests/posters/my-2-cents.jpg", "watched": "Tuesday June 9, 2026"}, {"slug": "the-empire-strikes-back", "name": "The Empire Strikes Back", "year": "1980", "poster": "project-assets/side-quests/posters/the-empire-strikes-back.jpg", "watched": "Monday June 8, 2026"}, {"slug": "star-wars", "name": "Star Wars", "year": "1977", "poster": "project-assets/side-quests/posters/star-wars.jpg", "watched": "Saturday June 6, 2026"}, {"slug": "the-lord-of-the-rings-the-return-of-the-king", "name": "The Lord of the Rings: The Return of the King", "year": "2003", "poster": "project-assets/side-quests/posters/the-lord-of-the-rings-the-return-of-the-king.jpg", "watched": "Tuesday June 2, 2026"}, {"slug": "the-lord-of-the-rings-the-two-towers", "name": "The Lord of the Rings: The Two Towers", "year": "2002", "poster": "project-assets/side-quests/posters/the-lord-of-the-rings-the-two-towers.jpg", "watched": "Sunday May 31, 2026"}, {"slug": "the-lord-of-the-rings-the-fellowship-of-the-ring", "name": "The Lord of the Rings: The Fellowship of the Ring", "year": "2001", "poster": "project-assets/side-quests/posters/the-lord-of-the-rings-the-fellowship-of-the-ring.jpg", "watched": "Monday May 25, 2026"}, {"slug": "the-crash-2026", "name": "The Crash", "year": "2026", "poster": "project-assets/side-quests/posters/the-crash-2026.jpg", "watched": "Monday May 25, 2026"}, {"slug": "escape-from-alcatraz", "name": "Escape from Alcatraz", "year": "1979", "poster": "project-assets/side-quests/posters/escape-from-alcatraz.jpg", "watched": "Saturday May 23, 2026"}, {"slug": "tropic-thunder", "name": "Tropic Thunder", "year": "2008", "poster": "project-assets/side-quests/posters/tropic-thunder.jpg", "watched": "Saturday May 16, 2026"}, {"slug": "jennifers-body", "name": "Jennifer's Body", "year": "2009", "poster": "project-assets/side-quests/posters/jennifers-body.jpg", "watched": "Saturday May 16, 2026"}, {"slug": "all-quiet-on-the-western-front-2022", "name": "All Quiet on the Western Front", "year": "2022", "poster": "project-assets/side-quests/posters/all-quiet-on-the-western-front-2022.jpg", "watched": "Friday May 15, 2026"}, {"slug": "a-beautiful-mind", "name": "A Beautiful Mind", "year": "2001", "poster": "project-assets/side-quests/posters/a-beautiful-mind.jpg", "watched": "Saturday May 9, 2026"}, {"slug": "chronicles-of-a-wandering-saint", "name": "Chronicles of a Wandering Saint", "year": "2023", "poster": "project-assets/side-quests/posters/chronicles-of-a-wandering-saint.jpg", "watched": "Tuesday May 5, 2026"}, {"slug": "too-big-to-fail", "name": "Too Big to Fail", "year": "2011", "poster": "project-assets/side-quests/posters/too-big-to-fail.jpg", "watched": "Monday April 27, 2026"}, {"slug": "lethal-weapon", "name": "Lethal Weapon", "year": "1987", "poster": "project-assets/side-quests/posters/lethal-weapon.jpg", "watched": "Saturday April 25, 2026"}, {"slug": "point-break", "name": "Point Break", "year": "1991", "poster": "project-assets/side-quests/posters/point-break.jpg", "watched": "Sunday April 19, 2026"}, {"slug": "training-day", "name": "Training Day", "year": "2001", "poster": "project-assets/side-quests/posters/training-day.jpg", "watched": "Friday April 17, 2026"}, {"slug": "clue", "name": "Clue", "year": "1985", "poster": "project-assets/side-quests/posters/clue.jpg", "watched": "Saturday April 11, 2026"}, {"slug": "about-time", "name": "About Time", "year": "2013", "poster": "project-assets/side-quests/posters/about-time.jpg", "watched": "Saturday April 4, 2026"}, {"slug": "limitless", "name": "Limitless", "year": "2011", "poster": "project-assets/side-quests/posters/limitless.jpg", "watched": "Thursday April 2, 2026"}, {"slug": "zodiac", "name": "Zodiac", "year": "2007", "poster": "project-assets/side-quests/posters/zodiac.jpg", "watched": "Sunday March 29, 2026"}, {"slug": "the-darjeeling-limited", "name": "The Darjeeling Limited", "year": "2007", "poster": "project-assets/side-quests/posters/the-darjeeling-limited.jpg", "watched": "Saturday March 28, 2026"}, {"slug": "pretty-woman", "name": "Pretty Woman", "year": "1990", "poster": "project-assets/side-quests/posters/pretty-woman.jpg", "watched": "Tuesday March 24, 2026"}, {"slug": "idiocracy", "name": "Idiocracy", "year": "2006", "poster": "project-assets/side-quests/posters/idiocracy.jpg", "watched": "Saturday March 21, 2026"}, {"slug": "peaky-blinders-the-immortal-man", "name": "Peaky Blinders: The Immortal Man", "year": "2026", "poster": "project-assets/side-quests/posters/peaky-blinders-the-immortal-man.jpg", "watched": "Saturday March 21, 2026"}, {"slug": "office-space", "name": "Office Space", "year": "1999", "poster": "project-assets/side-quests/posters/office-space.jpg", "watched": "Sunday March 15, 2026"}, {"slug": "avatar-fire-and-ash", "name": "Avatar: Fire and Ash", "year": "2025", "poster": "project-assets/side-quests/posters/avatar-fire-and-ash.jpg", "watched": "Monday February 23, 2026"}, {"slug": "f1", "name": "F1", "year": "2025", "poster": "project-assets/side-quests/posters/f1.jpg", "watched": "Monday February 23, 2026"}, {"slug": "demolition", "name": "Demolition", "year": "2015", "poster": "project-assets/side-quests/posters/demolition.jpg", "watched": "Saturday February 21, 2026"}, {"slug": "jujutsu-kaisen-0", "name": "Jujutsu Kaisen 0", "year": "2021", "poster": "project-assets/side-quests/posters/jujutsu-kaisen-0.jpg", "watched": "Saturday February 14, 2026"}, {"slug": "city-of-god", "name": "City of God", "year": "2002", "poster": "project-assets/side-quests/posters/city-of-god.jpg", "watched": "Saturday February 7, 2026"}]</script>
+    <div class="sq-layout">
+      <div class="sq-poster-side">
+        <button type="button" class="sq-nav" id="sq-prev" aria-label="Anterior">‹</button>
+        <div class="sq-poster-wrap">
+          <div class="sq-glow" id="sq-glow"></div>
+          <img class="sq-poster-main" id="sq-poster" src="" alt="">
+          <span class="sq-cat" id="sq-cat"></span>
+        </div>
+        <button type="button" class="sq-nav" id="sq-next" aria-label="Siguiente">›</button>
+      </div>
+      <div class="sq-info">
+        <span class="sq-cat-chip" id="sq-cat-chip"></span>
+        <h4 id="sq-detail-title"></h4>
+        <p class="sq-meta" id="sq-detail-sub"></p>
+        <blockquote class="sq-why" id="sq-detail-why"></blockquote>
+        <div class="sq-tagrow" id="sq-tagrow"></div>
+        <div class="sq-actions" id="sq-actions"></div>
+      </div>
+    </div>
+    <div class="sq-col-chips" id="sq-col-chips"></div>
+    <div class="sq-strip" id="sq-strip"></div>
+    <div class="sq-crew" id="sq-crew">
+      <div class="sq-crew-head">
+        <span class="sq-crew-line" id="sq-crew-line"></span>
+        <div class="sq-crew-modes" id="sq-crew-modes"></div>
+      </div>
+      <div class="sq-crew-cards" id="sq-crew-cards"></div>
+
+    </div>
+  </div>
+
+  <button id="console-launcher" class="console-launcher" type="button" aria-expanded="false" aria-controls="console-chat" aria-label="Abrir consola">
+    <span class="console-launcher-icon" aria-hidden="true">$</span>
+    <span class="console-launcher-label" data-i18n="console.launcher">Terminal</span>
+  </button>
+  <section id="console-chat" class="console-chat" aria-hidden="true" aria-label="Portfolio console">
+    <div class="terminal-card">
+      <div class="terminal-topbar">
+        <span></span><span></span><span></span>
+        <strong data-i18n="console.title">ignacio@portfolio</strong>
+        <button id="console-close" class="console-close" type="button" aria-label="Cerrar consola">x</button>
+      </div>
+      <div id="terminal-output" class="terminal-output" aria-live="polite"></div>
+      <form id="terminal-form" class="terminal-form">
+        <span>$</span>
+        <input id="terminal-input" autocomplete="off" spellcheck="false" placeholder="help" aria-label="Portfolio command">
+      </form>
+      <div class="terminal-commands">
+        <button type="button" data-terminal-cmd="about">about</button>
+        <button type="button" data-terminal-cmd="skills">skills</button>
+        <button type="button" data-terminal-cmd="projects">projects</button>
+        <button type="button" data-terminal-cmd="contact">contact</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="project-video-reveal" class="project-video-reveal" aria-hidden="true">
+    <div class="project-video-frame">
+      <!-- S1 poster slot (PVP-2): populated per-row from data-poster by app.js pre-paint -->
+      <video id="project-video-reveal-video" muted loop playsinline preload="none" poster=""></video>
+      <button type="button" id="project-video-reveal-close" class="project-video-reveal-close" aria-label="Cerrar video">✕</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js" integrity="sha384-qOkzR5Ke/XkQxuGVJ9hpFEpDlcoLtWwVYhnJf06cLIZa2vaIptSqaubivErzmD5O" crossorigin="anonymous"></script>
+  <script src="app.js"></script>
+</body>
+</html>
+

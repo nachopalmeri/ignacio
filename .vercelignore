@@ -1,0 +1,8 @@
+.atl
+.git
+.github
+.vercel
+node_modules
+output
+docs/superpowers
+tests
