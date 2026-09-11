@@ -48,7 +48,7 @@
 }
 
 :root[data-theme="light"] {
-  --bg: #f7f7f4;
+  --bg: #fbf8f1;
   --bg-card: #ffffff;
   --bg-hover: #eeeeea;
   --text-primary: #18181b;
@@ -367,6 +367,29 @@ nav.nav-menu {
 :root[data-theme="light"] .theme-moon {
   opacity: 0;
   transform: scale(0.6) rotate(-20deg);
+}
+
+.github-snake {
+  display: flex;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.github-snake img {
+  max-width: 100%;
+  height: auto;
+}
+
+.sq-snake-light {
+  display: none;
+}
+
+:root[data-theme="light"] .sq-snake-dark {
+  display: none;
+}
+
+:root[data-theme="light"] .sq-snake-light {
+  display: block;
 }
 
 .social-link {
@@ -809,6 +832,65 @@ nav.nav-menu {
   background: color-mix(in srgb, var(--bg-card) 68%, transparent);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+}
+
+.hero-marquee {
+  position: relative;
+  z-index: 2;
+  margin-top: clamp(24px, 4vw, 48px);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 14%, black 86%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 14%, black 86%, transparent);
+}
+
+.hero-marquee-track {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: max-content;
+  animation: heroMarqueeScroll 28s linear infinite;
+}
+
+.hero-marquee:hover .hero-marquee-track {
+  animation-play-state: paused;
+}
+
+.hero-marquee-track span {
+  flex: 0 0 auto;
+  position: relative;
+  overflow: hidden;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent-green) 28%, var(--border));
+  background: linear-gradient(145deg, color-mix(in srgb, var(--accent-green) 22%, var(--bg-card)), color-mix(in srgb, var(--accent-blue) 16%, var(--bg-card)));
+  color: var(--text-secondary);
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.hero-marquee-track span::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 28% 22%, rgba(255,255,255,0.35), transparent 55%);
+  pointer-events: none;
+}
+
+@keyframes heroMarqueeScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-marquee-track {
+    animation: none;
+    flex-wrap: wrap;
+    width: 100%;
+  }
 }
 
 .proof-strip {
@@ -4323,7 +4405,7 @@ footer.app-footer {
 }
 
 :root[data-theme="light"] {
-  --bg: #f7f7f4;
+  --bg: #fbf8f1;
   --bg-card: #ffffff;
   --bg-hover: #eeeeea;
   --text-primary: #18181b;
@@ -4642,6 +4724,29 @@ nav.nav-menu {
 :root[data-theme="light"] .theme-moon {
   opacity: 0;
   transform: scale(0.6) rotate(-20deg);
+}
+
+.github-snake {
+  display: flex;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.github-snake img {
+  max-width: 100%;
+  height: auto;
+}
+
+.sq-snake-light {
+  display: none;
+}
+
+:root[data-theme="light"] .sq-snake-dark {
+  display: none;
+}
+
+:root[data-theme="light"] .sq-snake-light {
+  display: block;
 }
 
 .social-link {
@@ -5084,6 +5189,65 @@ nav.nav-menu {
   background: color-mix(in srgb, var(--bg-card) 68%, transparent);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+}
+
+.hero-marquee {
+  position: relative;
+  z-index: 2;
+  margin-top: clamp(24px, 4vw, 48px);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 14%, black 86%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 14%, black 86%, transparent);
+}
+
+.hero-marquee-track {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: max-content;
+  animation: heroMarqueeScroll 28s linear infinite;
+}
+
+.hero-marquee:hover .hero-marquee-track {
+  animation-play-state: paused;
+}
+
+.hero-marquee-track span {
+  flex: 0 0 auto;
+  position: relative;
+  overflow: hidden;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent-green) 28%, var(--border));
+  background: linear-gradient(145deg, color-mix(in srgb, var(--accent-green) 22%, var(--bg-card)), color-mix(in srgb, var(--accent-blue) 16%, var(--bg-card)));
+  color: var(--text-secondary);
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.hero-marquee-track span::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 28% 22%, rgba(255,255,255,0.35), transparent 55%);
+  pointer-events: none;
+}
+
+@keyframes heroMarqueeScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-marquee-track {
+    animation: none;
+    flex-wrap: wrap;
+    width: 100%;
+  }
 }
 
 .proof-strip {
