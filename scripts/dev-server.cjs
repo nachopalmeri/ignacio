@@ -53,9 +53,13 @@ function parseRangeHeader(rangeHeader, size) {
   return { start, end };
 }
 
+// Mirrors the rewrites in vercel.json so the real routes behave the same
+// locally as they do in production.
+const APP_ROUTES = new Set(['/', '/projects', '/agents']);
+
 function resolveFilePath(rootDir, requestUrl) {
   const pathname = decodeURIComponent(requestUrl.pathname);
-  const relativePath = pathname === '/' ? 'index.html' : pathname.slice(1);
+  const relativePath = APP_ROUTES.has(pathname) ? 'index.html' : pathname.slice(1);
   const fileResolved = path.resolve(path.join(rootDir, relativePath));
   if (fileResolved !== path.resolve(rootDir) && !fileResolved.startsWith(`${path.resolve(rootDir)}${path.sep}`)) {
     return { status: 403 };

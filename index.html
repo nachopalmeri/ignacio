@@ -3,10 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ignacio - Junior AI Automation & Product Engineer</title>
-  <meta name="description" content="Portfolio de ignacio: automatización, producto, soporte operativo y proyectos desplegados con evidencia real.">
-  <meta property="og:title" content="ignacio - Junior AI Automation & Product Engineer">
-  <meta property="og:description" content="Portfolio de ignacio: automatización, producto, soporte operativo y proyectos desplegados con evidencia real.">
+  <title>Ignacio Palmeri - Junior AI Automation & Product Engineer</title>
+  <meta name="description" content="Portfolio de Ignacio Palmeri: automatización, producto, soporte operativo y proyectos desplegados con evidencia real. Disponible para pasantía o rol trainee.">
+  <link rel="canonical" href="https://ignaciop.vercel.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ignaciop.vercel.app/">
+  <meta property="og:site_name" content="Ignacio Palmeri">
+  <meta property="og:locale" content="es_AR">
+  <meta property="og:title" content="Ignacio Palmeri - Junior AI Automation & Product Engineer">
+  <meta property="og:description" content="Portfolio de Ignacio Palmeri: automatización, producto, soporte operativo y proyectos desplegados con evidencia real. Disponible para pasantía o rol trainee.">
+  <meta property="og:image" content="https://ignaciop.vercel.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Ignacio Palmeri - Junior AI Automation & Product Engineer">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ignacio Palmeri - Junior AI Automation & Product Engineer">
+  <meta name="twitter:description" content="Automatización, producto y proyectos desplegados con evidencia real. Disponible para pasantía o rol trainee.">
+  <meta name="twitter:image" content="https://ignaciop.vercel.app/og-image.png">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -19,7 +32,7 @@
 
   <header class="app-header">
     <div class="container header-container">
-      <a href="#/" class="logo">
+      <a href="/" data-route="overview" class="logo">
         <div class="logo-icon"></div>
         <span class="logo-text">ignacio</span>
         <span class="logo-tag">Automation / IA</span>
@@ -32,7 +45,7 @@
       </nav>
 
       <div class="header-actions">
-        <a href="#/projects" class="btn btn-primary nav-cta" data-i18n="hero.projectsCta">Ver proyectos</a>
+        <a href="/projects" data-route="projects" class="btn btn-primary nav-cta" data-i18n="hero.projectsCta">Ver proyectos</a>
         <div class="toggle-group" aria-label="Language selector">
           <button class="toggle-btn active" data-lang-btn="es">ES</button>
           <button class="toggle-btn" data-lang-btn="en">EN</button>
@@ -71,7 +84,7 @@
         <div class="hero-copy">
           <div class="hero-tagline" data-i18n="hero.tagline">Junior AI Automation & Product Engineer</div>
           <p class="hero-availability" data-i18n="hero.availability">Disponible para pasantías y roles trainee</p>
-          <h1 data-i18n="hero.title">ignacio</h1>
+          <h1 data-i18n="hero.title">Ignacio Palmeri</h1>
           <p class="hero-role-rotator" aria-live="off">
             <span data-i18n="hero.rolePrefix">Construyo</span>
             <span id="hero-role-word" class="hero-role-word">automatizaciones</span>
@@ -81,8 +94,23 @@
             Busco una pasantía o rol trainee donde pueda aportar criterio operativo, aprendizaje rápido y capacidad real de convertir procesos repetitivos en software útil.
           </p>
           <div class="hero-actions">
-            <a href="#/projects" class="btn btn-primary" data-i18n="hero.projectsCta">Ver proyectos</a>
-            <a href="https://github.com/nachopalmeri" target="_blank" rel="noopener noreferrer" class="btn btn-link" data-i18n="hero.githubCta">GitHub</a>
+            <a href="mailto:ignaciopalmeri1@gmail.com?subject=Pasant%C3%ADa%20%2F%20rol%20trainee&amp;body=Hola%20Ignacio%2C%0A%0ATe%20escribo%20por%20una%20b%C3%BAsqueda%20de%20pasant%C3%ADa%20%2F%20trainee.%0A%0AEmpresa%3A%0APosici%C3%B3n%3A%0A%0A" class="btn btn-primary" data-i18n="hero.contactCta">Contactame</a>
+            <a href="/projects" class="btn btn-secondary" data-route="projects" data-i18n="hero.projectsCta">Ver proyectos</a>
+            <a href="/cv.pdf" download class="btn btn-link" data-i18n="hero.cvCta">Descargar CV</a>
+          </div>
+          <div class="hero-contact-links">
+            <a href="mailto:ignaciopalmeri1@gmail.com" class="hero-contact-link">
+              <span class="hero-contact-icon" aria-hidden="true">@</span>
+              ignaciopalmeri1@gmail.com
+            </a>
+            <a href="https://www.linkedin.com/in/ignacio-palmeri-64035b378/" target="_blank" rel="noopener noreferrer" class="hero-contact-link">
+              <span class="hero-contact-icon" aria-hidden="true">in</span>
+              LinkedIn
+            </a>
+            <a href="https://github.com/nachopalmeri" target="_blank" rel="noopener noreferrer" class="hero-contact-link">
+              <span class="hero-contact-icon" aria-hidden="true">{ }</span>
+              GitHub
+            </a>
           </div>
           <aside class="hero-command hero-dock" aria-label="Profile signal">
             <div class="hero-signal" aria-hidden="true">
@@ -182,13 +210,37 @@
                 <strong data-i18n="certifications.anthropic.title">Claude Code in Action</strong>
                 <span data-i18n="certifications.anthropic.issuer">Anthropic</span>
               </div>
-              <span class="certification-link certification-link--static" data-i18n="certifications.cta">Ver credencial</span>
+              <!-- TODO(ignacio): pegar acá la URL pública del badge de Credly y
+                   cambiar el <span> por un <a href="..."> como los otros dos.
+                   Hasta entonces queda oculto para no mostrar un botón muerto. -->
+              <span class="certification-link certification-link--static" data-i18n="certifications.cta" hidden>Ver credencial</span>
             </li>
           </ul>
         </div>
       </div>
     </section>
 
+    <section class="container ops-section" aria-labelledby="ops-title">
+      <div class="ops-copy" data-reveal="up">
+        <p class="eyebrow" data-i18n="ops.eyebrow">Antes de programar</p>
+        <h2 id="ops-title" class="section-title" data-i18n="ops.title">Contexto operativo</h2>
+        <p class="section-deck" data-i18n="ops.body">Trabajé en el negocio familiar manejando caja, inventario y auditorías. Ahí aprendí cómo se rompen los procesos en la práctica, que es exactamente lo que hoy automatizo.</p>
+      </div>
+      <ul class="ops-list" data-reveal="up" data-reveal-delay="90">
+        <li class="ops-item">
+          <strong data-i18n="ops.cash.title">Caja diaria que tenía que cuadrar</strong>
+          <span data-i18n="ops.cash.body">Cierres con plata real de por medio: aprendí que un sistema que falla en silencio es peor que uno que no existe. Por eso hoy valido entradas y registro todo lo que corre.</span>
+        </li>
+        <li class="ops-item">
+          <strong data-i18n="ops.stock.title">Inventario y reposición</strong>
+          <span data-i18n="ops.stock.body">Contar stock a mano y cruzarlo con lo vendido es el caso de uso de automatización más claro que vi. Mis dashboards salen de haber hecho esa planilla a mano.</span>
+        </li>
+        <li class="ops-item">
+          <strong data-i18n="ops.audit.title">Auditorías y control de procesos</strong>
+          <span data-i18n="ops.audit.body">Revisar que lo declarado coincida con lo real me dejó el hábito de dejar rastro: logs, documentación y pasos reproducibles en cada cosa que construyo.</span>
+        </li>
+      </ul>
+    </section>
 
     <section class="roadmap-section" data-roadmap aria-labelledby="project-carousel-title">
       <div class="roadmap-sticky" data-roadmap-sticky>
@@ -220,7 +272,7 @@
             </div>
             <span class="project-static-link">Abrir proyecto</span>
           </a>
-          <a class="project-static-card" href="#/agents">
+          <a class="project-static-card" href="/agents" data-route="agents">
             <span class="project-static-kicker">Agents System</span>
             <strong>Workflow system</strong>
             <p>Mapa visual de agentes, reglas, memoria y rutas de trabajo.</p>
@@ -402,10 +454,6 @@
           <p>Porque es verdad: es mi primera experiencia profesional en tecnología. Los proyectos muestran que puedo entregar software real, no que tenga años de experiencia senior.</p>
         </details>
         <details class="faq-item">
-          <summary>¿Por qué no hay foto ni apellido en esta página?</summary>
-          <p>Es una versión pensada para compartir en redes sin exponer mi identidad completa. El portfolio con mi nombre completo y foto está en otro link, disponible si lo pedís.</p>
-        </details>
-        <details class="faq-item">
           <summary>¿Usás IA para programar? ¿Eso cuenta como trampa?</summary>
           <p>Uso asistentes de IA como parte de mi flujo de trabajo (planificar, construir, revisar, testear, documentar) — igual que cualquier developer hoy usa su IDE, linter o Stack Overflow. El criterio de qué construir y cómo revisar sigue siendo mío.</p>
         </details>
@@ -444,6 +492,14 @@
         <p data-i18n="agents.description">Sistema local que uso para construir, revisar y documentar proyectos con asistentes de IA. No es un producto: es mi forma de trabajar con más orden, pruebas y contexto.</p>
       </div>
 
+      <div class="agents-guide">
+        <p class="agents-guide-text" data-i18n="agents.guide">Cada nodo del grafo es un rol con instrucciones propias (planear, construir, revisar, testear, documentar). Resuelve el problema de perder contexto entre tareas: cada rol sabe qué hizo el anterior.</p>
+        <p class="agents-guide-hint">
+          <span class="agents-guide-cursor" aria-hidden="true"></span>
+          <span data-i18n="agents.guideHint">Clickeá cualquier agente del grafo para ver su rol y simular un flujo documentado</span>
+        </p>
+      </div>
+
       <section class="workflow-proof" aria-labelledby="workflow-proof-title">
         <div class="workflow-proof-copy">
           <p class="eyebrow" data-i18n="agents.workflowsTitle">Flujos de trabajo</p>
@@ -473,8 +529,10 @@
 
       <div id="eco-viewport">
         <div class="eco-grid-bg"></div>
-        <canvas id="eco-canvas-under" class="eco-canvas"></canvas>
-        <canvas id="eco-canvas-over" class="eco-canvas"></canvas>
+        <!-- Decorative: the links between agents are drawn here, but every agent
+             is a real DOM node with its own accessible name below. -->
+        <canvas id="eco-canvas-under" class="eco-canvas" aria-hidden="true"></canvas>
+        <canvas id="eco-canvas-over" class="eco-canvas" aria-hidden="true"></canvas>
         <div id="eco-graph-wrapper"></div>
         <div id="eco-sub-universe"></div>
 
@@ -506,9 +564,25 @@
   </main>
 
   <footer class="app-footer">
+    <section class="container footer-contact" aria-labelledby="footer-contact-title">
+      <div class="footer-contact-copy">
+        <p class="eyebrow" data-i18n="contact.eyebrow">Contacto</p>
+        <h2 id="footer-contact-title" data-i18n="contact.title">¿Buscás un trainee que ya entrega software?</h2>
+        <p data-i18n="contact.body">Estoy disponible para pasantía o rol trainee en Buenos Aires o remoto. Escribime y te respondo el mismo día.</p>
+      </div>
+      <div class="footer-contact-actions">
+        <a href="mailto:ignaciopalmeri1@gmail.com?subject=Pasant%C3%ADa%20%2F%20rol%20trainee&amp;body=Hola%20Ignacio%2C%0A%0ATe%20escribo%20por%20una%20b%C3%BAsqueda%20de%20pasant%C3%ADa%20%2F%20trainee.%0A%0AEmpresa%3A%0APosici%C3%B3n%3A%0A%0A" class="btn btn-primary" data-i18n="hero.contactCta">Contactame</a>
+        <a href="/cv.pdf" download class="btn btn-secondary" data-i18n="hero.cvCta">Descargar CV</a>
+        <div class="footer-contact-direct">
+          <a href="mailto:ignaciopalmeri1@gmail.com">ignaciopalmeri1@gmail.com</a>
+          <a href="https://www.linkedin.com/in/ignacio-palmeri-64035b378/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://github.com/nachopalmeri" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+      </div>
+    </section>
     <div class="container footer-container">
       <div class="footer-text" data-i18n="footer.text">
-        2026 ignacio.
+        2026 Ignacio Palmeri.
       </div>
       <div class="footer-socials">
         <a href="https://github.com/nachopalmeri" target="_blank" rel="noopener noreferrer">GitHub</a>

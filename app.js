@@ -8,11 +8,13 @@ const UI_COPY = {
     nav: { overview: 'Overview', projects: 'Proyectos', agents: 'Sistema de trabajo' },
     hero: {
       tagline: 'Junior AI Automation & Product Engineer',
-      title: 'ignacio',
+      title: 'Ignacio Palmeri',
       rolePrefix: 'Construyo',
       availability: 'Disponible para pasantías y roles trainee',
       kicker: 'Estudiante de Gestión IT. Construyo herramientas desplegadas con Python, FastAPI, automatización de procesos y asistentes de IA.',
       description: 'Busco una pasantía o rol trainee donde pueda aportar criterio operativo, aprendizaje rápido y capacidad real de convertir procesos repetitivos en software útil.',
+      contactCta: 'Contactame',
+      cvCta: 'Descargar CV',
       projectsCta: 'Ver proyectos',
       agentsCta: 'Ver sistema de trabajo',
       githubCta: 'GitHub',
@@ -31,7 +33,7 @@ const UI_COPY = {
       prompt: 'Comandos: about, skills, projects, agents, contact, clear',
       unknown: 'Comando no encontrado',
       help: 'Comandos: about, skills, projects, agents, contact, clear',
-      about: 'ignacio - estudiante de Gestión IT que combina experiencia operativa, producto y automatización para construir software útil.',
+      about: 'Ignacio Palmeri - estudiante de Gestión IT que combina experiencia operativa, producto y automatización para construir software útil.',
       skills: 'Python, FastAPI, TypeScript, SQL, Linux, Git, Playwright, automatización de procesos y desarrollo asistido por IA.',
       projects: 'Proyectos principales: JobBot, Agents System, Motor Estadístico Predictivo y Pisculichi Labs. El archivo completo muestra 9 piezas desplegadas o revisables.',
       agents: 'Uso asistentes de IA como parte de un flujo ordenado: plan, construcción, revisión, pruebas, documentación y publicación.',
@@ -70,6 +72,23 @@ const UI_COPY = {
       p2: 'Trabajo con Python, FastAPI, SQL, Linux, Git y asistentes de IA para construir dashboards, bots, automatizaciones y prototipos desplegados. Me importa más entregar trabajo revisable que parecer senior.',
       p3: 'Mi experiencia en atención al cliente y operaciones me dio presión real, caja, inventario y auditorías. Quiero llevar esa base a soporte IT, QA trainee, automatización o startups.'
     },
+    ops: {
+      eyebrow: 'Antes de programar',
+      title: 'Contexto operativo',
+      body: 'Trabajé en el negocio familiar manejando caja, inventario y auditorías. Ahí aprendí cómo se rompen los procesos en la práctica, que es exactamente lo que hoy automatizo.',
+      cash: {
+        title: 'Caja diaria que tenía que cuadrar',
+        body: 'Cierres con plata real de por medio: aprendí que un sistema que falla en silencio es peor que uno que no existe. Por eso hoy valido entradas y registro todo lo que corre.'
+      },
+      stock: {
+        title: 'Inventario y reposición',
+        body: 'Contar stock a mano y cruzarlo con lo vendido es el caso de uso de automatización más claro que vi. Mis dashboards salen de haber hecho esa planilla a mano.'
+      },
+      audit: {
+        title: 'Auditorías y control de procesos',
+        body: 'Revisar que lo declarado coincida con lo real me dejó el hábito de dejar rastro: logs, documentación y pasos reproducibles en cada cosa que construyo.'
+      }
+    },
     certifications: {
       title: 'Certificaciones',
       cta: 'Ver credencial',
@@ -107,6 +126,8 @@ const UI_COPY = {
       eyebrow: 'Sistema real del repo',
       title: 'Sistema de trabajo',
       description: 'Sistema local que uso para construir, revisar y documentar con IA. Prioriza contexto, pruebas y decisiones claras.',
+      guide: 'Cada nodo del grafo es un rol con instrucciones propias (planear, construir, revisar, testear, documentar). Resuelve el problema de perder contexto entre tareas: cada rol sabe qué hizo el anterior.',
+      guideHint: 'Clickeá cualquier agente del grafo para ver su rol y simular un flujo documentado',
       workflowsTitle: 'Flujos de trabajo',
       workflowsBody: 'Basado en archivos reales de ~/.agents.',
       proofTitle: 'Flujo real',
@@ -130,18 +151,25 @@ const UI_COPY = {
       validated: 'Ecosistema visualizado: evidencia revisada',
       system: 'Sistema'
     },
-      footer: { text: '2026 ignacio.', contact: 'Contacto' },
+      contact: {
+        eyebrow: 'Contacto',
+        title: '¿Buscás un trainee que ya entrega software?',
+        body: 'Estoy disponible para pasantía o rol trainee en Buenos Aires o remoto. Escribime y te respondo el mismo día.'
+      },
+      footer: { text: '2026 Ignacio Palmeri.', contact: 'Contacto' },
       sideQuests: { toggle: 'Side Quests', eyebrow: 'Fuera del código', heading: 'Side Quests', routeSummary: 'ver ruta técnica' }
   },
   en: {
     nav: { overview: 'Overview', projects: 'Projects', agents: 'Workflow System' },
     hero: {
       tagline: 'Junior AI Automation & Product Engineer',
-      title: 'ignacio',
+      title: 'Ignacio Palmeri',
       rolePrefix: 'Building',
       availability: 'Available for internships and trainee roles',
       kicker: 'IT Management student. I build deployed tools with Python, FastAPI, process automation and AI assistants.',
       description: 'I am looking for an internship or trainee role where I can contribute operational judgment, fast learning and the ability to turn repetitive workflows into useful software.',
+      contactCta: 'Get in touch',
+      cvCta: 'Download CV',
       projectsCta: 'View projects',
       agentsCta: 'View workflow system',
       githubCta: 'GitHub',
@@ -160,7 +188,7 @@ const UI_COPY = {
       prompt: 'Commands: about, skills, projects, agents, contact, clear',
       unknown: 'Command not found',
       help: 'Commands: about, skills, projects, agents, contact, clear',
-      about: 'ignacio - IT Management student combining operations, product and automation to build useful software.',
+      about: 'Ignacio Palmeri - IT Management student combining operations, product and automation to build useful software.',
       skills: 'Python, FastAPI, TypeScript, SQL, Linux, Git, Playwright, process automation and applied AI.',
       projects: 'Main projects: JobBot, Agents System, Sports Predictive Analytics Engine and Pisculichi Labs. The full archive shows 9 deployed or reviewable pieces.',
       agents: 'I use AI assistants inside an ordered workflow: planning, building, review, tests, documentation and shipping.',
@@ -199,6 +227,23 @@ const UI_COPY = {
       p2: 'I work with Python, FastAPI, SQL, Linux, Git and AI assistants to build dashboards, bots, automations and deployed prototypes. I care more about shipping reviewable work than looking senior.',
       p3: 'My customer service and operations background gave me real pressure, cash handling, inventory and audits. I want to bring that base into IT support, QA trainee, automation or startups.'
     },
+    ops: {
+      eyebrow: 'Before writing code',
+      title: 'Operations background',
+      body: 'I worked in the family business handling the till, inventory and audits. That is where I learned how processes actually break - exactly what I automate today.',
+      cash: {
+        title: 'A daily till that had to balance',
+        body: 'Closing out with real money on the line taught me that a system failing silently is worse than no system at all. That is why I validate inputs and log everything that runs.'
+      },
+      stock: {
+        title: 'Inventory and restocking',
+        body: 'Counting stock by hand and reconciling it against sales is the clearest automation case I have seen. My dashboards come from having built that spreadsheet manually.'
+      },
+      audit: {
+        title: 'Audits and process control',
+        body: 'Checking that what was declared matched reality left me with the habit of leaving a trail: logs, documentation and reproducible steps in everything I build.'
+      }
+    },
     certifications: {
       title: 'Certifications',
       cta: 'View credential',
@@ -236,6 +281,8 @@ const UI_COPY = {
       eyebrow: 'Real repo system',
       title: 'Workflow system',
       description: 'A local system I use to build, review and document with AI.',
+      guide: 'Each node in the graph is a role with its own instructions (plan, build, review, test, document). It solves context loss between tasks: every role knows what the previous one did.',
+      guideHint: 'Click any agent in the graph to see its role and simulate a documented flow',
       workflowsTitle: 'Workflows',
       workflowsBody: 'Based on real ~/.agents files.',
       proofTitle: 'Real flow',
@@ -259,7 +306,12 @@ const UI_COPY = {
       validated: 'Ecosystem visualized: evidence reviewed',
       system: 'System'
     },
-      footer: { text: '2026 ignacio.', contact: 'Contact' },
+      contact: {
+        eyebrow: 'Contact',
+        title: 'Looking for a trainee who already ships?',
+        body: 'Available for an internship or trainee role in Buenos Aires or remote. Write me and I reply the same day.'
+      },
+      footer: { text: '2026 Ignacio Palmeri.', contact: 'Contact' },
       sideQuests: { toggle: 'Side Quests', eyebrow: 'Beyond the code', heading: 'Side Quests', routeSummary: 'view technical route' }
   }
 };
@@ -436,8 +488,16 @@ async function setupGithubContributions() {
   calendar.dataset.state = 'loading';
   status.textContent = getCopy('github.loading');
 
+  // Without a deadline a hung serverless function leaves the panel stuck on
+  // "Cargando…" forever, so abort and fall back instead of waiting.
+  const controller = typeof AbortController === 'function' ? new AbortController() : null;
+  const timeout = setTimeout(() => controller && controller.abort(), 8000);
+
   try {
-    const response = await fetch('/api/github-contributions', { headers: { Accept: 'application/json' } });
+    const response = await fetch('/api/github-contributions', {
+      headers: { Accept: 'application/json' },
+      signal: controller ? controller.signal : undefined
+    });
     if (!response.ok) throw new Error('GitHub activity unavailable');
     const data = await response.json();
     if (!isValidGithubContributionData(data)) throw new Error('Invalid GitHub activity response');
@@ -445,6 +505,8 @@ async function setupGithubContributions() {
     renderGithubCalendar(data);
   } catch (_error) {
     setGithubFallback();
+  } finally {
+    clearTimeout(timeout);
   }
 }
 
@@ -744,6 +806,8 @@ function setupSideQuests() {
     visibleQuests().forEach(item => {
       const t = document.createElement('button');
       t.type = 'button'; t.className = 'sq-thumb';
+      // The poster img stays alt="" (decorative); the button carries the name.
+      t.setAttribute('aria-label', sqL(item.title) || item.title || '');
       if (sqSeenGet().includes(item.title)) t.classList.add('seen');
       if (sqMatch(item) >= 80) t.classList.add('foryou');
       t.innerHTML = '<img src="' + (item.kind === 'book' ? sqBookArt(item) : item.poster) + '" alt="" loading="lazy" decoding="async">';
@@ -1255,7 +1319,14 @@ const FEATURED_PROJECTS = [
       es: 'Demo pública, repo revisable y stack claro: API, dashboard, auth, webhooks, pagos y Telegram.',
       en: 'Public demo, reviewable repo and clear stack: API, dashboard, auth, webhooks, payments and Telegram.'
     },
-    stack: ['Python', 'FastAPI', 'Next.js', 'PostgreSQL', 'Webhooks']
+    stack: ['Python', 'FastAPI', 'Next.js', 'PostgreSQL', 'Webhooks'],
+    result: {
+      es: 'Desplegado en Vercel con demo pública y repo abierto: auth, webhooks y pagos funcionando end-to-end.',
+      en: 'Deployed on Vercel with a public demo and open repo: auth, webhooks and payments working end to end.'
+    },
+    // Completar cuando haya números reales (usuarios, pedidos, uptime…).
+    // Con un valor distinto de null la tarjeta muestra la métrica sola.
+    metrics: null
   },
   {
     id: 'pisculichi',
@@ -1286,7 +1357,14 @@ const FEATURED_PROJECTS = [
       es: 'Demo beta desplegada y repositorio de experimentos con bots, alertas e interfaces de mercado.',
       en: 'Deployed beta demo and experiment repository with bots, alerts and market interfaces.'
     },
-    stack: ['HTML', 'Telegram Bot', 'Prediction Markets', 'Alerts']
+    stack: ['HTML', 'Telegram Bot', 'Prediction Markets', 'Alerts'],
+    result: {
+      es: 'En beta pública: bots y alertas corriendo sobre prediction markets, con repo abierto.',
+      en: 'In public beta: bots and alerts running on prediction markets, with an open repo.'
+    },
+    // Completar cuando haya números reales (usuarios, pedidos, uptime…).
+    // Con un valor distinto de null la tarjeta muestra la métrica sola.
+    metrics: null
   },
   {
     id: 'darter',
@@ -1315,13 +1393,20 @@ const FEATURED_PROJECTS = [
       es: 'Proyecto personal en uso diario, sin demo pública: la evidencia es el video de producto.',
       en: 'A personal project in daily use, no public demo: the product video is the evidence.'
     },
-    stack: ['Next.js', 'Dashboard', 'Fintech', 'AI']
+    stack: ['Next.js', 'Dashboard', 'Fintech', 'AI'],
+    result: {
+      es: 'En uso personal diario. Repo privado por los datos financieros; la demo en video muestra el producto.',
+      en: 'In daily personal use. Repo is private because of the financial data; the video demo shows the product.'
+    },
+    // Completar cuando haya números reales (usuarios, pedidos, uptime…).
+    // Con un valor distinto de null la tarjeta muestra la métrica sola.
+    metrics: null
   },
   {
     id: 'agents-system',
     title: 'Agents System',
     repo: 'https://github.com/nachopalmeri/agents-system',
-    href: '#/agents',
+    href: '/agents',
     media: 'project-assets/agents-system.webp',
     video: 'project-assets/video/agents-system-demo.mp4',
     status: 'LOCAL',
@@ -1346,7 +1431,14 @@ const FEATURED_PROJECTS = [
       es: 'Grafo interactivo, rutas seleccionables, capturas y tests de navegador del portfolio.',
       en: 'Interactive graph, selectable routes, screenshots and browser tests in the portfolio.'
     },
-    stack: ['Agents', 'Playwright', 'Docs', 'Workflow']
+    stack: ['Agents', 'Playwright', 'Docs', 'Workflow'],
+    result: {
+      es: 'Sistema local que uso para construir estos proyectos. Repo público con la documentación del método.',
+      en: 'Local system I use to build these projects. Public repo with the method documented.'
+    },
+    // Completar cuando haya números reales (usuarios, pedidos, uptime…).
+    // Con un valor distinto de null la tarjeta muestra la métrica sola.
+    metrics: null
   },
   {
     id: 'franquiya',
@@ -1377,7 +1469,14 @@ const FEATURED_PROJECTS = [
       es: 'Producto en uso real por una franquicia, con dashboard desplegado, repositorio público y suite de tests.',
       en: 'A product in real use by a franchise, with a deployed dashboard, a public repository and a test suite.'
     },
-    stack: ['FastAPI', 'Next.js', 'Recharts', 'Groq AI']
+    stack: ['FastAPI', 'Next.js', 'Recharts', 'Groq AI'],
+    result: {
+      es: 'Desplegado y en uso para operación de franquicias: stock, facturas y auditorías en un solo dashboard.',
+      en: 'Deployed and in use for franchise operations: stock, invoices and audits in a single dashboard.'
+    },
+    // Completar cuando haya números reales (usuarios, pedidos, uptime…).
+    // Con un valor distinto de null la tarjeta muestra la métrica sola.
+    metrics: null
   },
   {
     id: 'dulces',
@@ -1409,7 +1508,14 @@ const FEATURED_PROJECTS = [
       es: 'Muestra velocidad para entregar sitios simples con criterio comercial.',
       en: 'Shows speed delivering simple sites with commercial judgment.'
     },
-    stack: ['HTML', 'Commerce', 'Brand', 'Vercel']
+    stack: ['HTML', 'Commerce', 'Brand', 'Vercel'],
+    result: {
+      es: 'Landing comercial desplegada para una marca real de productos dulces.',
+      en: 'Commercial landing deployed for a real confectionery brand.'
+    },
+    // Completar cuando haya números reales (usuarios, pedidos, uptime…).
+    // Con un valor distinto de null la tarjeta muestra la métrica sola.
+    metrics: null
   },
   {
     id: 'motor-estadistico',
@@ -1441,7 +1547,14 @@ const FEATURED_PROJECTS = [
       es: 'Dashboard desplegado, repositorio público y lógica de predicción explicable desde el código.',
       en: 'Deployed dashboard, public repository and prediction logic that can be inspected in code.'
     },
-    stack: ['Python', 'Analytics', 'Vercel', 'Game Logic']
+    stack: ['Python', 'Analytics', 'Vercel', 'Game Logic'],
+    result: {
+      es: 'Desplegado con dashboard público de predicciones y simulaciones.',
+      en: 'Deployed with a public dashboard of predictions and simulations.'
+    },
+    // Completar cuando haya números reales (usuarios, pedidos, uptime…).
+    // Con un valor distinto de null la tarjeta muestra la métrica sola.
+    metrics: null
   },
   {
     id: 'piscubi',
@@ -1473,7 +1586,14 @@ const FEATURED_PROJECTS = [
       es: 'Demo desplegada, video de producto y repositorio público.',
       en: 'Deployed demo, product video and public repository.'
     },
-    stack: ['Next.js', 'E-commerce', 'Tailwind', 'Stripe']
+    stack: ['Next.js', 'E-commerce', 'Tailwind', 'Stripe'],
+    result: {
+      es: 'E-commerce desplegado con catálogo interactivo y pasarela de pago integrada.',
+      en: 'Deployed e-commerce with an interactive catalog and payment gateway.'
+    },
+    // Completar cuando haya números reales (usuarios, pedidos, uptime…).
+    // Con un valor distinto de null la tarjeta muestra la métrica sola.
+    metrics: null
   },
   {
     id: 'pisku',
@@ -1503,7 +1623,14 @@ const FEATURED_PROJECTS = [
       es: 'Demuestra criterio de empaque, narrativa y UX fuera del molde de landing.',
       en: 'Shows packaging, narrative and UX judgment beyond generic landing pages.'
     },
-    stack: ['Python', 'CLI', 'Finance UX', 'Landing']
+    stack: ['Python', 'CLI', 'Finance UX', 'Landing'],
+    result: {
+      es: 'Interfaz CLI desplegada como producto demostrable, con repo abierto.',
+      en: 'CLI interface deployed as a demonstrable product, with an open repo.'
+    },
+    // Completar cuando haya números reales (usuarios, pedidos, uptime…).
+    // Con un valor distinto de null la tarjeta muestra la métrica sola.
+    metrics: null
   },
   {
     id: 'fulbotracker',
@@ -1535,7 +1662,14 @@ const FEATURED_PROJECTS = [
       es: 'Muestra sensibilidad para productos pequenos con uso recurrente.',
       en: 'Shows sensitivity for small products with recurring use.'
     },
-    stack: ['HTML', 'Product UX', 'Sports', 'Vercel']
+    stack: ['HTML', 'Product UX', 'Sports', 'Vercel'],
+    result: {
+      es: 'Desplegado y usado para trackear partidos y torneos entre amigos.',
+      en: 'Deployed and used to track matches and tournaments among friends.'
+    },
+    // Completar cuando haya números reales (usuarios, pedidos, uptime…).
+    // Con un valor distinto de null la tarjeta muestra la métrica sola.
+    metrics: null
   },
   {
     id: 'comidadebarrio',
@@ -1567,7 +1701,14 @@ const FEATURED_PROJECTS = [
       es: 'Muestra criterio para resolver necesidades reales sin sobredisenar.',
       en: 'Shows judgment for solving real needs without overdesigning.'
     },
-    stack: ['HTML', 'Local Business', 'Landing', 'Vercel']
+    stack: ['HTML', 'Local Business', 'Landing', 'Vercel'],
+    result: {
+      es: 'Landing desplegada para un comercio gastronómico de barrio.',
+      en: 'Landing deployed for a neighbourhood food business.'
+    },
+    // Completar cuando haya números reales (usuarios, pedidos, uptime…).
+    // Con un valor distinto de null la tarjeta muestra la métrica sola.
+    metrics: null
   },
   {
     id: 'dom',
@@ -1597,9 +1738,21 @@ const FEATURED_PROJECTS = [
       es: 'Demuestra amplitud para construir interfaces no solo tecnicas.',
       en: 'Shows range for building interfaces beyond technical dashboards.'
     },
-    stack: ['HTML', 'Sports', 'Landing', 'Vercel']
+    stack: ['HTML', 'Sports', 'Landing', 'Vercel'],
+    result: {
+      es: 'Landing desplegada con repo abierto.',
+      en: 'Landing deployed with an open repo.'
+    },
+    // Completar cuando haya números reales (usuarios, pedidos, uptime…).
+    // Con un valor distinto de null la tarjeta muestra la métrica sola.
+    metrics: null
   }
 ];
+
+// Internal hrefs are app routes (/agents); everything else opens in a new tab.
+function isInternalHref(href) {
+  return typeof href === 'string' && href.startsWith('/') && !href.startsWith('//');
+}
 
 function projectField(project, field) {
   const value = project[field];
@@ -1672,11 +1825,14 @@ function renderProjectPreview(project, index, mode = 'active') {
         <h3>${escapeHtml(project.title)}</h3>
         <p>${escapeHtml(projectField(project, 'description'))}</p>
         <dl class="project-proof-points">
+          <div><dt>${currentLang === 'es' ? 'Problema' : 'Problem'}</dt><dd>${escapeHtml(projectField(project, 'problem'))}</dd></div>
           <div><dt>${currentLang === 'es' ? 'Rol' : 'Role'}</dt><dd>${escapeHtml(projectField(project, 'role'))}</dd></div>
+          <div><dt>${currentLang === 'es' ? 'Resultado' : 'Result'}</dt><dd>${escapeHtml(projectField(project, 'result'))}</dd></div>
+          ${project.metrics ? `<div><dt>${currentLang === 'es' ? 'Métricas' : 'Metrics'}</dt><dd>${escapeHtml(projectField(project, 'metrics'))}</dd></div>` : ''}
         </dl>
         <div class="project-preview-tags">${project.stack.slice(0, 4).map(item => `<span>${escapeHtml(item)}</span>`).join('')}</div>
         <div class="project-preview-links">
-          ${project.href ? `<a class="carousel-proof" href="${project.href}" ${project.href.startsWith('#') ? '' : 'target="_blank" rel="noopener noreferrer"'}>${escapeHtml(getCopy('projects.open'))}</a>` : ''}
+          ${project.href ? `<a class="carousel-proof" href="${project.href}" ${isInternalHref(project.href) ? `data-route="${project.href.replace(/^\//, '')}"` : 'target="_blank" rel="noopener noreferrer"'}>${escapeHtml(getCopy('projects.open'))}</a>` : ''}
           ${project.repo ? `<a class="carousel-proof subtle" href="${project.repo}" target="_blank" rel="noopener noreferrer">${escapeHtml(getCopy('projects.repo'))}</a>` : ''}
           ${project.video ? `<button type="button" class="carousel-proof subtle video-trigger" data-video-trigger="${project.video}">${escapeHtml(getCopy('projects.watchVideo'))}</button>` : ''}
         </div>
@@ -1702,7 +1858,7 @@ function renderProjectCarousel() {
     archive.innerHTML = FEATURED_PROJECTS.map((project, index) => {
       const tag = project.href ? 'a' : 'div';
       const hrefAttr = project.href ? ` href="${project.href}"` : '';
-      const targetAttr = project.href && !project.href.startsWith('#') ? ' target="_blank" rel="noopener noreferrer"' : '';
+      const targetAttr = project.href && !isInternalHref(project.href) ? ' target="_blank" rel="noopener noreferrer"' : ` data-route="${(project.href || '').replace(/^\//, '')}"`;
       const videoSrc = project.loop || project.video;
       return `
       <${tag} class="archive-row ${index < 4 ? 'archive-row-featured' : 'archive-row-secondary'}" data-project-id="${project.id}" data-reveal="${index % 2 === 0 ? 'left' : 'right'}"${hrefAttr}${targetAttr}>
@@ -2218,31 +2374,58 @@ document.addEventListener('DOMContentLoaded', () => {
     window.dispatchEvent(new CustomEvent('portfolio-tab-change', { detail: { tabId } }));
   }
 
+  const VALID_TABS = ['overview', 'projects', 'agents'];
+
+  function pathForTab(tabId) {
+    return tabId === 'overview' ? '/' : `/${tabId}`;
+  }
+
+  function navigate(tabId, { replace = false } = {}) {
+    const path = pathForTab(tabId);
+    if (window.location.pathname !== path) {
+      history[replace ? 'replaceState' : 'pushState']({ tabId }, '', path);
+    }
+    switchTab(tabId);
+  }
+
   navTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const tabId = tab.getAttribute('data-tab');
-      window.location.hash = tabId === 'overview' ? '' : `#/${tabId}`;
-      switchTab(tabId);
-    });
+    tab.addEventListener('click', () => navigate(tab.getAttribute('data-tab')));
   });
 
-  // Handle URL Hash Router
-  function handleRouting() {
+  // In-page links to a tab (hero CTA, header CTA, project cards) route without
+  // a full reload; everything else keeps its normal behaviour.
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest('a[data-route]');
+    if (!link || event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+    const tabId = link.dataset.route;
+    if (!VALID_TABS.includes(tabId)) return;
+    event.preventDefault();
+    navigate(tabId);
+  });
+
+  // Routes are real paths (/projects). Legacy #/projects links still work and
+  // get rewritten to the clean path on arrival.
+  function handleRouting({ replace = false } = {}) {
     const hash = window.location.hash;
     if (hash.startsWith('#/')) {
-      const tabId = hash.replace('#/', '');
-      const validTabs = ['overview', 'projects', 'agents'];
-      if (validTabs.includes(tabId)) {
-        switchTab(tabId);
+      const hashTab = hash.slice(2);
+      if (VALID_TABS.includes(hashTab)) {
+        history.replaceState({ tabId: hashTab }, '', pathForTab(hashTab));
+        switchTab(hashTab);
         return;
       }
     }
-    // Default fallback
-    switchTab('overview');
+
+    const pathTab = window.location.pathname.replace(/^\/+|\/+$/g, '');
+    if (VALID_TABS.includes(pathTab)) {
+      switchTab(pathTab);
+      return;
+    }
+    navigate('overview', { replace });
   }
 
-  window.addEventListener('hashchange', handleRouting);
-  handleRouting(); // Initial call
+  window.addEventListener('popstate', () => handleRouting());
+  handleRouting({ replace: true }); // Initial call
 });
 
 
