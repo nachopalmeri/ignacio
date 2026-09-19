@@ -171,7 +171,7 @@ html, body {
   color: var(--text-primary);
   font-family: var(--font-body);
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: clip;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -4544,7 +4544,7 @@ html, body {
   color: var(--text-primary);
   font-family: var(--font-body);
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: clip;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -8800,17 +8800,12 @@ footer.app-footer {
   transform: translateY(4px);
 }
 
-/* Floating pill navbar. `position: sticky` is inert on this page: `html, body`
-   both carry `overflow-x: hidden` (see the base reset above), which turns body
-   into a scroll container that never actually receives the scroll offset in
-   Chromium/WebKit, so a sticky descendant just scrolls away with the page.
-   `position: fixed` sidesteps that entirely — it anchors to the viewport
-   regardless of ancestor overflow. body.js-fixed-header-pad compensates the
-   layout space the header no longer reserves once taken out of flow. */
+/* Floating pill navbar. The base reset uses `overflow-x: clip` (not `hidden`)
+   on html/body on purpose: `hidden` makes body a scroll container that never
+   receives the scroll offset, which silently kills every `position: sticky`
+   descendant — the header here and the roadmap pin below. `clip` clips the
+   same overflow without creating that scroll container. */
 header.app-header {
-  position: fixed;
-  left: 0;
-  right: 0;
   top: 0;
   border-bottom: 0;
   background: transparent;
@@ -8818,16 +8813,6 @@ header.app-header {
   -webkit-backdrop-filter: none;
   padding-top: 12px;
   transition: padding-top 0.35s var(--ease);
-}
-
-body {
-  padding-top: 88px;
-}
-
-@media (max-width: 900px) {
-  body {
-    padding-top: 80px;
-  }
 }
 
 .header-container {
@@ -8983,4 +8968,207 @@ header.app-header.is-scrolled .nav-cta {
   color: #52493c;
   font-size: 13.5px;
   line-height: 1.6;
+}
+
+/* ═══════════════════ PROJECT ROADMAP (pinned horizontal scrub) ═══════════════ */
+
+.roadmap-section {
+  position: relative;
+  margin: clamp(40px, 7vw, 88px) 0;
+}
+
+.roadmap-sticky {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.roadmap-section.is-pinned .roadmap-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  box-sizing: border-box;
+  padding-top: 100px;
+  padding-bottom: 26px;
+}
+
+.roadmap-head {
+  flex: 0 0 auto;
+}
+
+.roadmap-progress {
+  position: relative;
+  height: 3px;
+  margin-top: 16px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--border) 80%, transparent);
+  overflow: hidden;
+}
+
+.roadmap-progress-fill {
+  display: block;
+  height: 100%;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+}
+
+.roadmap-viewport {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.roadmap-viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.roadmap-section.is-pinned .roadmap-viewport {
+  overflow: clip;
+}
+
+.roadmap-rail {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 clamp(20px, 6vw, 110px);
+  box-sizing: border-box;
+}
+
+.roadmap-section.is-pinned .roadmap-rail {
+  will-change: transform;
+}
+
+.roadmap-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 0;
+}
+
+.roadmap-line {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.roadmap-line-bg {
+  stroke: color-mix(in srgb, var(--text-muted) 40%, transparent);
+  stroke-dasharray: 5 9;
+}
+
+.roadmap-line-fg {
+  stroke: var(--accent-green);
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent-green) 45%, transparent));
+}
+
+/* Cards become milestones: evenly spaced, alternating above/below the line.
+   Offsets use margin (not transform) so they never collide with the reveal
+   system's transforms. */
+.roadmap-section.is-pinned .featured-project-grid {
+  display: flex;
+  overflow: visible;
+  scroll-snap-type: none;
+  align-items: center;
+  gap: clamp(30px, 4.5vw, 64px);
+  padding: 0;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.roadmap-section.is-pinned .featured-project-grid .project-preview {
+  flex: 0 0 clamp(280px, 29vw, 380px);
+  scroll-snap-align: none;
+  /* The milestone dot lives outside the card box; the base card clips it. */
+  overflow: visible;
+  opacity: 0.42;
+  transform: scale(0.94);
+  transition: opacity 0.45s var(--ease), transform 0.45s var(--ease), box-shadow 0.45s var(--ease);
+}
+
+.roadmap-section.is-pinned .featured-project-grid .project-preview:nth-child(odd) {
+  margin-bottom: 86px;
+}
+
+.roadmap-section.is-pinned .featured-project-grid .project-preview:nth-child(even) {
+  margin-top: 86px;
+}
+
+.roadmap-section.is-pinned .featured-project-grid .project-preview.is-roadmap-active {
+  opacity: 1;
+  transform: scale(1);
+  box-shadow: 0 26px 70px color-mix(in srgb, var(--shadow-strong) 72%, transparent);
+}
+
+/* Milestone dot. Its centre sits 26px above the card's top edge, which is the
+   MARKER_OFFSET the path builder in app.js threads the line through. */
+.roadmap-section.is-pinned .featured-project-grid .project-preview::before {
+  content: '';
+  position: absolute;
+  top: -26px;
+  left: 50%;
+  width: 13px;
+  height: 13px;
+  margin: -6.5px 0 0 -6.5px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 2px solid color-mix(in srgb, var(--text-muted) 55%, transparent);
+  z-index: 3;
+  transition: border-color 0.35s var(--ease), box-shadow 0.35s var(--ease), background 0.35s var(--ease);
+}
+
+.roadmap-section.is-pinned .featured-project-grid .project-preview.is-roadmap-active::before {
+  background: var(--accent-green);
+  border-color: var(--accent-green);
+  box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent-green) 16%, transparent);
+}
+
+.roadmap-hint {
+  flex: 0 0 auto;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+
+.roadmap-section.is-pinned .roadmap-hint {
+  opacity: 1;
+}
+
+.roadmap-section.is-pinned.is-roadmap-complete .roadmap-hint {
+  opacity: 0;
+}
+
+/* Not pinned (mobile, reduced motion, no JS): the same cards read as a plain
+   horizontal snap carousel. */
+.roadmap-section:not(.is-pinned) .roadmap-svg {
+  display: none;
+}
+
+.roadmap-section:not(.is-pinned) .roadmap-rail {
+  display: block;
+  padding: 4px 0 20px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .roadmap-section.is-pinned .featured-project-grid .project-preview {
+    transition: none;
+  }
 }

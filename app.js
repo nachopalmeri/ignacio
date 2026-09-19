@@ -81,7 +81,8 @@ const UI_COPY = {
     projects: {
       title: 'Proyectos destacados',
       archiveTitle: 'Archivo de proyectos',
-      featuredBody: 'Cuatro piezas: producto, trabajo, analytics y lab.',
+      featuredBody: 'Un camino por todos los proyectos: producto, trabajo, analytics, comercio y lab.',
+      roadmapHint: 'Seguí scrolleando para recorrer el camino',
       archiveBody: 'El archivo completa el rango: CLI, deportes, comercio local y landings.',
       github: 'Ver GitHub',
       watchVideo: 'Ver video',
@@ -209,7 +210,8 @@ const UI_COPY = {
     projects: {
       title: 'Featured projects',
       archiveTitle: 'Project archive',
-      featuredBody: 'Four main pieces: product, workflow system, analytics and experimental lab.',
+      featuredBody: 'One path through every project: product, workflow systems, analytics, commerce and lab.',
+      roadmapHint: 'Keep scrolling to travel the path',
       archiveBody: 'The first four are the core. The rest shows range: CLI, sports, local commerce and deployed landing pages.',
       github: 'View GitHub',
       watchVideo: 'Watch video',
@@ -1006,6 +1008,198 @@ function initCounters() {
   counters.forEach((el) => observer.observe(el));
 }
 
+// ═══════════════════ PROJECT ROADMAP (pinned vertical→horizontal scrub) ═══════
+// The section is made as tall as the rail is wide, so 1px of page scroll maps to
+// 1px of horizontal travel. The sticky child stays pinned for that whole range,
+// the rail is translated by the scroll progress, and the SVG path is revealed
+// with stroke-dashoffset. Requires `overflow-x: clip` (not `hidden`) on
+// html/body — `hidden` makes body a scroll container and kills sticky.
+const roadmapState = { cleanup: null };
+
+function initProjectRoadmap() {
+  const section = document.querySelector('[data-roadmap]');
+  if (!section) return;
+
+  if (roadmapState.cleanup) {
+    roadmapState.cleanup();
+    roadmapState.cleanup = null;
+  }
+
+  const rail = section.querySelector('[data-roadmap-rail]');
+  const viewport = section.querySelector('.roadmap-viewport');
+  const lineBg = section.querySelector('[data-roadmap-line-bg]');
+  const lineFg = section.querySelector('[data-roadmap-line-fg]');
+  const svg = section.querySelector('[data-roadmap-svg]');
+  const progressFill = section.querySelector('[data-roadmap-progress]');
+  if (!rail || !viewport) return;
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isNarrow = window.matchMedia('(max-width: 900px)').matches;
+
+  // Fallback: plain horizontal snap carousel, no pinning.
+  if (reduceMotion || isNarrow) {
+    section.classList.remove('is-pinned');
+    section.style.height = '';
+    rail.style.transform = '';
+    return;
+  }
+
+  section.classList.add('is-pinned');
+
+  let cards = [];
+  let cardAnchors = [];
+  let maxShift = 0;
+  let sectionTop = 0;
+  let scrollRange = 1;
+  let railOriginLeft = 0;
+  let pathLength = 0;
+  let frame = null;
+
+  function buildPath(railWidth, railHeight) {
+    if (!svg || !lineBg || !lineFg || !cardAnchors.length) return;
+    svg.setAttribute('viewBox', `0 0 ${railWidth} ${railHeight}`);
+    svg.setAttribute('width', String(railWidth));
+    svg.setAttribute('height', String(railHeight));
+
+    // The line threads through each milestone's marker dot, so the road and the
+    // cards stay locked together at any viewport size.
+    const points = cardAnchors.map((anchor) => ({ x: anchor.x, y: anchor.y }));
+    const midY = points.reduce((sum, p) => sum + p.y, 0) / points.length;
+    // Extend past the first and last milestone so the road enters and leaves frame.
+    points.unshift({ x: -80, y: midY });
+    points.push({ x: railWidth + 80, y: midY });
+
+    let d = `M ${points[0].x} ${points[0].y}`;
+    for (let i = 1; i < points.length; i++) {
+      const prev = points[i - 1];
+      const cur = points[i];
+      const midX = (prev.x + cur.x) / 2;
+      d += ` C ${midX} ${prev.y}, ${midX} ${cur.y}, ${cur.x} ${cur.y}`;
+    }
+
+    lineBg.setAttribute('d', d);
+    lineFg.setAttribute('d', d);
+    pathLength = lineFg.getTotalLength ? lineFg.getTotalLength() : railWidth;
+    lineFg.style.strokeDasharray = String(pathLength);
+    lineFg.style.strokeDashoffset = String(pathLength);
+  }
+
+  function measure() {
+    if (!section.offsetParent) return; // hidden tab: nothing to measure
+    cards = Array.from(rail.querySelectorAll('.project-preview, .project-static-card'));
+    if (!cards.length) return;
+
+    // The roadmap drives its own entrance/active states, so hand the cards over
+    // from the generic reveal system — otherwise both fight over transform and
+    // opacity on the same elements.
+    cards.forEach((card) => {
+      card.removeAttribute('data-reveal');
+      card.classList.add('is-visible');
+    });
+
+    rail.style.transform = 'translate3d(0, 0, 0)';
+
+    // Lead-in and lead-out equal to half the viewport minus half a card, so the
+    // journey starts centred on the first milestone and ends on the last one
+    // instead of leaving them stranded against the edges.
+    const halfViewport = viewport.clientWidth / 2;
+    const firstWidth = cards[0].getBoundingClientRect().width;
+    const lastWidth = cards[cards.length - 1].getBoundingClientRect().width;
+    rail.style.paddingLeft = `${Math.max(24, halfViewport - firstWidth / 2)}px`;
+    rail.style.paddingRight = `${Math.max(24, halfViewport - lastWidth / 2)}px`;
+
+    const railRect = rail.getBoundingClientRect();
+    const railWidth = rail.scrollWidth;
+    railOriginLeft = railRect.left;
+
+    maxShift = Math.max(0, railWidth - viewport.clientWidth);
+    section.style.height = `${window.innerHeight + maxShift}px`;
+    sectionTop = section.getBoundingClientRect().top + window.scrollY;
+    scrollRange = Math.max(1, section.offsetHeight - window.innerHeight);
+
+    // MARKER_OFFSET matches the .project-preview::before dot in style.css, so
+    // the drawn line lands on the dots instead of near them.
+    const MARKER_OFFSET = 26;
+    cardAnchors = cards.map((card) => {
+      const rect = card.getBoundingClientRect();
+      return {
+        x: rect.left - railRect.left + rect.width / 2,
+        y: rect.top - railRect.top - MARKER_OFFSET
+      };
+    });
+
+    buildPath(railWidth, viewport.clientHeight);
+    update();
+  }
+
+  function update() {
+    if (!section.offsetParent || !cards.length) return;
+    const raw = (window.scrollY - sectionTop) / scrollRange;
+    const progress = Math.min(1, Math.max(0, raw));
+    const shift = maxShift * progress;
+
+    rail.style.transform = `translate3d(${-shift}px, 0, 0)`;
+    if (lineFg && pathLength) {
+      lineFg.style.strokeDashoffset = String(pathLength * (1 - progress));
+    }
+    if (progressFill) progressFill.style.transform = `scaleX(${progress})`;
+
+    // Highlight the milestone closest to the middle of the pinned viewport.
+    // Positions are derived from the measured centers, so no layout reads here.
+    const focusX = viewport.clientWidth / 2;
+    let activeIndex = 0;
+    let bestDistance = Infinity;
+    cardAnchors.forEach((anchor, i) => {
+      const distance = Math.abs((railOriginLeft + anchor.x - shift) - focusX);
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        activeIndex = i;
+      }
+    });
+    cards.forEach((card, i) => card.classList.toggle('is-roadmap-active', i === activeIndex));
+    section.classList.toggle('is-roadmap-complete', progress >= 0.999);
+  }
+
+  function onScroll() {
+    if (frame) return;
+    frame = window.requestAnimationFrame(() => {
+      frame = null;
+      update();
+    });
+  }
+
+  let resizeTimer = null;
+  function onResize() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      // Crossing the mobile/reduced-motion boundary swaps modes entirely.
+      initProjectRoadmap();
+    }, 180);
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onResize);
+  window.addEventListener('portfolio-tab-change', measure);
+
+  roadmapState.cleanup = () => {
+    if (frame) window.cancelAnimationFrame(frame);
+    clearTimeout(resizeTimer);
+    window.removeEventListener('scroll', onScroll);
+    window.removeEventListener('resize', onResize);
+    window.removeEventListener('portfolio-tab-change', measure);
+    section.classList.remove('is-pinned', 'is-roadmap-complete');
+    section.style.height = '';
+    rail.style.transform = '';
+    rail.style.paddingLeft = '';
+    rail.style.paddingRight = '';
+    cards.forEach((card) => card.classList.remove('is-roadmap-active'));
+  };
+
+  measure();
+  // Media (the card screenshots) can change the rail width after load.
+  window.addEventListener('load', measure, { once: true });
+}
+
 function setupPreferenceControls() {
   applyStaticCopy();
   setupTerminal();
@@ -1499,7 +1693,7 @@ function renderProjectCarousel() {
   if (carousel) {
     carousel.innerHTML = `
       <div class="featured-project-grid" aria-label="Featured projects">
-        ${FEATURED_PROJECTS.slice(0, 4).map((project, index) => renderProjectPreview(project, index, 'active')).join('')}
+        ${FEATURED_PROJECTS.map((project, index) => renderProjectPreview(project, index, 'active')).join('')}
       </div>
     `;
   }
@@ -1533,6 +1727,7 @@ function renderProjectCarousel() {
 
   setupProjectVideoReveal();
   initScrollReveal();
+  initProjectRoadmap();
 }
 
 const projectVideoRevealState = { canReveal: null };
@@ -1998,6 +2193,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initNavbarScroll();
   initScrollReveal();
   initCounters();
+  initProjectRoadmap();
   // Navigation tabs
   const navTabs = document.querySelectorAll('.nav-tab');
   const viewSections = document.querySelectorAll('.view-section');

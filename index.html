@@ -190,12 +190,24 @@
     </section>
 
 
-    <section class="container project-carousel-section" aria-labelledby="project-carousel-title">
-      <div class="section-heading-row">
-        <h2 id="project-carousel-title" class="section-title" data-i18n="projects.title">Proyectos destacados</h2>
-        <p class="section-deck" data-i18n="projects.featuredBody">Cuatro piezas: producto, trabajo, analytics y lab.</p>
-      </div>
-      <div id="project-carousel" class="project-carousel" tabindex="0" aria-live="polite">
+    <section class="roadmap-section" data-roadmap aria-labelledby="project-carousel-title">
+      <div class="roadmap-sticky" data-roadmap-sticky>
+        <div class="container roadmap-head">
+          <div class="section-heading-row">
+            <h2 id="project-carousel-title" class="section-title" data-i18n="projects.title">Proyectos destacados</h2>
+            <p class="section-deck" data-i18n="projects.featuredBody">Cuatro piezas: producto, trabajo, analytics y lab.</p>
+          </div>
+          <div class="roadmap-progress" aria-hidden="true">
+            <span class="roadmap-progress-fill" data-roadmap-progress></span>
+          </div>
+        </div>
+        <div class="roadmap-viewport">
+          <div class="roadmap-rail" data-roadmap-rail>
+            <svg class="roadmap-svg" data-roadmap-svg aria-hidden="true">
+              <path class="roadmap-line roadmap-line-bg" data-roadmap-line-bg fill="none" />
+              <path class="roadmap-line roadmap-line-fg" data-roadmap-line-fg fill="none" />
+            </svg>
+            <div id="project-carousel" class="project-carousel" tabindex="0" aria-live="polite">
         <div class="project-static-fallback" aria-label="Featured projects fallback">
           <a class="project-static-card" href="https://jobbot-lime.vercel.app" target="_blank" rel="noopener noreferrer">
             <span class="project-static-kicker">JobBot</span>
@@ -241,7 +253,14 @@
             </div>
             <span class="project-static-link">Abrir proyecto</span>
           </a>
+            </div>
+          </div>
+          </div>
         </div>
+        <p class="roadmap-hint" data-roadmap-hint>
+          <span data-i18n="projects.roadmapHint">Seguí scrolleando para recorrer el camino</span>
+          <span aria-hidden="true">→</span>
+        </p>
       </div>
     </section>
 
