@@ -72,6 +72,19 @@ const UI_COPY = {
       p2: 'Trabajo con Python, FastAPI, SQL, Linux, Git y asistentes de IA para construir dashboards, bots, automatizaciones y prototipos desplegados. Me importa más entregar trabajo revisable que parecer senior.',
       p3: 'Mi experiencia en atención al cliente y operaciones me dio presión real, caja, inventario y auditorías. Quiero llevar esa base a soporte IT, QA trainee, automatización o startups.'
     },
+    flow: {
+      eyebrow: 'Cómo trabajo',
+      title: 'Un flujo, cinco pasos',
+      body: 'El mismo recorrido en cada proyecto, con asistentes de IA en cada etapa y trabajo revisable al final.',
+      plan: { title: 'Plan', body: 'Defino el problema y el alcance antes de escribir una línea.' },
+      build: { title: 'Build', body: 'Construyo la versión más chica que se pueda desplegar y usar.' },
+      review: { title: 'Review', body: 'Reviso el diff buscando qué se rompe, no qué funciona.' },
+      test: { title: 'Test', body: 'Pruebo el camino real en el browser, no solo que compile.' },
+      ship: { title: 'Ship', body: 'Despliego y dejo documentado qué cambió y qué quedó pendiente.' },
+      commits: 'Contribuciones públicas en el último año',
+      projects: 'Proyectos desplegados',
+      certs: 'Certificaciones'
+    },
     ops: {
       eyebrow: 'Antes de programar',
       title: 'Contexto operativo',
@@ -227,6 +240,19 @@ const UI_COPY = {
       p2: 'I work with Python, FastAPI, SQL, Linux, Git and AI assistants to build dashboards, bots, automations and deployed prototypes. I care more about shipping reviewable work than looking senior.',
       p3: 'My customer service and operations background gave me real pressure, cash handling, inventory and audits. I want to bring that base into IT support, QA trainee, automation or startups.'
     },
+    flow: {
+      eyebrow: 'How I work',
+      title: 'One flow, five steps',
+      body: 'The same path on every project, with AI assistants at each stage and reviewable work at the end.',
+      plan: { title: 'Plan', body: 'I define the problem and the scope before writing a line.' },
+      build: { title: 'Build', body: 'I build the smallest version that can be deployed and used.' },
+      review: { title: 'Review', body: 'I read the diff looking for what breaks, not what works.' },
+      test: { title: 'Test', body: 'I walk the real path in the browser, not just check that it compiles.' },
+      ship: { title: 'Ship', body: 'I deploy and document what changed and what is still pending.' },
+      commits: 'Public contributions in the last year',
+      projects: 'Deployed projects',
+      certs: 'Certifications'
+    },
     ops: {
       eyebrow: 'Before writing code',
       title: 'Operations background',
@@ -359,9 +385,7 @@ function getCopy(path, lang = currentLang) {
 function applyStaticCopy() {
   document.documentElement.lang = currentLang;
   document.documentElement.dataset.theme = currentTheme;
-  document.title = currentLang === 'es'
-    ? 'ignacio - Junior AI Automation & Product Engineer'
-    : 'ignacio - Junior AI Automation & Product Engineer';
+  document.title = 'Ignacio Palmeri - Junior AI Automation & Product Engineer';
   document.querySelectorAll('[data-i18n]').forEach((el) => {
     el.textContent = getCopy(el.dataset.i18n);
   });
@@ -370,8 +394,33 @@ function applyStaticCopy() {
   });
   secureExternalLinks(document);
   resetTerminal();
+  splitHeroTitle();
   if (document.getElementById('project-carousel')) renderProjectCarousel();
   if (githubContributionData) renderGithubCalendar(githubContributionData);
+}
+
+// The hero title enters word by word on load. It has to run after
+// applyStaticCopy, which rewrites [data-i18n] nodes via textContent and would
+// otherwise wipe the word spans on every language or theme switch.
+function splitHeroTitle() {
+  const title = document.querySelector('[data-hero-title]');
+  if (!title) return;
+
+  const words = title.textContent.trim().split(/\s+/).filter(Boolean);
+  if (!words.length) return;
+
+  // Words keep their inline-block box from the first paint, so the entrance
+  // animates opacity/transform only and never shifts layout.
+  title.innerHTML = words
+    .map((word, i) => `<span class="hero-word" style="--word-index:${i}">${escapeHtml(word)}</span>`)
+    .join(' ');
+
+  if (prefersReducedMotion()) {
+    title.classList.add('is-entered');
+    return;
+  }
+  title.classList.remove('is-entered');
+  requestAnimationFrame(() => requestAnimationFrame(() => title.classList.add('is-entered')));
 }
 
 let githubContributionData = null;
@@ -503,6 +552,7 @@ async function setupGithubContributions() {
     if (!isValidGithubContributionData(data)) throw new Error('Invalid GitHub activity response');
     githubContributionData = data;
     renderGithubCalendar(data);
+    showCommitCounter(data.totalContributions);
   } catch (_error) {
     setGithubFallback();
   } finally {
@@ -1072,22 +1122,106 @@ function initCounters() {
   counters.forEach((el) => observer.observe(el));
 }
 
+// ═══════════════════ SCROLL ENGINE ═══════════════════
+// One scroll listener and one rAF for the entire page. Every pinned section
+// registers here and receives a 0→1 progress value; no section adds its own
+// listener, so the per-frame cost stays flat as sections are added.
+const scrollEngine = {
+  sections: [],
+  frame: null,
+  bound: false,
+  resizeTimer: null
+};
+
+function scrollEngineUpdate() {
+  scrollEngine.frame = null;
+  const scrollY = window.scrollY;
+  scrollEngine.sections.forEach((entry) => {
+    if (!entry.active) return;
+    const progress = Math.min(1, Math.max(0, (scrollY - entry.top) / entry.range));
+    if (progress === entry.lastProgress) return;
+    entry.lastProgress = progress;
+    entry.onProgress(progress);
+  });
+}
+
+function scrollEngineRequest() {
+  if (scrollEngine.frame) return;
+  scrollEngine.frame = window.requestAnimationFrame(scrollEngineUpdate);
+}
+
+// Measuring reads layout, so it happens here — never inside onProgress, which
+// runs every frame and must only write transform/opacity.
+function scrollEngineMeasure() {
+  scrollEngine.sections.forEach((entry) => {
+    const active = !!entry.el.offsetParent && entry.enabled();
+    entry.active = active;
+    // onDisable runs on every inactive measure, not just on the active→inactive
+    // edge: on touch and reduced motion a section is inactive from the very
+    // first measure and still needs its static state applied.
+    if (!active) {
+      entry.onDisable();
+      return;
+    }
+    entry.onMeasure();
+    entry.top = entry.el.getBoundingClientRect().top + window.scrollY;
+    entry.range = Math.max(1, entry.el.offsetHeight - window.innerHeight);
+    entry.lastProgress = -1;
+  });
+  scrollEngineUpdate();
+}
+
+function registerScrollSection(config) {
+  // Re-registering the same element replaces it, so re-renders never stack
+  // duplicate handlers.
+  const previous = scrollEngine.sections.find((s) => s.el === config.el);
+  if (previous && previous.active) previous.onDisable();
+  scrollEngine.sections = scrollEngine.sections.filter((s) => s.el !== config.el);
+
+  scrollEngine.sections.push({
+    el: config.el,
+    enabled: config.enabled || (() => true),
+    onMeasure: config.onMeasure || (() => {}),
+    onProgress: config.onProgress || (() => {}),
+    onDisable: config.onDisable || (() => {}),
+    top: 0,
+    range: 1,
+    lastProgress: -1,
+    active: false
+  });
+
+  if (!scrollEngine.bound) {
+    scrollEngine.bound = true;
+    window.addEventListener('scroll', scrollEngineRequest, { passive: true });
+    window.addEventListener('resize', () => {
+      clearTimeout(scrollEngine.resizeTimer);
+      scrollEngine.resizeTimer = setTimeout(scrollEngineMeasure, 180);
+    });
+    window.addEventListener('portfolio-tab-change', scrollEngineMeasure);
+    // Images and videos settle after load and change section heights.
+    window.addEventListener('load', scrollEngineMeasure, { once: true });
+  }
+
+  scrollEngineMeasure();
+}
+
+function prefersReducedMotion() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function isHandheld() {
+  return window.matchMedia('(max-width: 767px)').matches;
+}
+
 // ═══════════════════ PROJECT ROADMAP (pinned vertical→horizontal scrub) ═══════
 // The section is made as tall as the rail is wide, so 1px of page scroll maps to
 // 1px of horizontal travel. The sticky child stays pinned for that whole range,
 // the rail is translated by the scroll progress, and the SVG path is revealed
 // with stroke-dashoffset. Requires `overflow-x: clip` (not `hidden`) on
 // html/body — `hidden` makes body a scroll container and kills sticky.
-const roadmapState = { cleanup: null };
-
 function initProjectRoadmap() {
   const section = document.querySelector('[data-roadmap]');
   if (!section) return;
-
-  if (roadmapState.cleanup) {
-    roadmapState.cleanup();
-    roadmapState.cleanup = null;
-  }
 
   const rail = section.querySelector('[data-roadmap-rail]');
   const viewport = section.querySelector('.roadmap-viewport');
@@ -1097,27 +1231,11 @@ function initProjectRoadmap() {
   const progressFill = section.querySelector('[data-roadmap-progress]');
   if (!rail || !viewport) return;
 
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const isNarrow = window.matchMedia('(max-width: 900px)').matches;
-
-  // Fallback: plain horizontal snap carousel, no pinning.
-  if (reduceMotion || isNarrow) {
-    section.classList.remove('is-pinned');
-    section.style.height = '';
-    rail.style.transform = '';
-    return;
-  }
-
-  section.classList.add('is-pinned');
-
   let cards = [];
   let cardAnchors = [];
   let maxShift = 0;
-  let sectionTop = 0;
-  let scrollRange = 1;
   let railOriginLeft = 0;
   let pathLength = 0;
-  let frame = null;
 
   function buildPath(railWidth, railHeight) {
     if (!svg || !lineBg || !lineFg || !cardAnchors.length) return;
@@ -1149,9 +1267,9 @@ function initProjectRoadmap() {
   }
 
   function measure() {
-    if (!section.offsetParent) return; // hidden tab: nothing to measure
     cards = Array.from(rail.querySelectorAll('.project-preview, .project-static-card'));
     if (!cards.length) return;
+    section.classList.add('is-pinned');
 
     // The roadmap drives its own entrance/active states, so hand the cards over
     // from the generic reveal system — otherwise both fight over transform and
@@ -1178,8 +1296,6 @@ function initProjectRoadmap() {
 
     maxShift = Math.max(0, railWidth - viewport.clientWidth);
     section.style.height = `${window.innerHeight + maxShift}px`;
-    sectionTop = section.getBoundingClientRect().top + window.scrollY;
-    scrollRange = Math.max(1, section.offsetHeight - window.innerHeight);
 
     // MARKER_OFFSET matches the .project-preview::before dot in style.css, so
     // the drawn line lands on the dots instead of near them.
@@ -1193,13 +1309,10 @@ function initProjectRoadmap() {
     });
 
     buildPath(railWidth, viewport.clientHeight);
-    update();
   }
 
-  function update() {
-    if (!section.offsetParent || !cards.length) return;
-    const raw = (window.scrollY - sectionTop) / scrollRange;
-    const progress = Math.min(1, Math.max(0, raw));
+  function render(progress) {
+    if (!cards.length) return;
     const shift = maxShift * progress;
 
     rail.style.transform = `translate3d(${-shift}px, 0, 0)`;
@@ -1209,7 +1322,7 @@ function initProjectRoadmap() {
     if (progressFill) progressFill.style.transform = `scaleX(${progress})`;
 
     // Highlight the milestone closest to the middle of the pinned viewport.
-    // Positions are derived from the measured centers, so no layout reads here.
+    // Positions come from the measured centres, so no layout reads here.
     const focusX = viewport.clientWidth / 2;
     let activeIndex = 0;
     let bestDistance = Infinity;
@@ -1224,44 +1337,154 @@ function initProjectRoadmap() {
     section.classList.toggle('is-roadmap-complete', progress >= 0.999);
   }
 
-  function onScroll() {
-    if (frame) return;
-    frame = window.requestAnimationFrame(() => {
-      frame = null;
-      update();
-    });
-  }
-
-  let resizeTimer = null;
-  function onResize() {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      // Crossing the mobile/reduced-motion boundary swaps modes entirely.
-      initProjectRoadmap();
-    }, 180);
-  }
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onResize);
-  window.addEventListener('portfolio-tab-change', measure);
-
-  roadmapState.cleanup = () => {
-    if (frame) window.cancelAnimationFrame(frame);
-    clearTimeout(resizeTimer);
-    window.removeEventListener('scroll', onScroll);
-    window.removeEventListener('resize', onResize);
-    window.removeEventListener('portfolio-tab-change', measure);
+  // Touch and reduced motion fall back to a plain horizontal snap carousel.
+  function disable() {
     section.classList.remove('is-pinned', 'is-roadmap-complete');
     section.style.height = '';
     rail.style.transform = '';
     rail.style.paddingLeft = '';
     rail.style.paddingRight = '';
     cards.forEach((card) => card.classList.remove('is-roadmap-active'));
-  };
+  }
 
-  measure();
-  // Media (the card screenshots) can change the rail width after load.
-  window.addEventListener('load', measure, { once: true });
+  registerScrollSection({
+    el: section,
+    enabled: () => !prefersReducedMotion() && !isHandheld(),
+    onMeasure: measure,
+    onProgress: render,
+    onDisable: disable
+  });
+}
+
+// ═══════════════════ FLOW SECTION (pinned step reveal + count-up) ═══════════
+// Pins for one section height (CSS gives it ~300vh) while progress reveals
+// the five steps in order and, past the halfway point, starts the metric
+// count-up once. Falls back to a static block with everything already
+// visible on touch and reduced motion.
+function animateCountUp(el, target) {
+  const start = performance.now();
+  const duration = 1100;
+  function frame(now) {
+    const progress = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(eased * target).toLocaleString(currentLang === 'es' ? 'es-AR' : 'en-US');
+    if (progress < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+function initFlowSection() {
+  const section = document.querySelector('[data-flow]');
+  if (!section) return;
+
+  const steps = Array.from(section.querySelectorAll('[data-flow-step]'));
+  const metrics = Array.from(section.querySelectorAll('[data-flow-metric]'));
+  if (!steps.length) return;
+
+  let countersStarted = false;
+  function startCounters() {
+    if (countersStarted) return;
+    countersStarted = true;
+    metrics.forEach((metric) => {
+      if (metric.hidden) return;
+      const counterEl = metric.querySelector('[data-flow-counter]');
+      if (!counterEl) return;
+      animateCountUp(counterEl, Number(counterEl.dataset.counterTarget || 0));
+    });
+  }
+
+  function measure() {
+    section.classList.add('is-pinned');
+    // 3.2x viewport height: enough scroll room to read five steps one at a
+    // time plus the count-up, short of the ~4x that starts to drag.
+    section.style.height = `${Math.round(window.innerHeight * 3.2)}px`;
+  }
+
+  function render(progress) {
+    const revealCount = Math.ceil(progress * steps.length);
+    steps.forEach((step, i) => step.classList.toggle('is-visible', i < revealCount));
+    if (progress > 0.55) startCounters();
+  }
+
+  function disable() {
+    section.classList.remove('is-pinned');
+    section.style.height = '';
+    steps.forEach((step) => step.classList.add('is-visible'));
+    startCounters();
+  }
+
+  registerScrollSection({
+    el: section,
+    enabled: () => !prefersReducedMotion() && !isHandheld(),
+    onMeasure: measure,
+    onProgress: render,
+    onDisable: disable
+  });
+}
+
+// The commit counter starts hidden (there's nothing to count until the real
+// total loads) and swaps in once GitHub activity resolves successfully.
+function showCommitCounter(totalContributions) {
+  const metric = document.querySelector('[data-flow-metric][data-metric="commits"]');
+  if (!metric) return;
+  const counterEl = metric.querySelector('[data-flow-counter]');
+  if (counterEl) counterEl.dataset.counterTarget = String(totalContributions);
+  metric.hidden = false;
+}
+
+// Mouse drag-to-scroll for the certifications carousel. Touch and scrollbar
+// dragging already work natively via overflow-x; this only adds the mouse
+// path and a grab/grabbing cursor to match it.
+function initCertificationsDrag() {
+  const list = document.querySelector('.certifications-list');
+  if (!list) return;
+
+  let isDown = false;
+  let startX = 0;
+  let startScroll = 0;
+  let moved = false;
+
+  list.addEventListener('mousedown', (event) => {
+    isDown = true;
+    moved = false;
+    startX = event.pageX;
+    startScroll = list.scrollLeft;
+    list.classList.add('is-dragging');
+  });
+
+  window.addEventListener('mousemove', (event) => {
+    if (!isDown) return;
+    const delta = event.pageX - startX;
+    if (Math.abs(delta) > 4) moved = true;
+    list.scrollLeft = startScroll - delta;
+  });
+
+  function endDrag() {
+    isDown = false;
+    list.classList.remove('is-dragging');
+  }
+  window.addEventListener('mouseup', endDrag);
+  list.addEventListener('mouseleave', endDrag);
+
+  // A drag that actually moved the list shouldn't also fire the link click
+  // underneath the cursor when the mouse button is released.
+  list.addEventListener('click', (event) => {
+    if (moved) event.preventDefault();
+  }, { capture: true });
+}
+
+// FAQ accordion. The height animation is pure CSS (grid-template-rows tween
+// on .faq-panel); this only flips aria-expanded, which both drives that CSS
+// and keeps the state correct for screen readers.
+function initFaqAccordion() {
+  const list = document.querySelector('[data-faq-list]');
+  if (!list) return;
+  list.querySelectorAll('.faq-trigger').forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const expanded = trigger.getAttribute('aria-expanded') === 'true';
+      trigger.setAttribute('aria-expanded', String(!expanded));
+    });
+  });
 }
 
 function setupPreferenceControls() {
@@ -1269,6 +1492,8 @@ function setupPreferenceControls() {
   setupTerminal();
   setupFloatingConsole();
   setupSideQuests();
+  initCertificationsDrag();
+  initFaqAccordion();
   document.querySelectorAll('[data-lang-btn]').forEach((btn) => {
     btn.addEventListener('click', () => {
       currentLang = btn.dataset.langBtn;
@@ -2350,6 +2575,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollReveal();
   initCounters();
   initProjectRoadmap();
+  initFlowSection();
   // Navigation tabs
   const navTabs = document.querySelectorAll('.nav-tab');
   const viewSections = document.querySelectorAll('.view-section');

@@ -168,6 +168,12 @@
   }
 }
 
+html {
+  /* The header is a sticky ~76px pill; without this, jumping to an anchor or
+     calling scrollIntoView() tucks the target's top edge under it. */
+  scroll-padding-top: 96px;
+}
+
 html, body {
   background: var(--bg);
   color: var(--text-primary);
@@ -2802,37 +2808,58 @@ button.carousel-proof {
   margin-bottom: 18px;
 }
 
+/* Horizontal drag carousel: mouse drag (cursor grab/grabbing), touch swipe and
+   scroll-snap all move the same scrollLeft, so keyboard/scrollbar users get
+   the identical behaviour for free. */
 .certifications-list {
   list-style: none;
-  display: grid;
-  gap: 0;
+  display: flex;
+  gap: 12px;
+  margin: 0;
+  padding: 4px 4px 10px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  cursor: grab;
+  user-select: none;
+}
+
+.certifications-list::-webkit-scrollbar {
+  display: none;
+}
+
+.certifications-list.is-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
 }
 
 .certification-item {
-  display: grid;
-  grid-template-columns: 28px minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 16px;
-  padding: 14px 0;
-  border-top: 1px solid var(--border);
-}
-
-.certification-item:first-child {
-  border-top: 0;
-  padding-top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 0 0 220px;
+  scroll-snap-align: start;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--bg-card) 55%, transparent);
 }
 
 .certification-logo {
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--accent-green) 10%, transparent);
   color: var(--text-secondary);
 }
 
 .certification-logo svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
 }
 
 .certification-info {
@@ -2855,6 +2882,7 @@ button.carousel-proof {
 }
 
 .certification-link {
+  align-self: flex-start;
   font-family: var(--font-display);
   font-size: 12px;
   font-weight: 700;
@@ -2877,13 +2905,9 @@ button.carousel-proof {
   outline: none;
 }
 
-@media (max-width: 480px) {
-  .certification-item {
-    grid-template-columns: 24px minmax(0, 1fr);
-    row-gap: 6px;
-  }
-  .certification-link {
-    grid-column: 2;
+@media (prefers-reduced-motion: reduce) {
+  .certifications-list {
+    scroll-behavior: auto;
   }
 }
 
@@ -4543,6 +4567,12 @@ footer.app-footer {
   }
 }
 
+html {
+  /* The header is a sticky ~76px pill; without this, jumping to an anchor or
+     calling scrollIntoView() tucks the target's top edge under it. */
+  scroll-padding-top: 96px;
+}
+
 html, body {
   background: var(--bg);
   color: var(--text-primary);
@@ -7177,37 +7207,58 @@ button.carousel-proof {
   margin-bottom: 18px;
 }
 
+/* Horizontal drag carousel: mouse drag (cursor grab/grabbing), touch swipe and
+   scroll-snap all move the same scrollLeft, so keyboard/scrollbar users get
+   the identical behaviour for free. */
 .certifications-list {
   list-style: none;
-  display: grid;
-  gap: 0;
+  display: flex;
+  gap: 12px;
+  margin: 0;
+  padding: 4px 4px 10px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  cursor: grab;
+  user-select: none;
+}
+
+.certifications-list::-webkit-scrollbar {
+  display: none;
+}
+
+.certifications-list.is-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
 }
 
 .certification-item {
-  display: grid;
-  grid-template-columns: 28px minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 16px;
-  padding: 14px 0;
-  border-top: 1px solid var(--border);
-}
-
-.certification-item:first-child {
-  border-top: 0;
-  padding-top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 0 0 220px;
+  scroll-snap-align: start;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--bg-card) 55%, transparent);
 }
 
 .certification-logo {
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--accent-green) 10%, transparent);
   color: var(--text-secondary);
 }
 
 .certification-logo svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
 }
 
 .certification-info {
@@ -7230,6 +7281,7 @@ button.carousel-proof {
 }
 
 .certification-link {
+  align-self: flex-start;
   font-family: var(--font-display);
   font-size: 12px;
   font-weight: 700;
@@ -7252,13 +7304,9 @@ button.carousel-proof {
   outline: none;
 }
 
-@media (max-width: 480px) {
-  .certification-item {
-    grid-template-columns: 24px minmax(0, 1fr);
-    row-gap: 6px;
-  }
-  .certification-link {
-    grid-column: 2;
+@media (prefers-reduced-motion: reduce) {
+  .certifications-list {
+    scroll-behavior: auto;
   }
 }
 
@@ -8935,16 +8983,19 @@ header.app-header.is-scrolled .nav-cta {
   border: 1px solid #ecdfc0;
   border-radius: 14px;
   background: #fffdf7;
-  padding: 4px 18px;
+  padding: 0 18px;
 }
 
-.faq-item summary {
+.faq-trigger {
+  width: 100%;
   cursor: pointer;
-  list-style: none;
   padding: 14px 0;
+  border: 0;
+  background: none;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 14px;
+  text-align: left;
   color: #1c1c1c;
   display: flex;
   align-items: center;
@@ -8952,19 +9003,55 @@ header.app-header.is-scrolled .nav-cta {
   gap: 12px;
 }
 
-.faq-item summary::-webkit-details-marker { display: none; }
-
-.faq-item summary::after {
-  content: '+';
+.faq-icon {
+  position: relative;
   flex-shrink: 0;
-  font-size: 20px;
-  font-weight: 400;
-  color: #93887b;
+  width: 14px;
+  height: 14px;
+}
+
+.faq-icon::before,
+.faq-icon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: #93887b;
+  transform: translate(-50%, -50%);
   transition: transform 0.25s var(--ease);
 }
 
-.faq-item[open] summary::after {
-  transform: rotate(45deg);
+.faq-icon::before {
+  width: 14px;
+  height: 2px;
+}
+
+.faq-icon::after {
+  width: 2px;
+  height: 14px;
+}
+
+.faq-trigger[aria-expanded="true"] .faq-icon::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+  opacity: 0;
+}
+
+/* Animating to auto height without JS measurement: the panel is a 1-row grid
+   that tweens between 0fr and 1fr, and its child clips at that computed
+   height. Reduced motion below just removes the transition. */
+.faq-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s var(--ease);
+}
+
+.faq-item:has(.faq-trigger[aria-expanded="true"]) .faq-panel {
+  grid-template-rows: 1fr;
+}
+
+.faq-panel-inner {
+  overflow: hidden;
+  min-height: 0;
 }
 
 .faq-item p {
@@ -8972,6 +9059,12 @@ header.app-header.is-scrolled .nav-cta {
   color: #52493c;
   font-size: 13.5px;
   line-height: 1.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-panel {
+    transition: none;
+  }
 }
 
 /* ═══════════════════ PROJECT ROADMAP (pinned horizontal scrub) ═══════════════ */
@@ -9173,6 +9266,128 @@ header.app-header.is-scrolled .nav-cta {
 
 @media (prefers-reduced-motion: reduce) {
   .roadmap-section.is-pinned .featured-project-grid .project-preview {
+    transition: none;
+  }
+}
+
+/* ═══════════════════ FLOW SECTION (pinned step reveal + counters) ═══════════ */
+
+.flow-section {
+  position: relative;
+  margin: clamp(40px, 7vw, 88px) 0;
+}
+
+.flow-sticky {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.flow-section.is-pinned .flow-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 90px 0;
+}
+
+.flow-head {
+  max-width: 640px;
+}
+
+.flow-steps {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px;
+  margin: clamp(32px, 5vw, 56px) 0;
+  padding: 0;
+  list-style: none;
+}
+
+.flow-step {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 16px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--bg-card) 55%, transparent);
+}
+
+.flow-section.is-pinned .flow-step {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+}
+
+.flow-section.is-pinned .flow-step.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.flow-step-index {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  color: var(--accent-green-text);
+}
+
+.flow-step strong {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.flow-step span:last-child {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.flow-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(24px, 4vw, 56px);
+}
+
+.flow-metric strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: clamp(30px, 3.6vw, 44px);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--text-primary);
+}
+
+.flow-metric span {
+  display: block;
+  margin-top: 6px;
+  max-width: 22ch;
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Not pinned (mobile, reduced motion): a normal static block, everything
+   visible, no sticky, no per-step transition. */
+.flow-section:not(.is-pinned) .flow-step {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 900px) {
+  .flow-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-section.is-pinned .flow-step {
     transition: none;
   }
 }
@@ -9390,4 +9605,37 @@ header.app-header.is-scrolled .nav-cta {
   .hero-glow {
     display: none;
   }
+}
+
+/* ═══════════════════ HERO WORD ENTRANCE ═══════════════════ */
+/* Each word keeps its inline-block box from the first paint, so only opacity
+   and transform animate and the headline never reflows. */
+.hero h1 .hero-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(18px);
+  will-change: transform, opacity;
+}
+
+.hero h1.is-entered .hero-word {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.55s var(--ease), transform 0.55s var(--ease);
+  transition-delay: calc(var(--word-index, 0) * 60ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero h1 .hero-word,
+  .hero h1.is-entered .hero-word {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Deeper blur on the floating nav pill, per the reference's glass treatment.
+   The tint stays theme-driven: a flat white 30% would wash out in dark mode. */
+.header-container {
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
 }

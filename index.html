@@ -84,7 +84,7 @@
         <div class="hero-copy">
           <div class="hero-tagline" data-i18n="hero.tagline">Junior AI Automation & Product Engineer</div>
           <p class="hero-availability" data-i18n="hero.availability">Disponible para pasantías y roles trainee</p>
-          <h1 data-i18n="hero.title">Ignacio Palmeri</h1>
+          <h1 data-hero-title data-i18n="hero.title">Ignacio Palmeri</h1>
           <p class="hero-role-rotator" aria-live="off">
             <span data-i18n="hero.rolePrefix">Construyo</span>
             <span id="hero-role-word" class="hero-role-word">automatizaciones</span>
@@ -356,6 +356,59 @@
       </div>
     </section>
 
+    <section class="flow-section" data-flow aria-labelledby="flow-title">
+      <div class="flow-sticky" data-flow-sticky>
+        <div class="container flow-inner">
+          <div class="flow-head">
+            <p class="eyebrow" data-i18n="flow.eyebrow">Cómo trabajo</p>
+            <h2 id="flow-title" class="section-title" data-i18n="flow.title">Un flujo, cinco pasos</h2>
+            <p class="section-deck" data-i18n="flow.body">El mismo recorrido en cada proyecto, con asistentes de IA en cada etapa y trabajo revisable al final.</p>
+          </div>
+          <ol class="flow-steps">
+            <li class="flow-step" data-flow-step>
+              <span class="flow-step-index" aria-hidden="true">01</span>
+              <strong data-i18n="flow.plan.title">Plan</strong>
+              <span data-i18n="flow.plan.body">Defino el problema y el alcance antes de escribir una línea.</span>
+            </li>
+            <li class="flow-step" data-flow-step>
+              <span class="flow-step-index" aria-hidden="true">02</span>
+              <strong data-i18n="flow.build.title">Build</strong>
+              <span data-i18n="flow.build.body">Construyo la versión más chica que se pueda desplegar y usar.</span>
+            </li>
+            <li class="flow-step" data-flow-step>
+              <span class="flow-step-index" aria-hidden="true">03</span>
+              <strong data-i18n="flow.review.title">Review</strong>
+              <span data-i18n="flow.review.body">Reviso el diff buscando qué se rompe, no qué funciona.</span>
+            </li>
+            <li class="flow-step" data-flow-step>
+              <span class="flow-step-index" aria-hidden="true">04</span>
+              <strong data-i18n="flow.test.title">Test</strong>
+              <span data-i18n="flow.test.body">Pruebo el camino real en el browser, no solo que compile.</span>
+            </li>
+            <li class="flow-step" data-flow-step>
+              <span class="flow-step-index" aria-hidden="true">05</span>
+              <strong data-i18n="flow.ship.title">Ship</strong>
+              <span data-i18n="flow.ship.body">Despliego y dejo documentado qué cambió y qué quedó pendiente.</span>
+            </li>
+          </ol>
+          <div class="flow-metrics">
+            <div class="flow-metric" data-flow-metric data-metric="commits" hidden>
+              <strong data-flow-counter data-counter-target="0">0</strong>
+              <span data-i18n="flow.commits">Contribuciones públicas en el último año</span>
+            </div>
+            <div class="flow-metric" data-flow-metric>
+              <strong data-flow-counter data-counter-target="12">0</strong>
+              <span data-i18n="flow.projects">Proyectos desplegados</span>
+            </div>
+            <div class="flow-metric" data-flow-metric>
+              <strong data-flow-counter data-counter-target="3">0</strong>
+              <span data-i18n="flow.certs">Certificaciones</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="container github-activity" aria-labelledby="github-activity-title">
       <div class="github-activity-copy" data-reveal="up">
         <p class="eyebrow" data-i18n="github.eyebrow">Actividad verificable</p>
@@ -448,23 +501,51 @@
 
     <section class="container faq-section" aria-labelledby="faq-title">
       <h2 id="faq-title" class="section-title" data-reveal="up">Preguntas frecuentes</h2>
-      <div class="faq-list" data-reveal="up">
-        <details class="faq-item">
-          <summary>¿Por qué te presentás como "junior" si ya tenés proyectos desplegados?</summary>
-          <p>Porque es verdad: es mi primera experiencia profesional en tecnología. Los proyectos muestran que puedo entregar software real, no que tenga años de experiencia senior.</p>
-        </details>
-        <details class="faq-item">
-          <summary>¿Usás IA para programar? ¿Eso cuenta como trampa?</summary>
-          <p>Uso asistentes de IA como parte de mi flujo de trabajo (planificar, construir, revisar, testear, documentar) — igual que cualquier developer hoy usa su IDE, linter o Stack Overflow. El criterio de qué construir y cómo revisar sigue siendo mío.</p>
-        </details>
-        <details class="faq-item">
-          <summary>¿Cómo puedo revisar tu código?</summary>
-          <p>Todos los proyectos tienen link a su repo público de GitHub y a la demo desplegada. Preferí mirar el código antes que confiar en el marketing de esta página.</p>
-        </details>
-        <details class="faq-item">
-          <summary>¿Cuál es tu disponibilidad?</summary>
-          <p>Busco pasantía o rol trainee, full-time o part-time según el equipo. Con base en Buenos Aires, Argentina, y cómodo trabajando remoto.</p>
-        </details>
+      <div class="faq-list" data-reveal="up" data-faq-list>
+        <div class="faq-item">
+          <button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-panel-1">
+            <span>¿Por qué te presentás como "junior" si ya tenés proyectos desplegados?</span>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-panel" id="faq-panel-1">
+            <div class="faq-panel-inner">
+              <p>Porque es verdad: es mi primera experiencia profesional en tecnología. Los proyectos muestran que puedo entregar software real, no que tenga años de experiencia senior.</p>
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-panel-2">
+            <span>¿Usás IA para programar? ¿Eso cuenta como trampa?</span>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-panel" id="faq-panel-2">
+            <div class="faq-panel-inner">
+              <p>Uso asistentes de IA como parte de mi flujo de trabajo (planificar, construir, revisar, testear, documentar) — igual que cualquier developer hoy usa su IDE, linter o Stack Overflow. El criterio de qué construir y cómo revisar sigue siendo mío.</p>
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-panel-3">
+            <span>¿Cómo puedo revisar tu código?</span>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-panel" id="faq-panel-3">
+            <div class="faq-panel-inner">
+              <p>Todos los proyectos tienen link a su repo público de GitHub y a la demo desplegada. Preferí mirar el código antes que confiar en el marketing de esta página.</p>
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-panel-4">
+            <span>¿Cuál es tu disponibilidad?</span>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-panel" id="faq-panel-4">
+            <div class="faq-panel-inner">
+              <p>Busco pasantía o rol trainee, full-time o part-time según el equipo. Con base en Buenos Aires, Argentina, y cómodo trabajando remoto.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
