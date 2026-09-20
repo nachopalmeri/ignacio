@@ -2420,14 +2420,26 @@ function setupAiOpsHero() {
   }
   let width = 0;
   let height = 0;
+  let graphicLeft = 0; // where the text column ends, in canvas-local px
   let particles = [];
   let frameId = null;
   let running = false;
+  const heroCopy = hero.querySelector('.hero-copy');
 
   function resize() {
     const rect = hero.getBoundingClientRect();
     width = Math.max(1, rect.width);
     height = Math.max(420, rect.height);
+
+    // The canvas is a full-bleed background layer, but the core should sit
+    // centered in the empty space to the right of the text column, not in
+    // the middle of the whole hero (which is mostly text on desktop).
+    // Below the 900px breakpoint the grid drops to one column and this
+    // canvas is hidden entirely (see the max-width:900px rule in style.css),
+    // so a heroCopy-driven boundary only ever applies to the two-column case.
+    const copyRect = heroCopy ? heroCopy.getBoundingClientRect() : null;
+    graphicLeft = copyRect ? Math.max(0, copyRect.right - rect.left + 56) : width * 0.5;
+
     const ratio = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
     canvas.width = Math.round(width * ratio);
     canvas.height = Math.round(height * ratio);
@@ -2446,10 +2458,11 @@ function setupAiOpsHero() {
   }
 
   function getCore() {
+    const graphicWidth = Math.max(240, width - graphicLeft);
     return {
-      x: width < 900 ? width * 0.54 : width * 0.66,
-      y: width < 900 ? height * 0.38 : height * 0.46,
-      r: Math.min(width, height) * (width < 760 ? 0.11 : 0.13)
+      x: width < 900 ? width * 0.54 : graphicLeft + graphicWidth * 0.5,
+      y: height * 0.5,
+      r: Math.min(graphicWidth, height) * (width < 760 ? 0.11 : 0.13)
     };
   }
 
