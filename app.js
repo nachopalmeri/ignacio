@@ -70,9 +70,9 @@ const UI_COPY = {
     },
     about: {
       title: 'Sobre mí',
-      p1: 'Estudio Gestión IT y estoy construyendo mi primera experiencia profesional en tecnología. Mezclo criterio de producto y contexto operativo para convertir procesos repetitivos en software útil.',
+      p1: 'Estudio Gestión IT en UADE desde 2025 y estoy construyendo mi primera experiencia profesional en tecnología. Mezclo criterio de producto y contexto operativo para convertir procesos repetitivos en software útil.',
       p2: 'Trabajo con Python, FastAPI, SQL, Linux, Git y asistentes de IA para construir dashboards, bots, automatizaciones y prototipos desplegados. Me importa más entregar trabajo revisable que parecer senior.',
-      p3: 'Mi experiencia en atención al cliente y operaciones me dio presión real, caja, inventario y auditorías. Quiero llevar esa base a soporte IT, QA trainee, automatización o startups.'
+      p3: 'Desde octubre de 2024 trabajo como Analista de Operaciones en Grido, con caja, inventario y auditorías — presión real que me enseñó cómo se rompen los procesos en la práctica. Quiero llevar esa base a soporte IT, QA trainee, automatización o startups.'
     },
     flow: {
       eyebrow: 'Cómo trabajo',
@@ -247,9 +247,9 @@ const UI_COPY = {
     },
     about: {
       title: 'About me',
-      p1: 'I am an IT Management student building my first professional path in technology. I combine product judgment and operational context to turn repetitive processes into useful software.',
+      p1: 'I have been studying IT Management at UADE since 2025, building my first professional path in technology. I combine product judgment and operational context to turn repetitive processes into useful software.',
       p2: 'I work with Python, FastAPI, SQL, Linux, Git and AI assistants to build dashboards, bots, automations and deployed prototypes. I care more about shipping reviewable work than looking senior.',
-      p3: 'My customer service and operations background gave me real pressure, cash handling, inventory and audits. I want to bring that base into IT support, QA trainee, automation or startups.'
+      p3: "Since October 2024 I have worked as an Operations Analyst at Grido, handling cash, inventory and audits — real pressure that taught me how processes actually break. I want to bring that base into IT support, QA trainee, automation or startups."
     },
     flow: {
       eyebrow: 'How I work',
