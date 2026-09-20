@@ -183,6 +183,13 @@ html, body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html, body {
+    transition: none;
+  }
 }
 
 /* Custom Scrollbar */
@@ -843,6 +850,7 @@ nav.nav-menu {
 .terminal-line {
   color: var(--text-secondary);
   margin-bottom: 6px;
+  white-space: pre-line;
 }
 
 .terminal-line-input {
@@ -1203,6 +1211,11 @@ nav.nav-menu {
   box-shadow: 0 4px 20px rgba(255, 255, 255, 0.08);
 }
 
+.btn-primary:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 1px 6px rgba(255, 255, 255, 0.06);
+}
+
 .btn-secondary {
   background: rgba(255, 255, 255, 0.03);
   color: var(--text-primary);
@@ -1217,6 +1230,10 @@ nav.nav-menu {
   background: rgba(255, 255, 255, 0.08);
   border-color: var(--text-muted);
   transform: translateY(-2px);
+}
+
+.btn-secondary:active {
+  transform: translateY(0) scale(0.98);
 }
 
 /* GitHub activity */
@@ -4250,6 +4267,38 @@ footer.app-footer {
 .footer-text {
   font-size: 13px;
   color: var(--text-muted);
+}
+
+.footer-blame {
+  position: relative;
+  cursor: help;
+  width: fit-content;
+}
+
+.footer-blame::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  white-space: nowrap;
+  padding: 7px 11px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 11px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(4px);
+  transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
+  pointer-events: none;
+}
+
+.footer-blame:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 .footer-socials {

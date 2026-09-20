@@ -30,14 +30,16 @@ const UI_COPY = {
       title: 'ignacio@portfolio',
       launcher: 'Terminal',
       welcome: 'Escribí help para explorar mi perfil.',
-      prompt: 'Comandos: about, skills, projects, agents, contact, clear',
+      prompt: 'Comandos: about, skills, projects, agents, contact, whoami, log, clear',
       unknown: 'Comando no encontrado',
-      help: 'Comandos: about, skills, projects, agents, contact, clear',
+      help: 'Comandos: about, skills, projects, agents, contact, whoami, log, clear',
       about: 'Ignacio Palmeri - estudiante de Gestión IT que combina experiencia operativa, producto y automatización para construir software útil.',
       skills: 'Python, FastAPI, TypeScript, SQL, Linux, Git, Playwright, automatización de procesos y desarrollo asistido por IA.',
       projects: 'Proyectos principales: JobBot, Agents System, Motor Estadístico Predictivo y Pisculichi Labs. El archivo completo muestra 9 piezas desplegadas o revisables.',
       agents: 'Uso asistentes de IA como parte de un flujo ordenado: plan, construcción, revisión, pruebas, documentación y publicación.',
-      contact: 'GitHub: @nachopalmeri | LinkedIn: ignacio | Email: ignaciopalmeri1@gmail.com'
+      contact: 'GitHub: @nachopalmeri | LinkedIn: ignacio | Email: ignaciopalmeri1@gmail.com',
+      whoami: 'Ignacio Palmeri. Gestión de IT en UADE, Analista de Operaciones en Grido desde oct-2024. Construyo con Python, FastAPI e IA. Ni senior ni sorprendido de estar acá.',
+      log: 'oct-2024  grido      → caja, inventario y auditorías, la fricción real que me hizo automatizar\n2025      uade       → arranco Gestión de IT\nongoing   jobbot     → SaaS full-stack para búsqueda laboral, auth+webhooks+pagos\nongoing   portfolio  → este sitio, iterado en público con IA'
     },
     github: {
       eyebrow: 'Actividad verificable',
@@ -205,14 +207,16 @@ const UI_COPY = {
       title: 'ignacio@portfolio',
       launcher: 'Terminal',
       welcome: 'Type help to explore my profile.',
-      prompt: 'Commands: about, skills, projects, agents, contact, clear',
+      prompt: 'Commands: about, skills, projects, agents, contact, whoami, log, clear',
       unknown: 'Command not found',
-      help: 'Commands: about, skills, projects, agents, contact, clear',
+      help: 'Commands: about, skills, projects, agents, contact, whoami, log, clear',
       about: 'Ignacio Palmeri - IT Management student combining operations, product and automation to build useful software.',
       skills: 'Python, FastAPI, TypeScript, SQL, Linux, Git, Playwright, process automation and applied AI.',
       projects: 'Main projects: JobBot, Agents System, Sports Predictive Analytics Engine and Pisculichi Labs. The full archive shows 9 deployed or reviewable pieces.',
       agents: 'I use AI assistants inside an ordered workflow: planning, building, review, tests, documentation and shipping.',
-      contact: 'GitHub: @nachopalmeri | LinkedIn: ignacio | Email: ignaciopalmeri1@gmail.com'
+      contact: 'GitHub: @nachopalmeri | LinkedIn: ignacio | Email: ignaciopalmeri1@gmail.com',
+      whoami: "Ignacio Palmeri. IT Management at UADE, Operations Analyst at Grido since oct-2024. I build with Python, FastAPI and AI. Not senior, not surprised to be here.",
+      log: 'oct-2024  grido      -> cash, inventory and audits, the real friction that got me automating\n2025      uade       -> started IT Management\nongoing   jobbot     -> full-stack job-search SaaS, auth+webhooks+payments\nongoing   portfolio  -> this site, iterated in public with AI'
     },
     github: {
       eyebrow: 'Verifiable activity',
