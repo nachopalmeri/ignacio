@@ -838,6 +838,7 @@ function setupSideQuests() {
   const chipRow = document.getElementById('sq-col-chips');
   const prevBtn = document.getElementById('sq-prev');
   const nextBtn = document.getElementById('sq-next');
+  const leakEl = document.getElementById('sq-leak');
   if (!toggle || !reveal || !posterImg) return;
 
   const n = SIDE_QUESTS.length;
@@ -845,6 +846,16 @@ function setupSideQuests() {
   let current = 0;
   let filterCat = 'all';
   let audioEl = null;
+  let isFirstRenderSinceOpen = true;
+
+  // Quick "montage cut" light-leak sweep across the poster on every change
+  // after the first (the curtain/spotlight intro already covers that one).
+  function triggerLeak() {
+    if (!leakEl || reduceMotion || isFirstRenderSinceOpen) return;
+    leakEl.classList.remove('is-active');
+    void leakEl.offsetWidth;
+    leakEl.classList.add('is-active');
+  }
 
   function buildChips() {
     chipRow.innerHTML = '';
@@ -889,8 +900,10 @@ function setupSideQuests() {
     if (!item) return;
     const intel = sqIntel(item.title) || { tags: [], mood: { es: '', en: '' } };
     const accent = item.color;
+    triggerLeak();
     posterImg.style.opacity = 0;
     setTimeout(() => { posterImg.src = item.kind === 'book' ? sqBookArt(item) : item.poster; posterImg.alt = item.title; posterImg.style.opacity = 1; }, reduceMotion ? 0 : 150);
+    isFirstRenderSinceOpen = false;
     glow.style.background = 'radial-gradient(closest-side, ' + accent + ', transparent 72%)';
     document.getElementById('side-quests-reveal').style.setProperty('--sq-accent', accent);
     catChip.textContent = localize(item.cat);
@@ -1007,6 +1020,7 @@ function setupSideQuests() {
   }
 
   function open() {
+    isFirstRenderSinceOpen = true;
     toggle.setAttribute('aria-expanded', 'true');
     reveal.classList.add('is-visible');
     reveal.setAttribute('aria-hidden', 'false');

@@ -4512,6 +4512,136 @@ footer.app-footer {
   100% { opacity: 0; }
 }
 
+/* ═══════════════════ SIDE QUESTS: CINEMATIC OPEN ═══════════════════
+   Curtains part on open, a spotlight blooms on the poster, film grain +
+   vignette stay on for the whole session, and poster changes get a quick
+   light-leak sweep — the "cinema lounge" the section already leans into,
+   pushed further into an actual opening-night moment. */
+
+.sq-curtain {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 54%;
+  z-index: 60;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #260909 0px, #3c1212 16px, #1a0606 32px, #341010 48px
+    );
+  box-shadow: 0 0 90px 30px rgba(0, 0, 0, 0.65) inset;
+}
+
+.sq-curtain-left {
+  left: 0;
+  border-right: 2px solid rgba(0, 0, 0, 0.5);
+}
+
+.sq-curtain-right {
+  right: 0;
+  border-left: 2px solid rgba(0, 0, 0, 0.5);
+}
+
+.side-quests-reveal.is-visible .sq-curtain-left {
+  animation: sqCurtainLeft 1s var(--ease) 250ms both;
+}
+
+.side-quests-reveal.is-visible .sq-curtain-right {
+  animation: sqCurtainRight 1s var(--ease) 250ms both;
+}
+
+@keyframes sqCurtainLeft {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-105%); }
+}
+
+@keyframes sqCurtainRight {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(105%); }
+}
+
+.sq-spotlight {
+  position: absolute;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 44%, rgba(255, 238, 204, 0.38) 0%, rgba(255, 200, 140, 0.14) 24%, transparent 48%);
+  opacity: 0;
+}
+
+.side-quests-reveal.is-visible .sq-spotlight {
+  animation: sqSpotlightBloom 1.4s var(--ease) 550ms both;
+}
+
+@keyframes sqSpotlightBloom {
+  0% { opacity: 0; transform: scale(0.6); }
+  55% { opacity: 1; transform: scale(1.06); }
+  100% { opacity: 0.45; transform: scale(1); }
+}
+
+.sq-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 45%, transparent 36%, rgba(0, 0, 0, 0.58) 100%);
+}
+
+.sq-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 46;
+  pointer-events: none;
+  opacity: 0.055;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
+  animation: sqGrainShift 0.5s steps(4) infinite;
+}
+
+@keyframes sqGrainShift {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-2%, 1%); }
+  50% { transform: translate(1%, -2%); }
+  75% { transform: translate(-1%, 2%); }
+  100% { transform: translate(0, 0); }
+}
+
+.sq-leak {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  border-radius: 16px;
+  background: linear-gradient(115deg, transparent 25%, rgba(255, 196, 120, 0.85) 45%, rgba(255, 120, 60, 0.55) 52%, transparent 72%);
+  mix-blend-mode: screen;
+}
+
+.sq-leak.is-active {
+  animation: sqLeakSweep 550ms ease-out;
+}
+
+@keyframes sqLeakSweep {
+  0% { opacity: 0; transform: translateX(-60%); }
+  35% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(60%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sq-curtain-left,
+  .sq-curtain-right,
+  .sq-spotlight {
+    animation: none !important;
+  }
+  .sq-curtain-left { transform: translateX(-105%); }
+  .sq-curtain-right { transform: translateX(105%); }
+  .sq-spotlight { opacity: 0.35; }
+  .sq-grain { animation: none; }
+  .sq-leak { display: none; }
+}
+
 .side-quests-close {
   position: absolute;
   top: 20px;
