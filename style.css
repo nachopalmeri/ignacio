@@ -9400,12 +9400,12 @@ header.app-header.is-scrolled .nav-cta {
   margin: clamp(48px, 8vw, 96px) auto;
   padding: clamp(28px, 5vw, 48px);
   border-radius: 28px;
-  background: #fdf6e8;
-  border: 1px solid #ecdfc0;
+  background: var(--bg);
+  border: 1px solid var(--border);
 }
 
 .faq-section .section-title {
-  color: #1c1c1c;
+  color: var(--text-primary);
 }
 
 .faq-list {
@@ -9415,9 +9415,9 @@ header.app-header.is-scrolled .nav-cta {
 }
 
 .faq-item {
-  border: 1px solid #ecdfc0;
+  border: 1px solid var(--border);
   border-radius: 14px;
-  background: #fffdf7;
+  background: var(--bg-card);
   padding: 0 18px;
 }
 
@@ -9431,7 +9431,7 @@ header.app-header.is-scrolled .nav-cta {
   font-weight: 700;
   font-size: 14px;
   text-align: left;
-  color: #1c1c1c;
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -9451,7 +9451,7 @@ header.app-header.is-scrolled .nav-cta {
   position: absolute;
   top: 50%;
   left: 50%;
-  background: #93887b;
+  background: var(--text-muted);
   transform: translate(-50%, -50%);
   transition: transform 0.25s var(--ease);
 }
@@ -9491,7 +9491,7 @@ header.app-header.is-scrolled .nav-cta {
 
 .faq-item p {
   margin: 0 0 16px;
-  color: #52493c;
+  color: var(--text-secondary);
   font-size: 13.5px;
   line-height: 1.6;
 }
