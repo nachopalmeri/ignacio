@@ -270,6 +270,87 @@ header.app-header {
   text-transform: uppercase;
 }
 
+
+.mobile-nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.mobile-nav-toggle span {
+  display: block;
+  width: 16px;
+  height: 2px;
+  background: var(--text-primary);
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+
+header.app-header.mobile-nav-open .mobile-nav-toggle span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+header.app-header.mobile-nav-open .mobile-nav-toggle span:nth-child(2) {
+  opacity: 0;
+}
+
+header.app-header.mobile-nav-open .mobile-nav-toggle span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+@media (max-width: 760px) {
+  .mobile-nav-toggle {
+    display: inline-flex;
+  }
+
+  .header-container {
+    flex-wrap: nowrap;
+  }
+
+  /* !important here: style.css has long-standing duplicate rules for
+     nav.nav-menu/.header-socials/.nav-cta elsewhere in the file (with equal
+     or higher selector specificity) that otherwise silently win over a
+     plain responsive override, regardless of source order. */
+  .nav-cta,
+  .header-socials {
+    display: none !important;
+  }
+
+  .nav-menu {
+    display: none !important;
+  }
+
+  header.app-header.mobile-nav-open .nav-menu {
+    display: flex !important;
+    flex-direction: column;
+    position: absolute;
+    top: 72px;
+    left: 0;
+    right: 0;
+    padding: 12px 20px 20px;
+    background: var(--header-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    gap: 6px;
+    z-index: 99;
+  }
+
+  header.app-header.mobile-nav-open .nav-tab {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 12px 14px;
+    border-radius: 8px;
+  }
+}
 nav.nav-menu {
   display: flex;
   gap: 8px;
@@ -2638,6 +2719,47 @@ button.carousel-proof {
   color: var(--text-secondary);
 }
 
+/* !important throughout: style.css has a duplicate unconditional
+   .archive-row rule later in the file with the desktop grid-template-*,
+   which otherwise wins back over this responsive override regardless of
+   source order. */
+@media (max-width: 640px) {
+  .archive-row {
+    grid-template-columns: 44px 1fr !important;
+    grid-template-areas:
+      "num thumb"
+      "main main"
+      "tags tags"
+      "open open" !important;
+    row-gap: 10px;
+    column-gap: 12px;
+    padding: 16px 4px;
+  }
+
+  .archive-number {
+    grid-area: num;
+    align-self: start;
+  }
+
+  .archive-thumb {
+    grid-area: thumb;
+    width: 100% !important;
+  }
+
+  .archive-main {
+    grid-area: main;
+  }
+
+  .archive-tags {
+    grid-area: tags;
+  }
+
+  .archive-open {
+    grid-area: open;
+    justify-self: start !important;
+  }
+}
+
 /* Hover-triggered video reveal for projects with a demo clip */
 .project-video-reveal {
   position: fixed;
@@ -2816,6 +2938,21 @@ button.carousel-proof {
 @keyframes consoleLauncherPulse {
   0%, 100% { box-shadow: 0 18px 60px color-mix(in srgb, var(--shadow-strong) 62%, transparent), 0 0 0 8px rgba(16,185,129,0.05); }
   50% { box-shadow: 0 18px 60px color-mix(in srgb, var(--shadow-strong) 62%, transparent), 0 0 0 14px rgba(16,185,129,0.14); }
+}
+
+/* On mobile the hero/archive content is left-aligned, so the fixed launcher
+   sitting bottom-left collides with the CTA row and archive rows. Move it
+   to the opposite corner and shrink it a touch. !important because
+   style.css has a duplicate unconditional .console-launcher rule later in
+   the file that would otherwise win back the desktop position. */
+@media (max-width: 640px) {
+  .console-launcher {
+    left: auto !important;
+    right: 16px !important;
+    bottom: 16px !important;
+    height: 40px !important;
+    padding: 0 14px 0 12px !important;
+  }
 }
 
 .console-chat {

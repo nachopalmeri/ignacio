@@ -2713,6 +2713,35 @@ function setupAiOpsHero() {
   window.addEventListener('portfolio-tab-change', start);
 }
 
+function setupMobileNav() {
+  const header = document.querySelector('header.app-header');
+  const toggle = document.getElementById('mobile-nav-toggle');
+  if (!header || !toggle) return;
+
+  function setOpen(open) {
+    header.classList.toggle('mobile-nav-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+  }
+
+  toggle.addEventListener('click', () => {
+    setOpen(!header.classList.contains('mobile-nav-open'));
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!header.classList.contains('mobile-nav-open')) return;
+    if (header.contains(event.target)) return;
+    setOpen(false);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && header.classList.contains('mobile-nav-open')) setOpen(false);
+  });
+
+  header.querySelectorAll('.nav-tab').forEach((tab) => {
+    tab.addEventListener('click', () => setOpen(false));
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   setupPreferenceControls();
   setupProjectCarousel();
@@ -2724,6 +2753,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCounters();
   initProjectRoadmap();
   initFlowSection();
+  setupMobileNav();
   // Navigation tabs
   const navTabs = document.querySelectorAll('.nav-tab');
   const viewSections = document.querySelectorAll('.view-section');
