@@ -2346,9 +2346,38 @@ function setupThreeAiOpsHero(canvas, hero, nodes, reduceMotion) {
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
-    group.position.x = width < 900 ? 1.55 : 4.05;
-    group.position.y = width < 760 ? 0.65 : -0.05;
-    group.scale.setScalar(width < 760 ? 0.6 : 0.86);
+
+    // Convert the same "empty space right of the text column" pixel boundary
+    // the 2D canvas uses (measureHeroGraphicLeft) into Three.js world space,
+    // via the perspective camera's FOV: at distance z from the camera, a
+    // plane through the origin shows a visible half-height of z*tan(fov/2),
+    // and a visible half-width of that times the aspect ratio. Pixel->NDC
+    // (-1..1) then NDC->world just scales by those half-extents.
+    const halfHeightWorld = camera.position.z * Math.tan((camera.fov * Math.PI) / 360);
+    const halfWidthWorld = halfHeightWorld * camera.aspect;
+    const graphicLeftPx = width < 900 ? null : measureHeroGraphicLeft(hero);
+
+    if (graphicLeftPx == null) {
+      group.position.x = width < 900 ? 1.55 : 4.05;
+      group.position.y = width < 760 ? 0.65 : -0.05;
+      group.scale.setScalar(width < 760 ? 0.85 : 1.2);
+    } else {
+      const graphicWidthPx = Math.max(240, width - graphicLeftPx);
+      const graphicCenterPx = graphicLeftPx + graphicWidthPx * 0.5;
+      const ndcX = (graphicCenterPx / width) * 2 - 1;
+      group.position.x = ndcX * halfWidthWorld;
+      group.position.y = 0;
+
+      // Scale the whole scene up to fill the available circle: rings extend
+      // to radius 2.55 at scale 1, so ~2.6 world units is that footprint's
+      // half-extent. Fit it inside whichever is tighter, the graphic column's
+      // half-width or the hero's half-height, then go "gigante" (up to 1.8x)
+      // while leaving a safety margin so rings never clip the hero edges.
+      const graphicHalfWidthWorld = (graphicWidthPx / width) * halfWidthWorld;
+      const fitWorld = Math.min(graphicHalfWidthWorld, halfHeightWorld) * 0.92;
+      const baseFootprint = 2.6;
+      group.scale.setScalar(Math.min(1.8, Math.max(0.9, fitWorld / baseFootprint)));
+    }
   }
 
   function shouldRun() {
@@ -2398,6 +2427,17 @@ function setupThreeAiOpsHero(canvas, hero, nodes, reduceMotion) {
   window.addEventListener('portfolio-tab-change', start);
 }
 
+// Shared by both the 3D and 2D hero: the graphic sits to the right of the
+// text column, not in the middle of the whole (mostly-text) hero. Returns the
+// pixel x, relative to the hero's left edge, where that empty space starts.
+function measureHeroGraphicLeft(hero) {
+  const heroCopy = hero.querySelector('.hero-copy');
+  if (!heroCopy) return null;
+  const heroRect = hero.getBoundingClientRect();
+  const copyRect = heroCopy.getBoundingClientRect();
+  return Math.max(0, copyRect.right - heroRect.left + 56);
+}
+
 function setupAiOpsHero() {
   const canvas = document.getElementById('ai-ops-canvas');
   const hero = document.querySelector('.ai-ops-hero');
@@ -2437,8 +2477,7 @@ function setupAiOpsHero() {
     // Below the 900px breakpoint the grid drops to one column and this
     // canvas is hidden entirely (see the max-width:900px rule in style.css),
     // so a heroCopy-driven boundary only ever applies to the two-column case.
-    const copyRect = heroCopy ? heroCopy.getBoundingClientRect() : null;
-    graphicLeft = copyRect ? Math.max(0, copyRect.right - rect.left + 56) : width * 0.5;
+    graphicLeft = measureHeroGraphicLeft(hero) ?? width * 0.5;
 
     const ratio = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
     canvas.width = Math.round(width * ratio);
@@ -2462,7 +2501,10 @@ function setupAiOpsHero() {
     return {
       x: width < 900 ? width * 0.54 : graphicLeft + graphicWidth * 0.5,
       y: height * 0.5,
-      r: Math.min(graphicWidth, height) * (width < 760 ? 0.11 : 0.13)
+      // Bigger presence on desktop: ~1.7x the old radius (r scales area, so
+      // ~2.9x more "mass" on screen), while staying inside min(graphicWidth,
+      // height) so the orbit rings (up to ~1.85x r) never clip the hero edges.
+      r: Math.min(graphicWidth, height) * (width < 760 ? 0.11 : 0.22)
     };
   }
 
