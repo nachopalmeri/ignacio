@@ -2286,7 +2286,7 @@ function setupThreeAiOpsHero(canvas, hero, nodes, reduceMotion) {
   group.add(particles);
 
   const lineMaterial = new THREE.LineBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0.24 });
-  const nodeObjects = nodes.map((label, index) => {
+  const nodeObjects = nodes.map((node, index) => {
     const nodeGroup = new THREE.Group();
     const angle = (index / nodes.length) * Math.PI * 2;
     nodeGroup.position.set(Math.cos(angle) * 3.0, Math.sin(angle) * 1.55, Math.sin(angle) * 0.85);
@@ -2297,7 +2297,7 @@ function setupThreeAiOpsHero(canvas, hero, nodes, reduceMotion) {
     );
     nodeGroup.add(nodeMesh);
 
-    const sprite = makeTextSprite(label);
+    const sprite = makeTextSprite(node.label);
     sprite.position.set(0, -0.42, 0);
     nodeGroup.add(sprite);
 
@@ -2305,8 +2305,70 @@ function setupThreeAiOpsHero(canvas, hero, nodes, reduceMotion) {
     const line = new THREE.Line(lineGeometry, lineMaterial.clone());
     group.add(line);
     group.add(nodeGroup);
-    return { group: nodeGroup, mesh: nodeMesh, line, angle };
+    return { group: nodeGroup, mesh: nodeMesh, line, angle, data: node, button: null };
   });
+
+  // DOM buttons for each node, projected from world space to screen space
+  // every frame (see updateNodeButtons). Real <button> elements so nodes are
+  // keyboard-focusable and clickable without WebGL raycasting.
+  const nodeLayer = hero.querySelector('[data-hero-node-layer]');
+  if (nodeLayer) {
+    nodeLayer.innerHTML = '';
+    nodeObjects.forEach((node) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'hero-node-btn';
+      const proofText = node.data.proof[currentLang] || node.data.proof.es;
+      btn.setAttribute('aria-label', `${node.data.label}: ${proofText}`);
+      btn.innerHTML = `<span class="hero-node-tooltip"><strong>${escapeHtml(node.data.label)}</strong><span>${escapeHtml(proofText)}</span></span>`;
+      btn.addEventListener('click', () => {
+        const target = document.querySelector(`#project-carousel [data-project-id="${node.data.projectId}"]`)
+          || document.getElementById('project-carousel-title');
+        if (!target) return;
+        target.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'center' });
+        target.classList.add('is-highlighted');
+        setTimeout(() => target.classList.remove('is-highlighted'), 1600);
+      });
+      nodeLayer.appendChild(btn);
+      node.button = btn;
+    });
+  }
+
+  const nodeWorldPos = new THREE.Vector3();
+  function updateNodeButtons() {
+    if (!nodeLayer) return;
+    nodeObjects.forEach((node) => {
+      if (!node.button) return;
+      const projected = node.group.getWorldPosition(nodeWorldPos).project(camera);
+      const inView = projected.z < 1 && Math.abs(projected.x) < 1.15 && Math.abs(projected.y) < 1.15;
+      node.button.classList.toggle('is-visible', inView);
+      if (!inView) return;
+      const x = (projected.x * 0.5 + 0.5) * width;
+      const y = (projected.y * -0.5 + 0.5) * height;
+      node.button.style.left = `${x}px`;
+      node.button.style.top = `${y}px`;
+    });
+  }
+
+  // Bounded mouse parallax: the group tilts toward the cursor within the
+  // hero, gently, and eases back to idle rotation when the mouse leaves or
+  // stays still. Disabled below the 900px breakpoint (same gate as resize())
+  // and for prefers-reduced-motion.
+  const parallax = { targetX: 0, targetY: 0, x: 0, y: 0 };
+  function onHeroMouseMove(event) {
+    if (reduceMotion.matches || width < 900) return;
+    const rect = hero.getBoundingClientRect();
+    const nx = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    const ny = ((event.clientY - rect.top) / rect.height) * 2 - 1;
+    parallax.targetX = -ny * 0.16;
+    parallax.targetY = nx * 0.16;
+  }
+  function onHeroMouseLeave() {
+    parallax.targetX = 0;
+    parallax.targetY = 0;
+  }
+  hero.addEventListener('mousemove', onHeroMouseMove);
+  hero.addEventListener('mouseleave', onHeroMouseLeave);
 
   let width = 0;
   let height = 0;
@@ -2400,7 +2462,10 @@ function setupThreeAiOpsHero(canvas, hero, nodes, reduceMotion) {
 
   function render(time = 0) {
     const active = Math.floor(time / 1100) % nodeObjects.length;
-    group.rotation.y = time * 0.00012;
+    parallax.x += (parallax.targetX - parallax.x) * 0.06;
+    parallax.y += (parallax.targetY - parallax.y) * 0.06;
+    group.rotation.y = time * 0.00012 + parallax.y;
+    group.rotation.x = parallax.x;
     core.rotation.y = time * 0.0005;
     halo.rotation.y = -time * 0.00035;
     particles.rotation.y = time * 0.00008;
@@ -2415,6 +2480,8 @@ function setupThreeAiOpsHero(canvas, hero, nodes, reduceMotion) {
       node.line.geometry.setFromPoints([new THREE.Vector3(0, 0, 0), node.group.position.clone()]);
       node.line.material.opacity = index === active ? 0.72 : 0.2;
     });
+    group.updateMatrixWorld(true);
+    updateNodeButtons();
     renderer.render(scene, camera);
     if (running) frameId = requestAnimationFrame(render);
   }
@@ -2457,7 +2524,15 @@ function setupAiOpsHero() {
   const hero = document.querySelector('.ai-ops-hero');
   if (!canvas || !hero) return;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const nodes = ['Planner', 'Builder', 'Reviewer', 'Security', 'Docs'];
+  // Real stack items tied to a real project, not generic labels — each node
+  // in the hero is a legitimate proof point, and clicking one jumps to it.
+  const nodes = [
+    { label: 'FastAPI', projectId: 'jobbot', proof: { es: 'Backend y pagos de JobBot', en: 'JobBot backend and payments' } },
+    { label: 'PostgreSQL', projectId: 'franquiya', proof: { es: 'Stock y facturas de FranquiYA', en: 'FranquiYA stock and invoices' } },
+    { label: 'Python', projectId: 'motor-estadistico', proof: { es: 'Motor de predicciones deportivas', en: 'Sports prediction engine' } },
+    { label: 'Next.js', projectId: 'piscubi', proof: { es: 'E-commerce de Piscubi Store', en: 'Piscubi Store e-commerce' } },
+    { label: 'Playwright', projectId: 'agents-system', proof: { es: 'Tests de este mismo portfolio', en: 'Tests for this very portfolio' } }
+  ];
   if (window.THREE && !reduceMotion.matches) {
     try {
       setupThreeAiOpsHero(canvas, hero, nodes, reduceMotion);
@@ -2577,7 +2652,7 @@ function setupAiOpsHero() {
     ctx.textAlign = 'center';
     ctx.fillText('AI CORE', core.x, core.y + 4);
 
-    nodes.forEach((label, index) => {
+    nodes.forEach((node, index) => {
       const pos = nodePosition(index, time);
       const isActive = index === active;
       ctx.strokeStyle = isActive ? 'rgba(16,185,129,0.82)' : 'rgba(255,255,255,0.12)';
@@ -2595,7 +2670,7 @@ function setupAiOpsHero() {
       ctx.stroke();
       ctx.fillStyle = isActive ? '#ededed' : 'rgba(237,237,237,0.72)';
       ctx.font = '700 11px Space Grotesk, sans-serif';
-      ctx.fillText(label, pos.x, pos.y + 4);
+      ctx.fillText(node.label, pos.x, pos.y + 4);
     });
 
     if (!reduceMotion.matches && running) frameId = requestAnimationFrame(draw);

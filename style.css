@@ -505,6 +505,95 @@ nav.nav-menu {
   display: grid;
 }
 
+/* Real DOM buttons projected over the 3D hero's orbiting nodes, so each one
+   is keyboard-focusable and clickable without raycasting into WebGL. */
+.hero-node-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ai-ops-hero.no-canvas .hero-node-layer {
+  display: none;
+}
+
+.hero-node-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--accent-green) 55%, transparent);
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+  cursor: pointer;
+  pointer-events: auto;
+  padding: 0;
+  opacity: 0;
+  transition: opacity var(--transition-normal), transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.hero-node-btn.is-visible {
+  opacity: 1;
+}
+
+.hero-node-btn:hover,
+.hero-node-btn:focus-visible {
+  border-color: var(--accent-green);
+  transform: translate(-50%, -50%) scale(1.25);
+  outline: none;
+}
+
+.hero-node-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  min-width: 168px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--accent-green) 40%, var(--border));
+  background: color-mix(in srgb, var(--bg-card) 96%, transparent);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  font-family: var(--font-display);
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
+  pointer-events: none;
+}
+
+.hero-node-btn:hover .hero-node-tooltip,
+.hero-node-btn:focus-visible .hero-node-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.hero-node-tooltip strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--accent-green-text);
+  margin-bottom: 2px;
+}
+
+.hero-node-tooltip span {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+@media (max-width: 900px) {
+  .hero-node-layer {
+    display: none;
+  }
+}
+
 .hero-tagline {
   font-size: 13px;
   color: var(--accent-blue);
@@ -2001,6 +2090,17 @@ button.carousel-proof {
   grid-template-columns: minmax(240px, 1.05fr) minmax(0, 0.78fr);
   gap: 16px;
   align-items: stretch;
+}
+
+/* Flashed briefly when a hero node's click-to-scroll lands on this card. */
+.project-preview.is-highlighted {
+  animation: projectHighlightPulse 1.6s var(--ease);
+}
+
+@keyframes projectHighlightPulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-green) 55%, transparent); }
+  30% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent-green) 30%, transparent); }
+  100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-green) 0%, transparent); }
 }
 
 .project-preview-media {
