@@ -170,7 +170,14 @@ const UI_COPY = {
         body: 'Estoy disponible para pasantía o rol trainee en Buenos Aires o remoto. Escribime y te respondo el mismo día.'
       },
       footer: { text: '2026 Ignacio Palmeri.', contact: 'Contacto' },
-      sideQuests: { toggle: 'Side Quests', eyebrow: 'Fuera del código', heading: 'Side Quests', routeSummary: 'ver ruta técnica' }
+      sideQuests: { toggle: 'Side Quests', eyebrow: 'Fuera del código', heading: 'Side Quests', routeSummary: 'ver ruta técnica' },
+      faq: {
+        title: 'Preguntas frecuentes',
+        q1: { q: '¿Cómo pasaste de atender un local a programar?', a: 'Trabajando en el negocio familiar manejando caja, inventario y auditorías vi de cerca cómo se rompen los procesos manuales. Esa fricción real fue lo que me hizo empezar a estudiar Gestión de IT y a construir software para resolverla — no al revés.' },
+        q2: { q: '¿Por qué certificaciones tan distintas (Red Hat, Cisco, IA)?', a: 'Porque quiero entender la pila completa, no solo la capa de arriba: RH124 me dio administración de sistemas Linux, CCNA me dio la base de redes y Claude Code in Action me dio un flujo serio para trabajar con IA sin perder criterio propio. Prefiero tener base antes de especializarme.' },
+        q3: { q: '¿Cómo usás la IA sin que te termine reemplazando el criterio?', a: 'La uso en cada etapa de mi flujo (plan, build, review, test, documentación), igual que cualquier developer usa hoy su IDE o un linter. Pero decidir qué construir, revisar el diff buscando qué se rompe y probar el camino real en el navegador sigue siendo trabajo mío. Si algo falla, la responsabilidad es mía, no de la IA.' },
+        q4: { q: '¿Qué estás buscando ahora?', a: 'Una pasantía o rol trainee, en Buenos Aires o remoto, donde pueda seguir aprendiendo rápido y aportar el criterio operativo que traigo de caja, inventario y auditorías. Escribime directo — te respondo el mismo día.' }
+      }
   },
   en: {
     nav: { overview: 'Overview', projects: 'Projects', agents: 'Workflow System' },
@@ -338,7 +345,14 @@ const UI_COPY = {
         body: 'Available for an internship or trainee role in Buenos Aires or remote. Write me and I reply the same day.'
       },
       footer: { text: '2026 Ignacio Palmeri.', contact: 'Contact' },
-      sideQuests: { toggle: 'Side Quests', eyebrow: 'Beyond the code', heading: 'Side Quests', routeSummary: 'view technical route' }
+      sideQuests: { toggle: 'Side Quests', eyebrow: 'Beyond the code', heading: 'Side Quests', routeSummary: 'view technical route' },
+      faq: {
+        title: 'FAQ',
+        q1: { q: 'How did you go from working retail to programming?', a: 'Working at my family business handling cash, inventory and audits, I saw up close how manual processes break. That real friction is what pushed me to start studying IT Management and building software to fix it — not the other way around.' },
+        q2: { q: 'Why such different certifications (Red Hat, Cisco, AI)?', a: 'Because I want to understand the whole stack, not just the top layer: RH124 gave me Linux system administration, CCNA gave me networking fundamentals, and Claude Code in Action gave me a real workflow for using AI without losing my own judgment. I prefer having a base before specializing.' },
+        q3: { q: 'How do you use AI without it replacing your judgment?', a: "I use it at every stage of my workflow (plan, build, review, test, document), the same way any developer today uses their IDE or a linter. But deciding what to build, reviewing the diff for what breaks, and testing the real path in the browser is still my work. If something fails, that's on me, not the AI." },
+        q4: { q: 'What are you looking for right now?', a: "An internship or trainee role, in Buenos Aires or remote, where I can keep learning fast and bring the operational judgment I built handling cash, inventory and audits. Write me directly — I'll reply the same day." }
+      }
   }
 };
 
