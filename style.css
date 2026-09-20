@@ -4597,6 +4597,13 @@ footer.app-footer {
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 140px 140px;
+}
+
+/* The animation only runs while the panel is actually open (and visible) —
+   it used to run unconditionally, which meant this mix-blend-mode layer
+   kept compositing every 0.5s on every page of the site even with Side
+   Quests closed, which is what was causing the site-wide lag. */
+.side-quests-reveal.is-visible .sq-grain {
   animation: sqGrainShift 0.5s steps(4) infinite;
 }
 
@@ -4629,6 +4636,18 @@ footer.app-footer {
   100% { opacity: 0; transform: translateX(60%); }
 }
 
+/* .side-quests-reveal, its ::before, and .sq-glow all carry pre-existing
+   "always on" animations (sq-warm-breathe, sq-dust, sq-glow-pulse) that
+   keep running site-wide even while this panel is hidden, since it's just
+   opacity/visibility toggled, not display:none. !important + :not() here
+   rather than editing those (duplicated elsewhere in this file) rules
+   directly, so this is guaranteed to win regardless of file order. */
+.side-quests-reveal:not(.is-visible),
+.side-quests-reveal:not(.is-visible)::before,
+.side-quests-reveal:not(.is-visible) .sq-glow {
+  animation: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .sq-curtain-left,
   .sq-curtain-right,
@@ -4638,7 +4657,7 @@ footer.app-footer {
   .sq-curtain-left { transform: translateX(-105%); }
   .sq-curtain-right { transform: translateX(105%); }
   .sq-spotlight { opacity: 0.35; }
-  .sq-grain { animation: none; }
+  .side-quests-reveal.is-visible .sq-grain { animation: none !important; }
   .sq-leak { display: none; }
 }
 
