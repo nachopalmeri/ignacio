@@ -1,9 +1,12 @@
-// Regenerates og-image.png (1200x630) and the cv.pdf placeholder.
+// Regenerates og-image.png (1200x630).
 // Run with: node scripts/og-image.mjs
 // Fonts are declared with explicit fallbacks so the output is deterministic
 // even when Google Fonts is unreachable from the build environment.
+//
+// This script used to also emit a placeholder cv.pdf, which silently
+// overwrote the real CV every time it ran. cv.pdf is a committed asset now
+// and is never generated here.
 import { chromium } from 'playwright';
-import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -57,33 +60,11 @@ const OG_HTML = `<!doctype html>
   </div>
 </body></html>`;
 
-const CV_HTML = `<!doctype html>
-<html><head><meta charset="utf-8"><style>
-  body { font-family: -apple-system, system-ui, sans-serif; padding: 64px; color: #18181b; }
-  h1 { font-family: Georgia, serif; font-size: 34px; margin-bottom: 6px; }
-  p { font-size: 15px; line-height: 1.6; color: #52525b; max-width: 60ch; }
-  .note { margin-top: 28px; padding: 18px 20px; border: 1px solid #e4e4e7;
-          border-radius: 12px; background: #fbf8f1; }
-</style></head><body>
-  <h1>Ignacio Palmeri</h1>
-  <p>Junior AI Automation &amp; Product Engineer — Buenos Aires, Argentina<br>
-     ignaciopalmeri1@gmail.com · github.com/nachopalmeri</p>
-  <div class="note">
-    <p><strong>Placeholder.</strong> Reemplazar este archivo por el CV real
-    (mismo nombre: <code>cv.pdf</code>, en la raíz del repo) para que el botón
-    "Descargar CV" del sitio entregue el documento definitivo.</p>
-  </div>
-</body></html>`;
-
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
 
 await page.setContent(OG_HTML, { waitUntil: 'load' });
 await page.screenshot({ path: path.join(rootDir, 'og-image.png') });
 
-await page.setContent(CV_HTML, { waitUntil: 'load' });
-const pdf = await page.pdf({ format: 'A4', printBackground: true });
-await writeFile(path.join(rootDir, 'cv.pdf'), pdf);
-
 await browser.close();
-console.log('Wrote og-image.png and cv.pdf');
+console.log('Wrote og-image.png');
