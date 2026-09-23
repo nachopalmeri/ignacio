@@ -2,7 +2,7 @@
 export default {
   id: 'agents-system',
   out: 'agents-system-demo.mp4',
-  url: 'https://ignaciop.vercel.app/agents',
+  url: 'https://ignaciopalmeri.dev/agents',
   accent: '#10b981',
   accentInk: '#03140d',
   chapters: 4,
