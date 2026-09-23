@@ -656,6 +656,7 @@ header.app-header.mobile-nav-open .mobile-nav-toggle span:nth-child(3) {
   --accent-purple: #a855f7;
   --accent-green: #10b981;
   --accent-green-text: #10b981;   /* same green: passes AA on the dark bg */
+  --accent-blue-text: #3b82f6;    /* 5.41:1 on the dark bg */
   --accent-amber: #f59e0b;
   --accent-red: #ef4444;
   
@@ -693,6 +694,7 @@ header.app-header.mobile-nav-open .mobile-nav-toggle span:nth-child(3) {
   --button-primary-bg: #18181b;
   --button-primary-text: #ffffff;
   --accent-green-text: #047857;   /* 5.17:1 on the cream bg */
+  --accent-blue-text: #2563eb;    /* 4.87:1 on the cream bg (#3b82f6 was 3.47:1) */
 }
 
 @supports not (color: color-mix(in srgb, black, white)) {
@@ -1130,7 +1132,7 @@ nav.nav-menu {
 
 .hero-tagline {
   font-size: 13px;
-  color: var(--accent-blue);
+  color: var(--accent-blue-text);
   letter-spacing: 2px;
   text-transform: uppercase;
   font-weight: 600;
@@ -1772,7 +1774,7 @@ nav.nav-menu {
   align-items: center;
   gap: 6px;
   margin-top: 10px;
-  color: var(--accent-blue);
+  color: var(--accent-blue-text);
   font-size: 13px;
   font-weight: 500;
   text-decoration: none;
