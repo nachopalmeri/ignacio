@@ -5864,3 +5864,44 @@ header.app-header.is-scrolled .nav-cta {
   backdrop-filter: blur(24px) saturate(1.4);
   -webkit-backdrop-filter: blur(24px) saturate(1.4);
 }
+
+/* ═══════════════════ SIDE QUESTS: fit + scroll on short viewports ═══════════
+   The panel is a full-viewport flex column. Once the crew cards load its
+   content is taller than most laptop screens, and with no scrolling every
+   child shrank to fit: the poster strip (a scroll container, so its minimum
+   height is 0) got crushed from 103px to 43px, squashing the thumbnails, and
+   the crew cards were clipped with no way to reach them.
+   Now nothing shrinks, the panel scrolls, and the decorative/fixed layers
+   (curtains, grain, vignette, spotlight, flash, close button, dust) are
+   viewport-fixed so they stay put while the content scrolls underneath. */
+.side-quests-reveal {
+  justify-content: center;
+  justify-content: safe center; /* never push the top out of reach */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-block: 28px;
+}
+
+.side-quests-reveal > * {
+  flex-shrink: 0;
+}
+
+.side-quests-reveal .sq-curtain,
+.side-quests-reveal .sq-spotlight,
+.side-quests-reveal .sq-vignette,
+.side-quests-reveal .sq-grain,
+.side-quests-reveal .sq-flash,
+.side-quests-reveal .side-quests-close,
+.side-quests-reveal::before {
+  position: fixed;
+}
+
+/* The strip is wider than its box, and `center` on an overflowing flex row
+   pushes the first posters off the left edge where they can't be scrolled
+   to. `safe center` centers only while everything fits. */
+.sq-strip {
+  justify-content: center;
+  justify-content: safe center;
+  align-items: flex-start;
+  flex-shrink: 0;
+}

@@ -792,8 +792,8 @@ function sqFilmOf(title) { return SQ_FILMS.find(f => f.name === title); }
 const SQ_TASTE_KEY = 'sq_taste', SQ_SEEN_KEY = 'sq_seen';
 function sqTasteGet() { try { return JSON.parse(localStorage.getItem(SQ_TASTE_KEY)) || { tags: {}, views: {} }; } catch (e) { return { tags: {}, views: {} }; } }
 function sqTasteBump(tags, w) { const t = sqTasteGet(); (tags || []).forEach(tag => { t.tags[tag] = Math.min(9, (t.tags[tag] || 0) + w); }); localStorage.setItem(SQ_TASTE_KEY, JSON.stringify(t)); }
-function sqMatch(quest) {
-  const t = sqTasteGet();
+function sqMatch(quest, taste) {
+  const t = taste || sqTasteGet();
   const intel = sqIntel(quest.title) || { tags: [] };
   let s = 46;
   intel.tags.forEach(tag => { s += (t.tags[tag] || 0) * 9; });
@@ -863,7 +863,7 @@ function setupSideQuests() {
       const c = document.createElement('button');
       c.type = 'button'; c.className = 'sq-col-chip'; c.dataset.col = id;
       c.textContent = label;
-      c.addEventListener('click', () => { filterCat = id; if (!visibleQuests().some(q => q.title === SIDE_QUESTS[current].title)) current = 0; buildChips(); buildStrip(); render(); });
+      c.addEventListener('click', () => { filterCat = id; const vis = visibleQuests(); if (vis.length && !vis.some(q => q.title === SIDE_QUESTS[current].title)) current = SIDE_QUESTS.indexOf(vis[0]); buildChips(); buildStrip(); render(); });
       chipRow.appendChild(c);
     };
     mk('all', currentLang === 'en' ? 'Everything' : 'Todo');
@@ -882,16 +882,46 @@ function setupSideQuests() {
 
   function buildStrip() {
     strip.innerHTML = '';
+    const seen = sqSeenGet();
+    const taste = sqTasteGet();
     visibleQuests().forEach(item => {
       const t = document.createElement('button');
       t.type = 'button'; t.className = 'sq-thumb';
+      t.dataset.q = String(SIDE_QUESTS.indexOf(item));
       // The poster img stays alt="" (decorative); the button carries the name.
       t.setAttribute('aria-label', sqL(item.title) || item.title || '');
-      if (sqSeenGet().includes(item.title)) t.classList.add('seen');
-      if (sqMatch(item) >= 80) t.classList.add('foryou');
+      if (seen.includes(item.title)) t.classList.add('seen');
+      if (sqMatch(item, taste) >= 80) t.classList.add('foryou');
       t.innerHTML = '<img src="' + (item.kind === 'book' ? sqBookArt(item) : item.poster) + '" alt="" loading="lazy" decoding="async">';
       t.addEventListener('click', () => { current = SIDE_QUESTS.indexOf(item); render(); });
       strip.appendChild(t);
+    });
+  }
+
+  // Changing poster only changes which thumb is active (plus seen/for-you
+  // badges), so update the existing thumbs in place instead of rebuilding all
+  // of them: the rebuild re-created every <img> and re-filtered the list once
+  // per thumb (O(n^2)) on each arrow press.
+  function syncStrip(item) {
+    let activeThumb = null;
+    const seen = sqSeenGet();
+    const taste = sqTasteGet();
+    strip.querySelectorAll('.sq-thumb').forEach((t) => {
+      const q = SIDE_QUESTS[Number(t.dataset.q)];
+      if (!q) return;
+      const isActive = q.title === item.title;
+      t.classList.toggle('seen', seen.includes(q.title));
+      t.classList.toggle('foryou', sqMatch(q, taste) >= 80);
+      t.classList.toggle('active', isActive);
+      if (isActive) activeThumb = t;
+    });
+    if (!activeThumb) return;
+    const target = activeThumb;
+    requestAnimationFrame(() => {
+      const tr = target.getBoundingClientRect();
+      const sr = strip.getBoundingClientRect();
+      const left = strip.scrollLeft + (tr.left - sr.left) - (strip.clientWidth - tr.width) / 2;
+      strip.scrollTo({ left: Math.max(0, left), behavior: reduceMotion ? 'auto' : 'smooth' });
     });
   }
 
@@ -944,12 +974,8 @@ function setupSideQuests() {
     views[item.title] = (views[item.title] || 0) + 1;
     taste.views = views;
     localStorage.setItem(SQ_TASTE_KEY, JSON.stringify(taste));
-    buildStrip();
-    strip.querySelectorAll('.sq-thumb').forEach((t, i) => {
-      const q = visibleQuests()[i];
-      t.classList.toggle('active', q && q.title === item.title);
-      if (q && q.title === item.title) t.scrollIntoView({ block: 'nearest', inline: 'center', behavior: reduceMotion ? 'auto' : 'smooth' });
-    });
+    if (strip.children.length !== visibleQuests().length) buildStrip();
+    syncStrip(item);
     const forYouEnd = sqMatch(item) >= 80;
     catChip.textContent = forYouEnd2 ? (currentLang === 'en' ? 'FOR YOU' : 'PARA VOS') : localize(item.cat);
     if (forYouEnd2) catChip.style.color = '#f5c04e'; else catChip.style.color = accent;
@@ -1026,6 +1052,7 @@ function setupSideQuests() {
     reveal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
     buildChips(); buildStrip(); render();
+    window.dispatchEvent(new CustomEvent('side-quests-visibility', { detail: { open: true } }));
   }
 
   function close() {
@@ -1034,6 +1061,7 @@ function setupSideQuests() {
     reveal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
     if (audioEl) audioEl.pause();
+    window.dispatchEvent(new CustomEvent('side-quests-visibility', { detail: { open: false } }));
   }
 
   if (!toggle.dataset.bound) {
@@ -2487,7 +2515,7 @@ function setupThreeAiOpsHero(canvas, hero, nodes, reduceMotion) {
   }
 
   function shouldRun() {
-    return !reduceMotion.matches && document.visibilityState === 'visible' && document.getElementById('overview-section')?.classList.contains('active');
+    return !reduceMotion.matches && document.visibilityState === 'visible' && document.getElementById('overview-section')?.classList.contains('active') && !sideQuestsOpen();
   }
 
   function render(time = 0) {
@@ -2536,6 +2564,14 @@ function setupThreeAiOpsHero(canvas, hero, nodes, reduceMotion) {
   });
   window.addEventListener('hashchange', start);
   window.addEventListener('portfolio-tab-change', start);
+  window.addEventListener('side-quests-visibility', start);
+}
+
+// The Side Quests panel is a full-screen opaque overlay; anything animating
+// underneath it (the hero's canvas/WebGL loop) is invisible work, so the
+// hero pauses while it's open.
+function sideQuestsOpen() {
+  return !!document.getElementById('side-quests-reveal')?.classList.contains('is-visible');
 }
 
 // Shared by both the 3D and 2D hero: the graphic sits to the right of the
@@ -2717,7 +2753,7 @@ function setupAiOpsHero() {
   }
 
   function shouldRun() {
-    return !reduceMotion.matches && document.visibilityState === 'visible' && document.getElementById('overview-section')?.classList.contains('active');
+    return !reduceMotion.matches && document.visibilityState === 'visible' && document.getElementById('overview-section')?.classList.contains('active') && !sideQuestsOpen();
   }
 
   function start() {
@@ -2737,6 +2773,7 @@ function setupAiOpsHero() {
   reduceMotion.addEventListener('change', start);
   window.addEventListener('hashchange', start);
   window.addEventListener('portfolio-tab-change', start);
+  window.addEventListener('side-quests-visibility', start);
 }
 
 function setupMobileNav() {
