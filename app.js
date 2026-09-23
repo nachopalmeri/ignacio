@@ -813,21 +813,31 @@ function esc(s) { return escapeHtml(String(s)); }
 function sqHash(str) { let h = 7; for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0; return h; }
 
 const SQ_BOOKS = [
-  { title: 'El sueño de los héroes', poster: 'project-assets/side-quests/el-sueno-de-los-heroes.jpg', color: '#c9a05c', cat: { es: 'Libro', en: 'Book' }, meta: 'Adolfo Bioy Casares, 1997',
-    why: { es: 'La mejor novela argentina sobre el tiempo y las segundas oportunidades que nunca son iguales.', en: 'The best Argentine novel about time and second chances that are never the same.' },
-    intel: { tags: ['fantástico', 'tiempo', 'argentino'], mood: { es: 'onírico y preciso', en: 'dreamlike and precise' }, time: '200 páginas', energy: { es: 'media', en: 'medium' }, bestMoment: { es: 'la primera vuelta al tablero: el tiempo empezando a doblarse', en: 'the first lap around the chessboard: time starting to fold' }, paraQuien: { es: 'para quien quiere tiempo y segundas oportunidades', en: 'for anyone who wants time and second chances' }, snd: 'cozy' } },
-  { title: 'Crimen y castigo', poster: 'project-assets/side-quests/crimen-y-castigo.jpg', color: '#c96a5a', cat: { es: 'Libro', en: 'Book' }, meta: 'Fiódor Dostoievski, 1866',
-    why: { es: 'Culpa y lógica al límite en 500 páginas que se sienten urgentes.', en: 'Guilt and logic pushed to the limit across 500 pages that still feel urgent.' },
-    intel: { tags: ['psicológico', 'culpa', 'clásico'], mood: { es: 'urgente y claustrofóbico', en: 'urgent and claustrophobic' }, time: '500+ páginas', energy: { es: 'alta', en: 'high' }, bestMoment: { es: 'el interrogatorio de Porfiry: ajedrez verbal cien páginas antes del final', en: 'Porfiry\'s interrogation: verbal chess 100 pages before the end' }, paraQuien: { es: 'para quien quiere culpa y lógica al límite', en: 'for anyone who wants guilt and logic at the limit' }, snd: 'dark' } },
-  { title: 'The Almanack of Naval Ravikant', poster: 'project-assets/side-quests/naval-almanack.jpg', color: '#d4b45c', cat: { es: 'Libro', en: 'Book' }, meta: 'Eric Jorgenson, 2020',
-    why: { es: 'El resumen más denso de decisiones de vida que leí en formato de bolsillo.', en: "The densest life-decisions summary I've read in pocket-book form." },
-    intel: { tags: ['decisiones', 'trabajo', 'bolsillo'], mood: { es: 'compacto y pragmático', en: 'compact and pragmatic' }, time: '242 páginas', energy: { es: 'media', en: 'medium' }, bestMoment: { es: 'la sección de apalancamiento: 40 páginas que reordenan cómo laburas', en: 'the leverage section: 40 pages that rewire how you work' }, paraQuien: { es: 'para quien quiere decisiones densas en formato bolsillo', en: 'for anyone who wants dense decisions in pocket form' }, snd: 'focus' } },
-  { title: 'The Perks of Being a Wallflower', poster: 'project-assets/side-quests/perks-wallflower.jpg', color: '#6aa8b8', cat: { es: 'Libro', en: 'Book' }, meta: 'Stephen Chbosky, 1999',
-    why: { es: 'Adolescencia honesta, sin la nostalgia impostada del género.', en: "Honest teenage years, without the genre's usual fake nostalgia." },
-    intel: { tags: ['coming of age', 'honesto', 'breve'], mood: { es: 'tierno y directo', en: 'tender and direct' }, time: '213 páginas', energy: { es: 'media-baja', en: 'medium-low' }, bestMoment: { es: 'we are infinite en el túnel', en: 'we are infinite in the tunnel' }, paraQuien: { es: 'para quien quiere adolescencia honesta', en: 'for anyone who wants honest adolescence' }, snd: 'cozy' } },
-  { title: 'Flowers for Algernon', poster: 'project-assets/side-quests/flowers-algernon.jpg', color: '#d4799a', cat: { es: 'Libro', en: 'Book' }, meta: 'Daniel Keyes, 1966',
-    why: { es: 'La ciencia ficción más triste y más humana que leí: inteligencia y pérdida en el mismo arco.', en: 'The saddest, most human sci-fi I read: intelligence and loss on the same arc.' },
-    intel: { tags: ['ciencia ficción', 'triste', 'breve'], mood: { es: 'devastador y limpio', en: 'devastating and clean' }, time: '311 páginas', energy: { es: 'media-alta', en: 'medium-high' }, bestMoment: { es: 'las faltas de ortografía volviendo al final: el idioma derrumbándose', en: 'the spelling errors creeping back at the end: a language falling apart' }, paraQuien: { es: 'para quien quiere la ciencia ficción más humana', en: 'for anyone who wants the most human sci-fi' }, snd: 'cozy' } }
+  { title: 'El sueño de los héroes', poster: 'project-assets/side-quests/el-sueno-de-los-heroes.jpg', color: '#c9a05c', cat: { es: 'Libro', en: 'Book' }, meta: 'Adolfo Bioy Casares · 1954',
+    premise: { es: 'Buenos Aires, carnaval de 1927. Emilio Gauna, un mecánico de veintiún años, gana plata en las carreras y se la gasta en tres noches de joda con sus amigos y el doctor Valerga. De esas noches solo recuerda un momento de plenitud que no sabe explicar. Tres años después intenta repetirlas, paso por paso, para volver a encontrarlo.', en: 'Buenos Aires, carnival of 1927. Emilio Gauna, a 21-year-old mechanic, wins money at the races and burns it on three wild nights with his friends and Doctor Valerga. All he remembers is one moment of fullness he cannot explain. Three years later he tries to relive those nights, step by step, to find it again.' },
+    why: { es: 'Porque es una novela sobre querer repetir el mejor momento de tu vida, escrita como un policial de barrio. Lo fantástico aparece sin efectos especiales: solo con el tiempo.', en: 'Because it is a novel about trying to relive the best moment of your life, told like a neighbourhood crime story. The fantastic shows up with no special effects: just time.' },
+    pages: 227, genre: { es: 'Novela fantástica argentina', en: 'Argentine fantastic novel' },
+    intel: { tags: ['fantástico', 'tiempo', 'argentino'], mood: { es: 'onírico y preciso', en: 'dreamlike and precise' }, time: '≈ 230 páginas', energy: { es: 'media', en: 'medium' }, bestMoment: { es: 'el regreso al carnaval, tres años después, cuando todo empieza a repetirse', en: 'the return to carnival three years later, when everything starts repeating' }, paraQuien: { es: 'para quien alguna vez quiso volver a una noche perfecta', en: 'for anyone who ever wanted to go back to a perfect night' }, snd: 'cozy' } },
+  { title: 'Crimen y castigo', poster: 'project-assets/side-quests/crimen-y-castigo.jpg', color: '#c96a5a', cat: { es: 'Libro', en: 'Book' }, meta: 'Fiódor Dostoievski · 1866',
+    premise: { es: 'San Petersburgo. Raskólnikov, un ex estudiante que vive en la miseria, se convence de que los hombres "extraordinarios" tienen derecho a cruzar cualquier límite, y mata a una vieja prestamista. El crimen ocurre al principio: el resto del libro es lo que esa idea le hace a su cabeza, mientras el juez Porfiri lo va cercando.', en: 'St Petersburg. Raskolnikov, a destitute former student, convinces himself that "extraordinary" men have the right to cross any line, and kills an old pawnbroker. The crime happens early: the rest of the book is what that idea does to his mind, while the investigator Porfiry closes in.' },
+    why: { es: 'Porque el suspenso no está en quién lo hizo sino en si va a poder vivir con eso. Los duelos de palabras con Porfiri son de lo mejor que leí.', en: 'Because the suspense is not who did it but whether he can live with it. The verbal duels with Porfiry are some of the best scenes I have read.' },
+    pages: 550, genre: { es: 'Novela psicológica', en: 'Psychological novel' },
+    intel: { tags: ['psicológico', 'culpa', 'clásico'], mood: { es: 'urgente y claustrofóbico', en: 'urgent and claustrophobic' }, time: '≈ 550 páginas', energy: { es: 'alta', en: 'high' }, bestMoment: { es: 'los interrogatorios de Porfiri: ajedrez verbal', en: "Porfiry's interrogations: verbal chess" }, paraQuien: { es: 'para quien disfruta de que un libro lo incomode', en: 'for anyone who enjoys a book that makes them uneasy' }, snd: 'dark' } },
+  { title: 'The Almanack of Naval Ravikant', poster: 'project-assets/side-quests/naval-almanack.jpg', color: '#d4b45c', cat: { es: 'Libro', en: 'Book' }, meta: 'Eric Jorgenson · 2020',
+    premise: { es: 'Una recopilación de tweets, entrevistas y podcasts de Naval Ravikant, inversor y cofundador de AngelList, ordenada en dos partes: cómo generar riqueza (conocimiento específico, apalancamiento, criterio) y cómo ser feliz. Se lee en cualquier orden.', en: 'A compilation of tweets, interviews and podcasts from Naval Ravikant, investor and co-founder of AngelList, arranged in two parts: building wealth (specific knowledge, leverage, judgment) and being happy. It reads in any order.' },
+    why: { es: 'Porque me ordenó cómo pienso el trabajo: buscar apalancamiento con código y contenido en vez de sumar horas. Lo releo por partes.', en: 'Because it reshaped how I think about work: look for leverage through code and content instead of adding hours. I reread it in pieces.' },
+    pages: 242, genre: { es: 'No ficción · decisiones y trabajo', en: 'Non-fiction · decisions and work' },
+    intel: { tags: ['decisiones', 'trabajo', 'bolsillo'], mood: { es: 'compacto y pragmático', en: 'compact and pragmatic' }, time: '≈ 240 páginas', energy: { es: 'media', en: 'medium' }, bestMoment: { es: 'la sección sobre apalancamiento: código y medios como trabajo que escala', en: 'the leverage section: code and media as work that scales' }, paraQuien: { es: 'para quien quiere ideas densas en formato bolsillo', en: 'for anyone who wants dense ideas in pocket form' }, snd: 'focus' } },
+  { title: 'The Perks of Being a Wallflower', poster: 'project-assets/side-quests/perks-wallflower.jpg', color: '#6aa8b8', cat: { es: 'Libro', en: 'Book' }, meta: 'Stephen Chbosky · 1999',
+    premise: { es: 'Charlie, un chico tímido de las afueras de Pittsburgh, empieza la secundaria y le escribe cartas a un desconocido contándole su año: la amistad con Sam y Patrick, la música, los libros que le presta su profesor y un pasado que todavía no se anima a mirar.', en: 'Charlie, a shy kid outside Pittsburgh, starts high school and writes letters to a stranger about his year: his friendship with Sam and Patrick, music, the books his teacher lends him, and a past he is not ready to look at.' },
+    why: { es: 'Porque cuenta la adolescencia sin nostalgia falsa, desde adentro. El formato de cartas hace que se sienta como leer un diario ajeno.', en: 'Because it tells adolescence from the inside, without fake nostalgia. The letter format makes it feel like reading someone else\'s diary.' },
+    pages: 231, genre: { es: 'Novela epistolar · coming of age', en: 'Epistolary novel · coming of age' },
+    intel: { tags: ['coming of age', 'honesto', 'breve'], mood: { es: 'tierno y directo', en: 'tender and direct' }, time: '≈ 230 páginas', energy: { es: 'media-baja', en: 'medium-low' }, bestMoment: { es: 'el túnel: "and in that moment, I swear we were infinite"', en: 'the tunnel: "and in that moment, I swear we were infinite"' }, paraQuien: { es: 'para quien quiere una historia corta que pega fuerte', en: 'for anyone who wants a short story that hits hard' }, snd: 'cozy' } },
+  { title: 'Flowers for Algernon', poster: 'project-assets/side-quests/flowers-algernon.jpg', color: '#d4799a', cat: { es: 'Libro', en: 'Book' }, meta: 'Daniel Keyes · 1966',
+    premise: { es: 'Charlie Gordon, un hombre con discapacidad intelectual, acepta una cirugía experimental que ya funcionó en Algernon, un ratón de laboratorio. Todo se cuenta a través de sus propios reportes de progreso: la ortografía, el vocabulario y la forma de ver a la gente van cambiando página a página.', en: 'Charlie Gordon, a man with an intellectual disability, agrees to an experimental surgery that already worked on Algernon, a lab mouse. Everything is told through his own progress reports: his spelling, vocabulary and view of people change page by page.' },
+    why: { es: 'Porque usa la forma del texto para contar la historia: ves la inteligencia de Charlie en cómo escribe. Es la ciencia ficción más humana que leí.', en: 'Because the form of the text tells the story: you see Charlie\'s intelligence in how he writes. It is the most human science fiction I have read.' },
+    pages: 311, genre: { es: 'Ciencia ficción', en: 'Science fiction' },
+    intel: { tags: ['ciencia ficción', 'triste', 'breve'], mood: { es: 'devastador y limpio', en: 'devastating and clean' }, time: '≈ 310 páginas', energy: { es: 'media-alta', en: 'medium-high' }, bestMoment: { es: 'cuando los reportes empiezan a cambiar de estilo', en: 'when the reports start changing style' }, paraQuien: { es: 'para quien quiere una ciencia ficción que no es sobre tecnología', en: 'for anyone who wants science fiction that is not about technology' }, snd: 'cozy' } }
 ];
 
 const SQ_FILM_TAGS = {
@@ -904,15 +914,18 @@ const SIDE_QUESTS = SQ_FILMS.map(f => ({
   })(),
   why: { es: (SQ_FILM_TAGS[f.slug] || {}).m ? 'En tu diary figura como ' + sqL((SQ_FILM_TAGS[f.slug]).m) + '.' : 'Del diario real de Letterboxd.', en: (SQ_FILM_TAGS[f.slug] || {}).m ? 'Your diary marks it as ' + sqL((SQ_FILM_TAGS[f.slug]).m) + '.' : 'From your real Letterboxd diary.' },
   kind: 'film', slug: f.slug, watched: f.watched
-})).concat(SQ_BOOKS.map(b => ({ title: b.title, poster: b.poster, color: b.color, cat: b.cat, meta: b.meta, why: b.why, kind: 'book' })));
+})).concat(SQ_BOOKS.map(b => ({ title: b.title, poster: b.poster, color: b.color, cat: b.cat, meta: b.meta, why: b.why, premise: b.premise, pages: b.pages, genre: b.genre, kind: 'book' })));
 
 function sqFilmColor(slug) {
   const h = sqHash(slug) % 360;
   return 'hsl(' + h + ', 38%, 58%)';
 }
-function sqIntel(title) {
-  const q = SIDE_QUESTS.find(q => q.title === title);
+// Takes the quest itself when possible: a film and a book can share a title
+// (El sueño de los héroes, The Perks of Being a Wallflower).
+function sqIntel(quest) {
+  const q = typeof quest === 'object' && quest ? quest : SIDE_QUESTS.find(x => x.title === quest);
   if (!q) return null;
+  const title = q.title;
   if (q.kind === 'book') { const b = (SQ_BOOKS.find(b => b.title === title) || {}).intel || { tags: [], mood: { es: '', en: '' }, time: '—', energy: { es: '', en: '' } }; return Object.assign({ signals: b.tags }, b); }
   const ft = SQ_FILM_TAGS[q.slug] || { t: ['cine'], m: { es: 'del diario', en: 'from the diary' } };
   return { tags: ft.t, mood: ft.m, signals: ft.t, time: 'una peli', energy: { es: 'una sentada', en: 'one sitting' } };
@@ -926,7 +939,7 @@ function sqTasteGet() { try { return JSON.parse(localStorage.getItem(SQ_TASTE_KE
 function sqTasteBump(tags, w) { const t = sqTasteGet(); (tags || []).forEach(tag => { t.tags[tag] = Math.min(9, (t.tags[tag] || 0) + w); }); localStorage.setItem(SQ_TASTE_KEY, JSON.stringify(t)); }
 function sqMatch(quest, taste) {
   const t = taste || sqTasteGet();
-  const intel = sqIntel(quest.title) || { tags: [] };
+  const intel = sqIntel(quest) || { tags: [] };
   let s = 46;
   intel.tags.forEach(tag => { s += (t.tags[tag] || 0) * 9; });
   if (t.views[quest.title]) s += 5;
@@ -998,22 +1011,44 @@ function setupSideQuests() {
       c.addEventListener('click', () => { filterCat = id; const vis = visibleQuests(); if (vis.length && !vis.some(q => q.title === SIDE_QUESTS[current].title)) current = SIDE_QUESTS.indexOf(vis[0]); buildChips(); buildStrip(); render(); });
       chipRow.appendChild(c);
     };
-    mk('all', currentLang === 'en' ? 'Everything' : 'Todo');
-    mk('film', currentLang === 'en' ? 'Pelis' : 'Pelis');
-    mk('book', currentLang === 'en' ? 'Libros' : 'Libros');
+    buildKindSwitch();
     const freq = {};
-    SIDE_QUESTS.forEach(q => { (sqIntel(q.title) || { tags: [] }).tags.forEach(t => { freq[t] = (freq[t] || 0) + 1; }); });
-    Object.keys(freq).sort((a, b) => freq[b] - freq[a]).slice(0, 4).forEach(t => mk(t, t));
+    SIDE_QUESTS.forEach(q => { (sqIntel(q) || { tags: [] }).tags.forEach(t => { freq[t] = (freq[t] || 0) + 1; }); });
+    if (filterCat !== 'book') Object.keys(freq).sort((a, b) => freq[b] - freq[a]).slice(0, 4).forEach(t => mk(t, t));
     chipRow.querySelectorAll('.sq-col-chip').forEach(c => c.classList.toggle('active', c.dataset.col === filterCat));
+  }
+
+  // Films and books as a top-level switch with counts, so the five books are
+  // one click away instead of hiding among ~50 posters.
+  function buildKindSwitch() {
+    let sw = document.getElementById('sq-kind-switch');
+    if (!sw) {
+      sw = document.createElement('div');
+      sw.id = 'sq-kind-switch';
+      sw.className = 'sq-kind-switch';
+      sw.setAttribute('role', 'tablist');
+      document.querySelector('#side-quests-reveal .sq-head').appendChild(sw);
+    }
+    const en = currentLang === 'en';
+    const count = (k) => SIDE_QUESTS.filter(q => q.kind === k).length;
+    const opts = [['all', en ? 'All' : 'Todo', SIDE_QUESTS.length], ['film', en ? 'Films' : 'Pelis', count('film')], ['book', en ? 'Books' : 'Libros', count('book')]];
+    sw.innerHTML = opts.map(([id, label, n]) => '<button type="button" role="tab" class="sq-kind' + (filterCat === id ? ' active' : '') + '" data-kind="' + id + '" aria-selected="' + (filterCat === id) + '">' + (id === 'book' ? '<span aria-hidden="true">📚</span> ' : id === 'film' ? '<span aria-hidden="true">🎬</span> ' : '') + esc(label) + ' <b>' + n + '</b></button>').join('');
+    sw.querySelectorAll('.sq-kind').forEach((btn) => btn.addEventListener('click', () => {
+      filterCat = btn.dataset.kind;
+      const vis = visibleQuests();
+      if (vis.length && !vis.some(q => q.title === SIDE_QUESTS[current].title)) current = SIDE_QUESTS.indexOf(vis[0]);
+      buildChips(); buildStrip(); render();
+    }));
   }
 
   function visibleQuests() {
     return SIDE_QUESTS.filter(q => filterCat === 'all' || q.kind === filterCat ||
-      (sqIntel(q.title) || { tags: [] }).tags.some(t => t.toLowerCase() === filterCat.toLowerCase()));
+      (sqIntel(q) || { tags: [] }).tags.some(t => t.toLowerCase() === filterCat.toLowerCase()));
   }
 
   function buildStrip() {
     strip.innerHTML = '';
+    strip.classList.toggle('is-shelf', filterCat === 'book');
     const seen = sqSeenGet();
     const taste = sqTasteGet();
     visibleQuests().forEach(item => {
@@ -1060,7 +1095,7 @@ function setupSideQuests() {
   function render() {
     const item = SIDE_QUESTS[current];
     if (!item) return;
-    const intel = sqIntel(item.title) || { tags: [], mood: { es: '', en: '' } };
+    const intel = sqIntel(item) || { tags: [], mood: { es: '', en: '' } };
     const accent = item.color;
     triggerLeak();
     posterImg.style.opacity = 0;
@@ -1073,11 +1108,14 @@ function setupSideQuests() {
     titleEl.textContent = item.title;
     subEl.textContent = localize(item.meta);
     whyEl.textContent = localize(item.why);
+    renderBookExtra(item);
     tagRow.innerHTML = intel.tags.map(t => '<span>' + esc(t) + '</span>').join('');
     const seen = sqSeenGet().includes(item.title);
     const forYouEnd2 = sqMatch(item) >= 80;
     actionRow.innerHTML =
-      '<button type="button" class="sq-act' + (seen ? ' on' : '') + '" id="sq-seen-btn">' + (seen ? '✓ ' : '') + (currentLang === 'en' ? (seen ? 'completed' : 'mark as done') : (seen ? 'completada' : 'marcar como vista')) + '</button>' +
+      '<button type="button" class="sq-act' + (seen ? ' on' : '') + '" id="sq-seen-btn">' + (seen ? '✓ ' : '') + (item.kind === 'book'
+        ? (currentLang === 'en' ? (seen ? 'read' : 'mark as read') : (seen ? 'leído' : 'marcar como leído'))
+        : (currentLang === 'en' ? (seen ? 'watched' : 'mark as watched') : (seen ? 'vista' : 'marcar como vista'))) + '</button>' +
       '<button type="button" class="sq-act" id="sq-share-btn">' + (currentLang === 'en' ? '\u2913 share' : '\u2913 compartir') + '</button>' +
       (intel.snd ? '<button type="button" class="sq-act sq-snd-btn" id="sq-snd-btn" title="' + (currentLang === 'en' ? 'ambient sound' : 'sonido ambiental') + '">♪</button>' : '');
     document.getElementById('sq-seen-btn').addEventListener('click', () => {
@@ -1115,6 +1153,31 @@ function setupSideQuests() {
   }
 
   function localize(field) { return typeof field === 'string' ? field : field[currentLang]; }
+
+  // Books get what a film poster gives for free: what it is about, how long
+  // it is, and one moment worth waiting for.
+  function renderBookExtra(item) {
+    let box = document.getElementById('sq-book-extra');
+    if (item.kind !== 'book') { if (box) box.hidden = true; return; }
+    if (!box) {
+      box = document.createElement('div');
+      box.id = 'sq-book-extra';
+      box.className = 'sq-book-extra';
+      whyEl.insertAdjacentElement('beforebegin', box);
+    }
+    const intel = sqIntel(item) || {};
+    const en = currentLang === 'en';
+    box.hidden = false;
+    box.innerHTML =
+      '<p class="sq-book-label">' + (en ? 'What it is about' : 'De qué trata') + '</p>' +
+      '<p class="sq-book-premise">' + esc(localize(item.premise || '')) + '</p>' +
+      '<dl class="sq-book-facts">' +
+        '<div><dt>' + (en ? 'Genre' : 'Género') + '</dt><dd>' + esc(localize(item.genre || '')) + '</dd></div>' +
+        '<div><dt>' + (en ? 'Length' : 'Extensión') + '</dt><dd>≈ ' + esc(String(item.pages || '')) + (en ? ' pages' : ' páginas') + '</dd></div>' +
+        (intel.bestMoment ? '<div class="wide"><dt>' + (en ? 'Best moment' : 'El mejor momento') + '</dt><dd>' + esc(localize(intel.bestMoment)) + '</dd></div>' : '') +
+      '</dl>' +
+      '<p class="sq-book-label">' + (en ? 'Why I recommend it' : 'Por qué lo recomiendo') + '</p>';
+  }
 
   function sqBestForYou() {
     let best = null, bestM = -1;
@@ -4143,7 +4206,7 @@ function setupSideQuestAgents() {
   function totalHours(chain) {
     let mins = 0;
     for (const q of chain) {
-      const it = sqIntel(q.title) || { time: '' };
+      const it = sqIntel(q) || { time: '' };
       const mh = it.time.match(/([\d.,]+)\s*(h|páginas|paginas)/i);
       if (!mh) continue;
       const n = parseFloat(mh[1].replace(',', '.'));
@@ -4153,7 +4216,7 @@ function setupSideQuestAgents() {
   }
 
   function buildReviews(wf, quest) {
-    const intel = sqIntel(quest.title) || { tags: [], mood: { es: '', en: '' }, time: '—', energy: { es: '', en: '' }, pairWith: '', pairWhy: { es: '', en: '' }, signals: [], bestMoment: null, paraQuien: null, debate: null };
+    const intel = sqIntel(quest) || { tags: [], mood: { es: '', en: '' }, time: '—', energy: { es: '', en: '' }, pairWith: '', pairWhy: { es: '', en: '' }, signals: [], bestMoment: null, paraQuien: null, debate: null };
     const h = sqHash(quest.title + wf.id);
     const score = (7.6 + (h % 24) / 10).toFixed(1);
     const cards = [];
@@ -4210,7 +4273,7 @@ function setupSideQuestAgents() {
     const quest = SIDE_QUESTS[questIndex];
     if (!quest) return;
     const wf = SQ_WORKFLOWS.find(w => w.id === currentWf) || SQ_WORKFLOWS[0];
-    const intel = sqIntel(quest.title);
+    const intel = sqIntel(quest);
     const t0 = performance.now();
     const alive = () => { if (seq !== runSeq) throw 'cancelled'; };
 
@@ -4263,7 +4326,7 @@ function setupSideQuestAgents() {
     Object.keys(SQ_INTENT_MAP).forEach(k => { if (norm.includes(k)) SQ_INTENT_MAP[k].forEach(t => wanted.add(t)); });
     let best = null, bestS = -1;
     SIDE_QUESTS.filter(q => !q.hidden || sqUnlockGet().includes(q.title)).forEach(q => {
-      const intel = sqIntel(q.title) || { tags: [] };
+      const intel = sqIntel(q) || { tags: [] };
       let s = sqMatch(q);
       intel.tags.forEach(t => { if (wanted.has(t)) s += 14; });
       if (norm.includes(q.title.toLowerCase())) s += 50;
@@ -4280,7 +4343,7 @@ function setupSideQuestAgents() {
     const best = routeAsk(q);
     const secs = (1 + sqHash(q) % 22 / 10).toFixed(1);
     if (!best) { sqToast(currentLang === 'en' ? 'No route found — try another feeling' : 'No encontré ruta — probá otro sentir'); return; }
-    const intel = sqIntel(best.title);
+    const intel = sqIntel(best);
     cardsEl.innerHTML = reviewCard(SQ_AGENTS[2],
       (currentLang === 'en'
         ? 'For "' + esc(q) + '" the crew routes to <b>' + esc(best.title) + '</b> — ' + esc(sqL(intel.mood)) + ', ' + esc(intel.time) + '. Signals: ' + intel.signals.join(', ') + '.'

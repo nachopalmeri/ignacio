@@ -6863,3 +6863,93 @@ header.app-header.is-scrolled .nav-cta {
 @media (max-width: 600px) {
   .cine-now { display: none; }
 }
+
+/* ═══════════════════ SIDE QUESTS: films vs books ═══════════════════ */
+.sq-kind-switch {
+  display: inline-flex;
+  gap: 4px;
+  margin-top: 14px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(243, 234, 217, 0.06);
+  border: 1px solid rgba(232, 200, 160, 0.18);
+}
+
+.sq-kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(243, 234, 217, 0.72);
+  font: 600 14px/1 'IBM Plex Sans', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.sq-kind b {
+  font: 700 11px/1 'IBM Plex Mono', monospace;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: rgba(243, 234, 217, 0.1);
+}
+
+.sq-kind:hover { color: #fff; }
+.sq-kind.active { background: rgba(232, 168, 76, 0.2); color: #f7e2b8; box-shadow: inset 0 0 0 1px rgba(232, 168, 76, 0.5); }
+.sq-kind:focus-visible { outline: 2px solid #f5c04e; outline-offset: 2px; }
+
+.sq-book-extra { margin: 0 0 10px; }
+.sq-book-extra[hidden] { display: none; }
+
+.sq-book-label {
+  margin: 0 0 6px;
+  font: 700 10.5px/1 'IBM Plex Mono', monospace;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sq-accent, #e8a84c);
+}
+
+.sq-book-premise {
+  margin: 0 0 16px;
+  max-width: 560px;
+  font: 400 15.5px/1.6 'IBM Plex Sans', sans-serif;
+  color: rgba(247, 239, 224, 0.86);
+}
+
+.sq-book-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 18px;
+  margin: 0 0 18px;
+  max-width: 560px;
+}
+
+.sq-book-facts .wide { grid-column: 1 / -1; }
+.sq-book-facts dt { font: 600 11px/1.2 'IBM Plex Sans', sans-serif; color: rgba(243, 234, 217, 0.5); margin-bottom: 3px; }
+.sq-book-facts dd { margin: 0; font: 500 14px/1.4 'IBM Plex Sans', sans-serif; color: rgba(247, 239, 224, 0.92); }
+
+/* Books sit on a shelf: bigger covers, a wooden ledge underneath. */
+.sq-strip.is-shelf {
+  justify-content: center;
+  gap: 18px;
+  padding-bottom: 18px;
+  background: linear-gradient(transparent calc(100% - 14px), rgba(120, 78, 40, 0.55) calc(100% - 14px), rgba(70, 44, 22, 0.8) calc(100% - 4px), transparent calc(100% - 4px));
+}
+
+.sq-strip.is-shelf .sq-thumb {
+  width: 92px;
+  height: 138px;
+  transform-origin: bottom center;
+  box-shadow: 6px 8px 18px rgba(0, 0, 0, 0.5);
+}
+
+.sq-strip.is-shelf .sq-thumb:hover { transform: translateY(-6px) rotate(-2deg); }
+.sq-strip.is-shelf .sq-thumb.active { transform: translateY(-10px); }
+
+@media (max-width: 700px) {
+  .sq-kind { padding: 8px 12px; font-size: 13px; }
+  .sq-book-facts { grid-template-columns: 1fr; }
+  .sq-strip.is-shelf .sq-thumb { width: 64px; height: 96px; }
+}
