@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobBot, caso de estudio - Ignacio Palmeri</title>
+  <meta name="description" content="Cómo construí JobBot: SaaS de búsqueda laboral con Next.js, FastAPI, PostgreSQL, bot de Telegram y pagos. Arquitectura, decisiones, qué salió mal y qué aprendí.">
+  <link rel="canonical" href="https://ignaciop.vercel.app/jobbot">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://ignaciop.vercel.app/jobbot">
+  <meta property="og:title" content="JobBot, caso de estudio - Ignacio Palmeri">
+  <meta property="og:description" content="Arquitectura, decisiones técnicas, bugs encontrados en auditoría y cómo se corrigieron.">
+  <meta property="og:image" content="https://ignaciop.vercel.app/og/jobbot.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://ignaciop.vercel.app/og/jobbot.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // Same preferences the main site stores, applied before paint.
+    (function () {
+      try {
+        var t = localStorage.getItem('portfolio-theme'); if (t) document.documentElement.dataset.theme = t;
+        var l = localStorage.getItem('portfolio-lang'); if (l === 'en') document.documentElement.lang = 'en';
+      } catch (e) {}
+    })();
+  </script>
+  <style>
+    html[lang="es"] [data-l="en"], html[lang="en"] [data-l="es"] { display: none !important; }
+    .cs { max-width: 820px; margin: 0 auto; padding: 32px 20px 80px; color: var(--text-primary); }
+    .cs-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 40px; }
+    .cs-back { color: var(--text-secondary); text-decoration: none; font-weight: 600; font-size: 14px; }
+    .cs-back:hover { color: var(--text-primary); }
+    .cs-lang { display: flex; gap: 4px; border: 1px solid var(--border); border-radius: 999px; padding: 3px; }
+    .cs-lang button { border: 0; background: transparent; color: var(--text-secondary); font: 600 12px var(--font-display); padding: 5px 10px; border-radius: 999px; cursor: pointer; }
+    .cs-lang button[aria-pressed="true"] { background: var(--text-primary); color: var(--bg); }
+    .cs-eyebrow { color: var(--accent-green-text); font: 700 12px var(--font-display); letter-spacing: .14em; text-transform: uppercase; }
+    .cs h1 { font-family: var(--font-heading); font-size: clamp(38px, 7vw, 64px); line-height: 1; letter-spacing: -.03em; margin: 10px 0 16px; }
+    .cs-lead { font-size: 19px; line-height: 1.55; color: var(--text-secondary); max-width: 62ch; }
+    .cs-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0 8px; }
+    .cs-links a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--border); color: var(--text-primary); text-decoration: none; font-weight: 600; font-size: 14px; }
+    .cs-links a.primary { background: var(--button-primary-bg); color: var(--button-primary-text); border-color: var(--button-primary-bg); }
+    .cs-facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 36px 0; }
+    .cs-fact { border: 1px solid var(--border); border-radius: 14px; padding: 14px; background: var(--bg-card); }
+    .cs-fact strong { display: block; font-family: var(--font-heading); font-size: 26px; }
+    .cs-fact span { color: var(--text-secondary); font-size: 13px; line-height: 1.4; }
+    .cs h2 { font-family: var(--font-heading); font-size: 30px; letter-spacing: -.02em; margin: 56px 0 14px; }
+    .cs p, .cs li { font-size: 16.5px; line-height: 1.7; color: var(--text-secondary); }
+    .cs p strong, .cs li strong { color: var(--text-primary); }
+    .cs ul { padding-left: 20px; margin: 10px 0; }
+    .cs-diagram { margin: 18px 0 6px; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-card); padding: 12px; overflow-x: auto; }
+    .cs-diagram svg { display: block; width: 100%; min-width: 620px; height: auto; }
+    .cs-caption { font-size: 13px; color: var(--text-muted); }
+    .cs-decision { border-top: 1px solid var(--border); padding: 18px 0; }
+    .cs-decision h3 { font-size: 17px; margin: 0 0 6px; color: var(--text-primary); }
+    .cs-decision p { margin: 0; }
+    .cs-bug { border: 1px solid var(--border); border-left: 3px solid var(--accent-amber); border-radius: 12px; padding: 16px 18px; margin: 14px 0; background: var(--bg-card); }
+    .cs-bug.fixed { border-left-color: var(--accent-green); }
+    .cs-bug h3 { margin: 0 0 6px; font-size: 16px; color: var(--text-primary); }
+    .cs-bug p { margin: 4px 0 0; font-size: 15.5px; }
+    .cs-tag { display: inline-block; font: 700 11px var(--font-display); letter-spacing: .08em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; margin-left: 8px; vertical-align: 2px; }
+    .cs-tag.ok { background: color-mix(in srgb, var(--accent-green) 16%, transparent); color: var(--accent-green-text); }
+    .cs-tag.open { background: color-mix(in srgb, var(--accent-amber) 18%, transparent); color: var(--text-primary); }
+    .cs-foot { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center; }
+    .cs code { font-size: .92em; background: var(--bg-hover); padding: 1px 6px; border-radius: 6px; }
+    @media (max-width: 640px) { .cs-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); } .cs h2 { font-size: 25px; } }
+    /* diagram colors follow the theme */
+    .d-box { fill: var(--bg); stroke: var(--border-focus); }
+    .d-core { fill: color-mix(in srgb, var(--accent-green) 12%, var(--bg)); stroke: var(--accent-green); }
+    .d-ext { fill: var(--bg); stroke: var(--border-focus); stroke-dasharray: 4 3; }
+    .d-t { fill: var(--text-primary); font: 700 13px var(--font-display); }
+    .d-s { fill: var(--text-secondary); font: 500 11px var(--font-display); }
+    .d-line { stroke: var(--text-muted); stroke-width: 1.4; fill: none; marker-end: url(#arrow); }
+    .d-arrow { fill: var(--text-muted); }
+  </style>
+</head>
+<body>
+<main class="cs">
+  <div class="cs-top">
+    <a class="cs-back" href="/"><span data-l="es">← Volver al portfolio</span><span data-l="en">← Back to portfolio</span></a>
+    <div class="cs-lang" role="group" aria-label="Language">
+      <button type="button" data-set-lang="es">ES</button>
+      <button type="button" data-set-lang="en">EN</button>
+    </div>
+  </div>
+
+  <div class="cs-eyebrow"><span data-l="es">Caso de estudio</span><span data-l="en">Case study</span></div>
+  <h1>JobBot</h1>
+  <p class="cs-lead" data-l="es">Un SaaS de búsqueda laboral que junta ofertas de varias fuentes, las filtra por tu perfil y te avisa por Telegram para que postules en las primeras horas. Lo construí solo, de punta a punta: API, dashboard, bot, pagos, CI y deploy.</p>
+  <p class="cs-lead" data-l="en">A job-search SaaS that pulls openings from several sources, filters them against your profile and pings you on Telegram so you apply within the first hours. I built it solo, end to end: API, dashboard, bot, payments, CI and deploy.</p>
+  <div class="cs-links">
+    <a class="primary" href="https://jobbot-lime.vercel.app" target="_blank" rel="noopener noreferrer"><span data-l="es">Ver la landing</span><span data-l="en">See the landing</span></a>
+    <a href="https://app-jobbot.vercel.app" target="_blank" rel="noopener noreferrer"><span data-l="es">Abrir la app</span><span data-l="en">Open the app</span></a>
+    <a href="https://github.com/nachopalmeri/jobbot" target="_blank" rel="noopener noreferrer"><span data-l="es">Ver el código</span><span data-l="en">Read the code</span></a>
+  </div>
+
+  <div class="cs-facts">
+    <div class="cs-fact"><strong>5 sem.</strong><span data-l="es">del primer commit (8 mar) a beta (11 abr 2026)</span><span data-l="en">first commit (Mar 8) to beta (Apr 11, 2026)</span></div>
+    <div class="cs-fact"><strong>81</strong><span data-l="es">commits, todos míos</span><span data-l="en">commits, all mine</span></div>
+    <div class="cs-fact"><strong>4</strong><span data-l="es">servicios: landing, app, API y bot</span><span data-l="en">services: landing, app, API and bot</span></div>
+    <div class="cs-fact"><strong>3</strong><span data-l="es">pipelines de CI (tests, e2e, chequeos)</span><span data-l="en">CI pipelines (tests, e2e, repo checks)</span></div>
+  </div>
+
+  <h2 data-l="es">El problema</h2><h2 data-l="en">The problem</h2>
+  <p data-l="es">Buscar trabajo es un desgaste con tres fugas concretas: <strong>se pierden oportunidades</strong> (decenas de ofertas nuevas por semana repartidas en sitios distintos), <strong>se aplica tarde</strong> (las primeras 24 horas deciden la mayoría de las entrevistas) y <strong>no hay seguimiento</strong> (horas refrescando LinkedIn sin saber qué funcionó). Lo viví buscando mi propia primera experiencia en tecnología.</p>
+  <p data-l="en">Job hunting leaks in three concrete places: <strong>you miss openings</strong> (dozens of new posts a week spread across different sites), <strong>you apply late</strong> (the first 24 hours decide most interviews) and <strong>there's no follow-up</strong> (hours refreshing LinkedIn with no idea what worked). I lived it looking for my own first tech role.</p>
+
+  <h2 data-l="es">Qué hace hoy</h2><h2 data-l="en">What it does today</h2>
+  <ul data-l="es">
+    <li>Busca en varias fuentes (APIs públicas de empleo remoto, Google Jobs y LinkedIn con respaldo por RSS) y deduplica.</li>
+    <li>Alertas por Telegram con las ofertas que coinciden con tus preferencias y horarios.</li>
+    <li>Dashboard con login real, historial y planes (Free, Starter, Pro y Premium).</li>
+    <li>CV Suite: análisis de CV con IA, cobrado con un sistema de créditos.</li>
+    <li>Checkout funcionando con Stripe y MercadoPago.</li>
+  </ul>
+  <ul data-l="en">
+    <li>Searches several sources (public remote-job APIs, Google Jobs, and LinkedIn with an RSS fallback) and deduplicates.</li>
+    <li>Telegram alerts for openings that match your preferences and schedule.</li>
+    <li>Dashboard with real login, history and plans (Free, Starter, Pro and Premium).</li>
+    <li>CV Suite: AI CV analysis, billed through a credits system.</li>
+    <li>Working checkout with Stripe and MercadoPago.</li>
+  </ul>
+
+  <h2 data-l="es">Arquitectura</h2><h2 data-l="en">Architecture</h2>
+  <div class="cs-diagram" role="img" aria-label="Diagrama: el usuario entra por la landing estática y la app Next.js; la app habla con la API FastAPI sobre PostgreSQL; el bot de Telegram busca ofertas en fuentes externas y lee y escribe en la misma base; Stripe y MercadoPago notifican pagos a la API por webhooks.">
+    <svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="d-arrow" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+      <rect class="d-box" x="20" y="30" width="150" height="58" rx="10"/>
+      <text class="d-t" x="95" y="55" text-anchor="middle">Landing</text><text class="d-s" x="95" y="73" text-anchor="middle" data-l="es">HTML estático · Vercel</text><text class="d-s" x="95" y="73" text-anchor="middle" data-l="en">static HTML · Vercel</text>
+      <rect class="d-core" x="230" y="30" width="170" height="58" rx="10"/>
+      <text class="d-t" x="315" y="55" text-anchor="middle">Dashboard</text><text class="d-s" x="315" y="73" text-anchor="middle">Next.js 16 · React 19</text>
+      <rect class="d-core" x="230" y="150" width="170" height="58" rx="10"/>
+      <text class="d-t" x="315" y="175" text-anchor="middle">API</text><text class="d-s" x="315" y="193" text-anchor="middle">FastAPI · JWT · rate limit</text>
+      <rect class="d-core" x="230" y="275" width="170" height="58" rx="10"/>
+      <text class="d-t" x="315" y="300" text-anchor="middle">PostgreSQL</text><text class="d-s" x="315" y="318" text-anchor="middle" data-l="es">usuarios · planes · ofertas</text><text class="d-s" x="315" y="318" text-anchor="middle" data-l="en">users · plans · jobs</text>
+      <rect class="d-core" x="470" y="150" width="150" height="58" rx="10"/>
+      <text class="d-t" x="545" y="175" text-anchor="middle">Bot Telegram</text><text class="d-s" x="545" y="193" text-anchor="middle">Python · scheduler</text>
+      <rect class="d-ext" x="470" y="30" width="270" height="58" rx="10"/>
+      <text class="d-t" x="605" y="50" text-anchor="middle" data-l="es">Fuentes de empleo</text><text class="d-t" x="605" y="50" text-anchor="middle" data-l="en">Job sources</text><text class="d-s" x="605" y="67" text-anchor="middle">Remotive · Arbeitnow · Jobicy</text><text class="d-s" x="605" y="81" text-anchor="middle">Himalayas · Google · LinkedIn</text>
+      <rect class="d-ext" x="20" y="150" width="150" height="58" rx="10"/>
+      <text class="d-t" x="95" y="175" text-anchor="middle" data-l="es">Pagos</text><text class="d-t" x="95" y="175" text-anchor="middle" data-l="en">Payments</text><text class="d-s" x="95" y="193" text-anchor="middle">Stripe · MercadoPago</text>
+      <rect class="d-ext" x="470" y="275" width="150" height="58" rx="10"/>
+      <text class="d-t" x="545" y="300" text-anchor="middle" data-l="es">IA</text><text class="d-t" x="545" y="300" text-anchor="middle" data-l="en">AI</text><text class="d-s" x="545" y="318" text-anchor="middle" data-l="es">análisis de CV</text><text class="d-s" x="545" y="318" text-anchor="middle" data-l="en">CV analysis</text>
+      <path class="d-line" d="M170 59 H226"/>
+      <path class="d-line" d="M315 88 V146"/>
+      <path class="d-line" d="M315 208 V271"/>
+      <path class="d-line" d="M170 179 H226"/>
+      <path class="d-line" d="M545 88 V146"/>
+      <path class="d-line" d="M545 208 C545 250 470 300 404 304"/>
+      <path class="d-line" d="M400 196 C440 230 490 260 520 271"/>
+      <path class="d-line" d="M470 179 H404"/>
+      <text class="d-s" x="198" y="170" text-anchor="middle">webhooks</text>
+    </svg>
+  </div>
+  <p class="cs-caption" data-l="es">La landing vende y deriva tráfico; el producto autenticado vive en el dashboard. Son dos deploys separados a propósito.</p>
+  <p class="cs-caption" data-l="en">The landing sells and routes traffic; the authenticated product lives in the dashboard. Two separate deploys, on purpose.</p>
+
+  <h2 data-l="es">Decisiones técnicas</h2><h2 data-l="en">Technical decisions</h2>
+  <div class="cs-decision">
+    <h3 data-l="es">Separar landing y app</h3><h3 data-l="en">Separate landing and app</h3>
+    <p data-l="es">La landing es HTML estático: carga instantánea y cambios de copy sin tocar el producto. El dashboard es Next.js con auth. Así un error de marketing no puede romper el login, y viceversa.</p>
+    <p data-l="en">The landing is static HTML: instant load and copy changes without touching the product. The dashboard is Next.js with auth. A marketing mistake can't break login, and vice versa.</p>
+  </div>
+  <div class="cs-decision">
+    <h3 data-l="es">Cookies httpOnly en vez de tokens en localStorage</h3><h3 data-l="en">httpOnly cookies instead of tokens in localStorage</h3>
+    <p data-l="es">Un token en localStorage lo lee cualquier script que se cuele en la página. En una cookie httpOnly, JavaScript no puede leerlo. Sumé refresh tokens agrupados en "familias" para detectar si alguien reutiliza uno robado y revocar toda la sesión.</p>
+    <p data-l="en">A token in localStorage can be read by any script that sneaks into the page; an httpOnly cookie can't be read by JavaScript at all. I added refresh tokens grouped into "families" so reuse of a stolen one is detected and the whole session revoked.</p>
+  </div>
+  <div class="cs-decision">
+    <h3 data-l="es">Muchas fuentes, ninguna imprescindible</h3><h3 data-l="en">Many sources, none essential</h3>
+    <p data-l="es">Los sitios de empleo cambian o bloquean sin aviso. Cada fuente es independiente, y LinkedIn tiene un camino de respaldo por RSS: si una se cae, las alertas siguen llegando con las demás.</p>
+    <p data-l="en">Job sites change or block without warning. Each source is independent, and LinkedIn has an RSS fallback path: if one breaks, alerts keep arriving from the rest.</p>
+  </div>
+  <div class="cs-decision">
+    <h3 data-l="es">Dos pasarelas de pago</h3><h3 data-l="en">Two payment gateways</h3>
+    <p data-l="es">Stripe para tarjetas internacionales y MercadoPago porque es lo que usa la gente en Argentina. Las dos confirman el pago a la API por webhook, así que el plan se activa aunque el usuario cierre la pestaña.</p>
+    <p data-l="en">Stripe for international cards and MercadoPago because it's what people actually use in Argentina. Both confirm payment to the API via webhook, so the plan activates even if the user closes the tab.</p>
+  </div>
+  <div class="cs-decision">
+    <h3 data-l="es">Créditos para lo que cuesta IA</h3><h3 data-l="en">Credits for anything that costs AI</h3>
+    <p data-l="es">El análisis de CV llama a un modelo de IA con costo por uso. Un sistema de créditos evita que un plan fijo termine regalando lo que cuesta plata.</p>
+    <p data-l="en">CV analysis calls a pay-per-use AI model. A credits system keeps a flat plan from giving away what costs money.</p>
+  </div>
+  <div class="cs-decision">
+    <h3 data-l="es">CI con base de datos real</h3><h3 data-l="en">CI against a real database</h3>
+    <p data-l="es">Los tests corren en GitHub Actions contra PostgreSQL y Redis reales, no contra mocks. Si una migración rompe algo, falla el pipeline, no el usuario.</p>
+    <p data-l="en">Tests run in GitHub Actions against real PostgreSQL and Redis, not mocks. If a migration breaks something, the pipeline fails, not the user.</p>
+  </div>
+
+  <h2 data-l="es">Qué salió mal (y cómo lo encontré)</h2><h2 data-l="en">What went wrong (and how I found it)</h2>
+  <p data-l="es">Antes del lanzamiento hice una revisión de código y una auditoría de seguridad sobre mi propio proyecto (los informes están en el repo). La nota global fue <strong>72/100</strong>. Estos son hallazgos reales:</p>
+  <p data-l="en">Before launch I ran a code review and a security audit on my own project (the reports are in the repo). The overall score was <strong>72/100</strong>. These are real findings:</p>
+
+  <div class="cs-bug fixed">
+    <h3><span data-l="es">Comparación del login de Telegram vulnerable a timing attacks</span><span data-l="en">Telegram login check open to timing attacks</span><span class="cs-tag ok" data-l="es">corregido</span><span class="cs-tag ok" data-l="en">fixed</span></h3>
+    <p data-l="es">Comparar un hash con <code>==</code> tarda distinto según cuántos caracteres coinciden, y eso filtra información. Detectado el 2 de abril; el 9 pasó a <code>hmac.compare_digest</code>, que compara en tiempo constante.</p>
+    <p data-l="en">Comparing a hash with <code>==</code> takes a different time depending on how many characters match, which leaks information. Found on April 2; by April 9 it used <code>hmac.compare_digest</code>, which runs in constant time.</p>
+  </div>
+  <div class="cs-bug fixed">
+    <h3><span data-l="es">La detección de tokens robados nunca podía activarse</span><span data-l="en">Stolen-token detection could never fire</span><span class="cs-tag ok" data-l="es">corregido</span><span class="cs-tag ok" data-l="en">fixed</span></h3>
+    <p data-l="es">Cada renovación de sesión creaba una "familia" de tokens nueva en vez de continuar la anterior. Como la detección de reuso compara dentro de una misma familia, un token robado nunca iba a disparar la alarma. Ahora la rotación mantiene la familia y guarda qué token reemplazó a cuál.</p>
+    <p data-l="en">Every session refresh started a brand-new token "family" instead of continuing the old one. Since reuse detection works within a family, a stolen token could never trip it. Rotation now keeps the family and records which token replaced which.</p>
+  </div>
+  <div class="cs-bug fixed">
+    <h3><span data-l="es">Dos funciones distintas actualizaban el plan del usuario</span><span data-l="en">Two different functions updated a user's plan</span><span class="cs-tag ok" data-l="es">corregido</span><span class="cs-tag ok" data-l="en">fixed</span></h3>
+    <p data-l="es">Había una <code>update_user_plan</code> duplicada, así que según qué camino tomaba el pago, los límites del plan quedaban distintos. Dejé una sola y agregué un test que cubre los límites comerciales.</p>
+    <p data-l="en">A duplicated <code>update_user_plan</code> meant plan limits depended on which payment path ran. I kept one and added a test covering the commercial limits.</p>
+  </div>
+  <div class="cs-bug fixed">
+    <h3><span data-l="es">La landing prometía cosas que el producto no medía</span><span data-l="en">The landing promised things the product didn't measure</span><span class="cs-tag ok" data-l="es">corregido</span><span class="cs-tag ok" data-l="en">fixed</span></h3>
+    <p data-l="es">Armé una matriz que contrasta cada frase de la landing con el código de la API. Decía "15+ portales" (eran 6), mostraba "42 empleos esta semana" (dato de demo) y "Top 10% de usuarios" (nada lo medía). Los corregí o los saqué, y los precios quedaron tomados de la API como única fuente.</p>
+    <p data-l="en">I built a matrix checking every landing claim against the API code. It said "15+ job boards" (there were 6), showed "42 jobs this week" (demo data) and "top 10% of users" (nothing measured it). I corrected or removed them, and prices now come from the API as the single source.</p>
+  </div>
+  <div class="cs-bug">
+    <h3><span data-l="es">Un secreto mal configurado se reporta como error 500</span><span data-l="en">A misconfigured secret surfaces as a 500 error</span><span class="cs-tag open" data-l="es">pendiente</span><span class="cs-tag open" data-l="en">open</span></h3>
+    <p data-l="es">Si falta la clave para firmar los tokens, la API debería negarse a arrancar. Hoy arranca igual y recién falla cuando alguien intenta iniciar sesión. Es el próximo arreglo; lo dejo acá porque no quiero mostrar solo lo que salió bien.</p>
+    <p data-l="en">If the token signing key is missing, the API should refuse to start. Today it starts anyway and only fails when someone tries to log in. It's the next fix; I'm listing it because I don't want to show only what went right.</p>
+  </div>
+
+  <h2 data-l="es">Qué aprendí</h2><h2 data-l="en">What I learned</h2>
+  <ul data-l="es">
+    <li><strong>Auditar lo propio con la misma dureza que lo ajeno.</strong> Ninguno de los bugs de arriba aparecía usando la app; aparecieron leyendo el código con otra mirada.</li>
+    <li><strong>Una sola fuente de verdad.</strong> Los planes duplicados y las promesas infladas son el mismo error: un dato definido en dos lugares, o en ninguno.</li>
+    <li><strong>Lo que puede fallar en silencio, falla en silencio.</strong> Ahora prefiero que un sistema se niegue a arrancar antes que parecer que funciona.</li>
+    <li><strong>La IA acelera, el criterio es mío.</strong> Usé asistentes para escribir y revisar, pero decidir qué construir y qué hallazgo importaba fue trabajo mío.</li>
+  </ul>
+  <ul data-l="en">
+    <li><strong>Audit your own work as harshly as anyone else's.</strong> None of the bugs above showed up while using the app; they showed up reading the code with fresh eyes.</li>
+    <li><strong>One source of truth.</strong> Duplicated plan logic and inflated claims are the same mistake: data defined in two places, or in none.</li>
+    <li><strong>What can fail silently, will.</strong> I now prefer a system that refuses to start over one that pretends to work.</li>
+    <li><strong>AI speeds things up; judgment stays mine.</strong> I used assistants to write and review, but deciding what to build and which finding mattered was my job.</li>
+  </ul>
+
+  <div class="cs-foot">
+    <a class="cs-back" href="/"><span data-l="es">← Volver al portfolio</span><span data-l="en">← Back to portfolio</span></a>
+    <div class="cs-links" style="margin:0">
+      <a class="primary" href="mailto:ignaciopalmeri1@gmail.com?subject=JobBot"><span data-l="es">Hablemos</span><span data-l="en">Let's talk</span></a>
+      <a href="/cv.pdf" data-cv-link download="Ignacio-Palmeri-CV.pdf"><span data-l="es">Descargar CV</span><span data-l="en">Download CV</span></a>
+    </div>
+  </div>
+</main>
+<script>
+  (function () {
+    function apply(lang) {
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-set-lang]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.setLang === lang)); });
+      document.querySelectorAll('[data-cv-link]').forEach(function (a) {
+        a.href = lang === 'en' ? '/cv-en.pdf' : '/cv.pdf';
+        a.setAttribute('download', lang === 'en' ? 'Ignacio-Palmeri-CV-EN.pdf' : 'Ignacio-Palmeri-CV.pdf');
+      });
+      document.title = lang === 'en' ? 'JobBot case study - Ignacio Palmeri' : 'JobBot, caso de estudio - Ignacio Palmeri';
+    }
+    document.querySelectorAll('[data-set-lang]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        try { localStorage.setItem('portfolio-lang', b.dataset.setLang); } catch (e) {}
+        apply(b.dataset.setLang);
+      });
+    });
+    apply(document.documentElement.lang === 'en' ? 'en' : 'es');
+  })();
+</script>
+</body>
+</html>

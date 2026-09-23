@@ -5905,3 +5905,11 @@ header.app-header.is-scrolled .nav-cta {
   align-items: flex-start;
   flex-shrink: 0;
 }
+
+/* The JobBot card links to its full case study: make that link read as the
+   primary next step rather than one more pill. */
+.carousel-proof.case-study-link {
+  border-color: color-mix(in srgb, var(--accent-green) 55%, var(--border));
+  color: var(--accent-green-text);
+  font-weight: 700;
+}

@@ -134,6 +134,7 @@ const UI_COPY = {
       valueFranquiya: 'Python, fuentes múltiples, matrices Poisson y dashboard.',
       valueAgents: 'Bots, alertas y experimentos web.',
       proof: 'Ver prueba',
+      caseStudy: 'Leer el caso de estudio',
       open: 'Abrir proyecto',
       repo: 'Ver repo',
       exploreAgents: 'Explorar ecosistema'
@@ -312,6 +313,7 @@ const UI_COPY = {
       valueFranquiya: 'Python, multiple sources, Poisson matrices, Monte Carlo simulations and dashboard.',
       valueAgents: 'Bots, alerts and web experiments with explicit prototype scope.',
       proof: 'View proof',
+      caseStudy: 'Read the case study',
       open: 'Open project',
       repo: 'View repo',
       exploreAgents: 'Explore ecosystem'
@@ -1605,6 +1607,7 @@ const FEATURED_PROJECTS = [
   {
     id: 'jobbot',
     title: 'JobBot',
+    caseStudy: '/jobbot',
     repo: 'https://github.com/nachopalmeri/jobbot',
     href: 'https://jobbot-lime.vercel.app',
     media: 'project-assets/job-bot.webp',
@@ -2156,6 +2159,7 @@ function renderProjectPreview(project, index, mode = 'active') {
         </dl>
         <div class="project-preview-tags">${project.stack.slice(0, 4).map(item => `<span>${escapeHtml(item)}</span>`).join('')}</div>
         <div class="project-preview-links">
+          ${project.caseStudy ? `<a class="carousel-proof case-study-link" href="${project.caseStudy}">${escapeHtml(getCopy('projects.caseStudy'))}</a>` : ''}
           ${project.href ? `<a class="carousel-proof" href="${project.href}" ${isInternalHref(project.href) ? `data-route="${project.href.replace(/^\//, '')}"` : 'target="_blank" rel="noopener noreferrer"'}>${escapeHtml(getCopy('projects.open'))}</a>` : ''}
           ${project.repo ? `<a class="carousel-proof subtle" href="${project.repo}" target="_blank" rel="noopener noreferrer">${escapeHtml(getCopy('projects.repo'))}</a>` : ''}
           ${project.video ? `<button type="button" class="carousel-proof subtle video-trigger" data-video-trigger="${project.video}">${escapeHtml(getCopy('projects.watchVideo'))}</button>` : ''}
