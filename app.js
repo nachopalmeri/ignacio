@@ -4110,7 +4110,7 @@ function setupSideQuestAgents() {
   // conversational router row
   const askRow = document.createElement('div');
   askRow.className = 'sq-ask-row';
-  askRow.innerHTML = '<input type="text" id="sq-ask-input" placeholder="' + (currentLang === 'en' ? 'Tell the crew what you feel like… (e.g. \u201csomething that destroys you\u201d)' : 'Contale al crew qué te apetece… (ej. \u201calgo que te destruya\u201d)') + '" maxlength="80">' +
+  askRow.innerHTML = '<input type="text" id="sq-ask-input" aria-label="' + (currentLang === 'en' ? 'Ask the crew for a recommendation' : 'Pedile una recomendación al crew') + '" placeholder="' + (currentLang === 'en' ? 'Tell the crew what you feel like… (e.g. \u201csomething that destroys you\u201d)' : 'Contale al crew qué te apetece… (ej. \u201calgo que te destruya\u201d)') + '" maxlength="80">' +
     '<button type="button" id="sq-ask-btn">' + (currentLang === 'en' ? 'Route' : 'Enrutar') + '</button>';
   cardsEl.parentNode.insertBefore(askRow, cardsEl);
 
