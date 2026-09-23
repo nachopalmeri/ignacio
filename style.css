@@ -7065,3 +7065,24 @@ header.app-header.is-scrolled .nav-cta {
 @media (max-width: 700px) {
   .agents-3d { height: 78svh; border-radius: 18px; margin-left: -8px; margin-right: -8px; }
 }
+
+/* The rotating word ("bots" / "automatizaciones") wraps to a second line on
+   phones. Reserve both lines so the swap never changes the hero's height:
+   that used to shift the whole project wall (CLS 0.21 on mobile). */
+@media (max-width: 600px) {
+  .cine-hero .cine-role {
+    min-height: 2em;
+    align-content: flex-start;
+  }
+}
+
+/* Lite hero (see probeHeroSmoothness): one still picture of the wall instead
+   of 40 moving screens in 3D. Only downloaded when the class applies. */
+.cine-hero.is-lite .cine-wall { display: none; }
+.cine-hero.is-lite .cine-stage {
+  background: #0a0a0c url("project-assets/hero-wall.webp") center / cover no-repeat;
+}
+
+@media (max-width: 900px) {
+  .cine-hero.is-lite .cine-stage { background-image: url("project-assets/hero-wall-m.webp"); }
+}

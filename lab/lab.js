@@ -324,8 +324,26 @@ function buildStage() {
 
   let running = true;
   const clock = new THREE.Clock();
+  // Adaptive quality: watch the first ~2 s of real frames; if this device
+  // struggles, drop the bloom pass and render at 1x (the look stays, the
+  // glow gets simpler).
+  let lite = false;
+  const probe = [];
   function frame() {
-    const dt = Math.min(clock.getDelta(), 0.05);
+    const raw = clock.getDelta();
+    if (!lite && probe.length < 120) {
+      if (clock.elapsedTime > 1.2) probe.push(raw * 1000);
+      if (probe.length === 120) {
+        const sorted = [...probe].sort((a, b) => a - b);
+        if (sorted[60] > 24) {
+          lite = true;
+          renderer.setPixelRatio(1);
+          renderer.setSize(innerWidth, innerHeight);
+          dust.visible = false;
+        }
+      }
+    }
+    const dt = Math.min(raw, 0.05);
     const t = clock.elapsedTime;
     const now = performance.now();
     for (const tw of tweens) {
@@ -350,7 +368,7 @@ function buildStage() {
       if (camera.position.distanceTo(camGoal.pos) < 0.05) camGoal = null;
     }
     controls.update();
-    composer.render();
+    if (lite) renderer.render(scene, camera); else composer.render();
     labels.render(scene, camera);
   }
   renderer.setAnimationLoop(frame);

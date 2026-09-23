@@ -994,6 +994,10 @@ const SQ_FILM_TAKES = {
   "city-of-god": { es: "Río de Janeiro, dos chicos, dos caminos. Arranqué el diario con esta y la vara quedó alta.", en: "Rio de Janeiro, two kids, two paths. I started the diary with this one and the bar stayed high." }
 };
 
+// One formatter each: toLocaleDateString builds a new one per call, and
+// this runs for every film in the diary at startup.
+const SQ_DATE_ES = new Intl.DateTimeFormat('es-AR', { day: 'numeric', month: 'long', year: 'numeric' });
+const SQ_DATE_EN = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 const SIDE_QUESTS = SQ_FILMS.map(f => ({
   title: f.name,
   year: f.year,
@@ -1002,8 +1006,8 @@ const SIDE_QUESTS = SQ_FILMS.map(f => ({
   cat: { es: 'Película', en: 'Film' },
   meta: (() => {
     const d = new Date(f.watched.replace('Watched on ', '').replace(/^([A-Za-z]+day)\s+/, ''));
-    const es = isNaN(d) ? f.watched : 'Vista el ' + d.toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' });
-    const en = isNaN(d) ? f.watched : 'Watched ' + d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    const es = isNaN(d) ? f.watched : 'Vista el ' + SQ_DATE_ES.format(d);
+    const en = isNaN(d) ? f.watched : 'Watched ' + SQ_DATE_EN.format(d);
     return { es: es, en: en };
   })(),
   why: SQ_FILM_TAKES[f.slug] || { es: 'Del diario de Letterboxd.', en: 'From the Letterboxd diary.' },
@@ -1164,7 +1168,12 @@ function setupSideQuests() {
       t.setAttribute('aria-label', sqL(item.title) || item.title || '');
       if (seen.includes(item.title)) t.classList.add('seen');
       if (sqMatch(item, taste) >= 80) t.classList.add('foryou');
-      t.innerHTML = '<img src="' + (item.kind === 'book' ? sqBookArt(item) : item.poster) + '" alt="" loading="lazy" decoding="async">';
+      // While the panel is closed the thumbs keep their URL in data-src: the
+      // hidden overlay still counts as on-screen for lazy loading, and all
+      // ~80 posters (~1 MB) used to download on every visit. open() rebuilds
+      // the strip once the panel is visible.
+      const art = item.kind === 'book' ? sqBookArt(item) : item.poster;
+      t.innerHTML = '<img ' + (reveal.classList.contains('is-visible') ? 'src' : 'data-src') + '="' + art + '" alt="" loading="lazy" decoding="async">';
       t.addEventListener('click', () => { current = SIDE_QUESTS.indexOf(item); render(); });
       strip.appendChild(t);
     });
@@ -1204,7 +1213,7 @@ function setupSideQuests() {
     const accent = item.color;
     triggerLeak();
     posterImg.style.opacity = 0;
-    setTimeout(() => { posterImg.src = item.kind === 'book' ? sqBookArt(item) : item.poster; posterImg.alt = item.title; posterImg.style.opacity = 1; }, reduceMotion ? 0 : 150);
+    setTimeout(() => { if (!reveal.classList.contains('is-visible')) return; posterImg.src = item.kind === 'book' ? sqBookArt(item) : item.poster; posterImg.alt = item.title; posterImg.style.opacity = 1; }, reduceMotion ? 0 : 150);
     isFirstRenderSinceOpen = false;
     glow.style.background = 'radial-gradient(closest-side, ' + accent + ', transparent 72%)';
     document.getElementById('side-quests-reveal').style.setProperty('--sq-accent', accent);
@@ -2714,6 +2723,39 @@ function renderCineSpotlight() {
   caption.innerHTML = `<span class="cine-now-label">${escapeHtml(getCopy('hero.nowShowing'))}</span><strong>${escapeHtml(project.title)}</strong><span class="cine-now-desc">${escapeHtml(projectField(project, 'kind'))}</span>`;
 }
 
+// Adaptive hero: the moving 3D wall is the heaviest thing on the page. For
+// ~1.5 s after it appears we watch real frame times; if this device can't
+// keep it smooth (or asks to save data) the wall becomes one still picture of
+// itself (is-lite). The decision lasts for the session.
+function probeHeroSmoothness(hero, running, sync) {
+  if (prefersReducedMotion()) return;
+  const goLite = () => {
+    hero.classList.add('is-lite');
+    hero.querySelectorAll('.cine-wall video').forEach((v) => { v.pause(); v.removeAttribute('src'); v.load(); });
+    sync();
+  };
+  let stored = null;
+  try { stored = sessionStorage.getItem('hero-lite'); } catch (_e) {}
+  if (stored === '1' || navigator.connection?.saveData) { goLite(); return; }
+  if (stored === '0') return;
+  const deltas = [];
+  let last = 0;
+  let begin = 0;
+  const frame = (t) => {
+    if (!running()) { last = 0; requestAnimationFrame(frame); return; }
+    if (!begin) begin = t + 600; // let the wall's entrance settle first
+    if (t > begin) { if (last) deltas.push(t - last); last = t; }
+    if (t - begin < 1500) { requestAnimationFrame(frame); return; }
+    deltas.sort((a, b) => a - b);
+    const median = deltas[Math.floor(deltas.length / 2)] || 16;
+    const slowShare = deltas.filter((d) => d > 34).length / Math.max(1, deltas.length);
+    const lite = median > 24 || slowShare > 0.25;
+    try { sessionStorage.setItem('hero-lite', lite ? '1' : '0'); } catch (_e) {}
+    if (lite) goLite();
+  };
+  requestAnimationFrame(frame);
+}
+
 function setupCineHero() {
   const hero = document.querySelector('[data-cine-hero]');
   const wall = hero?.querySelector('[data-cine-wall]');
@@ -2734,7 +2776,8 @@ function setupCineHero() {
   function sync() {
     const on = running();
     hero.classList.toggle('is-paused', !on);
-    hero.querySelectorAll('video').forEach((v) => { if (on) v.play().catch(() => {}); else v.pause(); });
+    const lite = hero.classList.contains('is-lite');
+    hero.querySelectorAll('video').forEach((v) => { if (on && !lite) v.play().catch(() => {}); else v.pause(); });
     if (on && !spotlightTimer) {
       spotlightTimer = setInterval(() => { cineSpotlightIndex++; renderCineSpotlight(); }, 3200);
       roleTimer = setInterval(tickHeroRoleWord, 2400);
@@ -2753,6 +2796,7 @@ function setupCineHero() {
   window.addEventListener('portfolio-tab-change', sync);
   window.addEventListener('side-quests-visibility', sync);
   sync();
+  probeHeroSmoothness(hero, running, sync);
 
   // In-page jump to the story act; plain anchors would collide with the
   // path-based router.
