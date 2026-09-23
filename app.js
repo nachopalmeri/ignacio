@@ -178,8 +178,6 @@ const UI_COPY = {
       guide: 'Cada nodo del grafo es un rol con instrucciones propias (planear, construir, revisar, testear, documentar). Resuelve el problema de perder contexto entre tareas: cada rol sabe qué hizo el anterior.',
       guideHint: 'Clickeá cualquier agente del grafo para ver su rol y simular un flujo documentado',
       labCta: 'Abrir en pantalla completa',
-      classicToggle: 'Ver el grafo clásico',
-      classicHide: 'Ocultar el grafo clásico',
       labNote: 'Abajo lo tenés en vivo: escribile un pedido al sistema y mirá a quién se lo da y por qué.',
       workflowsTitle: 'Flujos de trabajo',
       workflowsBody: 'Basado en archivos reales de ~/.agents.',
@@ -393,8 +391,6 @@ const UI_COPY = {
       guide: 'Each node in the graph is a role with its own instructions (plan, build, review, test, document). It solves context loss between tasks: every role knows what the previous one did.',
       guideHint: 'Click any agent in the graph to see its role and simulate a documented flow',
       labCta: 'Open full screen',
-      classicToggle: 'Show the classic graph',
-      classicHide: 'Hide the classic graph',
       labNote: 'It runs live below: send the system a request and see who gets it and why.',
       workflowsTitle: 'Workflows',
       workflowsBody: 'Based on real ~/.agents files.',
@@ -4445,21 +4441,32 @@ function setupSideQuestAgents() {
 setupSideQuestAgents();
 
 
-// Agents tab: the 3D command center is the main view; the classic graph
-// opens on demand (and gets a resize so its canvases size themselves).
-(function setupAgentsClassicToggle() {
-  const btn = document.getElementById('agents-classic-toggle');
-  const vp = document.getElementById('eco-viewport');
-  if (!btn || !vp) return;
-  btn.addEventListener('click', () => {
-    const open = vp.hidden;
-    vp.hidden = !open;
-    btn.setAttribute('aria-expanded', String(open));
-    btn.textContent = getCopy(open ? 'agents.classicHide' : 'agents.classicToggle');
-    if (open) {
+// Agents tab: one place, two views of the same system. 3D is the command
+// center (/lab in an iframe); 2D is the original graph. The choice sticks.
+(function setupAgentsViewSwitch() {
+  const buttons = document.querySelectorAll('[data-agents-view]');
+  const lab = document.getElementById('agents-3d');
+  const graph = document.getElementById('eco-viewport');
+  if (!buttons.length || !lab || !graph) return;
+  function show(view, init = true) {
+    const is2d = view === '2d';
+    lab.hidden = is2d;
+    graph.hidden = !is2d;
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.agentsView === view)));
+    if (is2d && init) {
       window.dispatchEvent(new Event('resize'));
-      initEcosystem();
-      vp.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (typeof initEcosystem === 'function') initEcosystem();
     }
-  });
+    try { localStorage.setItem('agents-view', view); } catch (_e) {}
+  }
+  buttons.forEach((b) => b.addEventListener('click', () => show(b.dataset.agentsView)));
+  // The workflow launcher animates the 2D graph, so it brings that view up.
+  document.getElementById('eco-wf-list')?.addEventListener('click', () => {
+    if (graph.hidden) show('2d');
+    graph.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, true);
+  let saved = '3d';
+  try { saved = localStorage.getItem('agents-view') || '3d'; } catch (_e) {}
+  // On load only set the view; the tab itself starts the graph when opened.
+  if (saved === '2d') show('2d', false);
 })();

@@ -660,39 +660,15 @@
         </p>
       </div>
 
-      <section class="workflow-proof" aria-labelledby="workflow-proof-title">
-        <div class="workflow-proof-copy">
-          <p class="eyebrow" data-i18n="agents.workflowsTitle">Flujos de trabajo</p>
-          <h3 id="workflow-proof-title" data-i18n="agents.proofTitle">Cómo lo uso en proyectos reales</h3>
-          <p data-i18n="agents.proofBody">El grafo muestra roles de trabajo, no cargos ni claims senior. La señal útil es el método: planear, construir, revisar, probar y documentar.</p>
-        </div>
-        <div class="workflow-steps" aria-label="Workflow steps">
-          <span data-i18n="agents.steps.plan">Plan</span>
-          <span data-i18n="agents.steps.build">Build</span>
-          <span data-i18n="agents.steps.review">Review</span>
-          <span data-i18n="agents.steps.test">Test</span>
-          <span data-i18n="agents.steps.ship">Ship</span>
-        </div>
-        <div class="workflow-cases">
-          <article><span>01</span><strong data-i18n="agents.workflow1.label">JobBot feature</strong></article>
-          <article><span>02</span><strong data-i18n="agents.workflow2.label">Portfolio verification</strong></article>
-          <article><span>03</span><strong data-i18n="agents.workflow3.label">README handoff</strong></article>
-        </div>
-        <div id="eco-wfp" class="eco-wfp" aria-label="Workflow launcher">
-          <div>
-            <h3 data-i18n="agents.workflowsTitle">Workflows documentados</h3>
-            <p data-i18n="agents.workflowsBody">Diagrama basado en archivos reales de ~/.agents. Visualiza rutas de trabajo; no ejecuta archivos markdown.</p>
-          </div>
-          <div id="eco-wf-list" class="wf-list" aria-label="Selected workflows"></div>
-        </div>
-      </section>
-
-      <!-- The immersive view: the 3D command center (/lab) runs here, inside
-           the agents tab. The classic graph stays one click away. -->
+      <!-- Two views of the same system: the 3D command center (/lab, embedded)
+           and the original 2D graph. The switch remembers the choice. -->
+      <div class="agents-view-switch" role="group" aria-label="Vista del sistema de agentes">
+        <button type="button" data-agents-view="3d" aria-pressed="true">3D</button>
+        <button type="button" data-agents-view="2d" aria-pressed="false">2D</button>
+      </div>
       <div class="agents-3d" id="agents-3d">
         <iframe src="/lab?embed=1" title="Centro de mando 3D del sistema de agentes" loading="lazy" allow="fullscreen"></iframe>
       </div>
-      <button type="button" class="agents-classic-toggle" id="agents-classic-toggle" aria-expanded="false" aria-controls="eco-viewport" data-i18n="agents.classicToggle">Ver el grafo clásico</button>
 
       <div id="eco-viewport" hidden>
         <div class="eco-grid-bg"></div>
@@ -727,6 +703,34 @@
         </div>
 
       </div>
+
+      <section class="workflow-proof" aria-labelledby="workflow-proof-title">
+        <div class="workflow-proof-copy">
+          <p class="eyebrow" data-i18n="agents.workflowsTitle">Flujos de trabajo</p>
+          <h3 id="workflow-proof-title" data-i18n="agents.proofTitle">Cómo lo uso en proyectos reales</h3>
+          <p data-i18n="agents.proofBody">El grafo muestra roles de trabajo, no cargos ni claims senior. La señal útil es el método: planear, construir, revisar, probar y documentar.</p>
+        </div>
+        <div class="workflow-steps" aria-label="Workflow steps">
+          <span data-i18n="agents.steps.plan">Plan</span>
+          <span data-i18n="agents.steps.build">Build</span>
+          <span data-i18n="agents.steps.review">Review</span>
+          <span data-i18n="agents.steps.test">Test</span>
+          <span data-i18n="agents.steps.ship">Ship</span>
+        </div>
+        <div class="workflow-cases">
+          <article><span>01</span><strong data-i18n="agents.workflow1.label">JobBot feature</strong></article>
+          <article><span>02</span><strong data-i18n="agents.workflow2.label">Portfolio verification</strong></article>
+          <article><span>03</span><strong data-i18n="agents.workflow3.label">README handoff</strong></article>
+        </div>
+        <div id="eco-wfp" class="eco-wfp" aria-label="Workflow launcher">
+          <div>
+            <h3 data-i18n="agents.workflowsTitle">Workflows documentados</h3>
+            <p data-i18n="agents.workflowsBody">Diagrama basado en archivos reales de ~/.agents. Visualiza rutas de trabajo; no ejecuta archivos markdown.</p>
+          </div>
+          <div id="eco-wf-list" class="wf-list" aria-label="Selected workflows"></div>
+        </div>
+      </section>
+
     </div>
   </main>
 
