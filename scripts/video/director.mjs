@@ -287,7 +287,7 @@ async function film(shotId, { keepFrames = false } = {}) {
   await sleep(600);
   await page.evaluate(() => window.stage.windowOut());
   await sleep(700);
-  await page.evaluate((e) => window.stage.end(e), { title: shot.end?.title || shot.title.title, url: shot.end?.url || shot.url.replace(/^https?:\/\//, '').replace(/\/$/, ''), by: 'Proyecto de Ignacio Palmeri · ignaciop.vercel.app' });
+  await page.evaluate((e) => window.stage.end(e), { title: shot.end?.title || shot.title.title, url: shot.end?.url || shot.url.replace(/^https?:\/\//, '').replace(/\/$/, ''), by: 'Proyecto de Ignacio Palmeri · ignaciopalmeri.dev' });
   await sleep(3600);
   await cdp.send('Page.stopScreencast');
   await sleep(300);

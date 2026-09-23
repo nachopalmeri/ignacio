@@ -56,11 +56,11 @@ const OG_HTML = `<!doctype html>
       <span class="chip">Python</span><span class="chip">FastAPI</span>
       <span class="chip">Next.js</span><span class="chip">PostgreSQL</span>
     </div>
-    <span class="url">ignaciop.vercel.app</span>
+    <span class="url">ignaciopalmeri.dev</span>
   </div>
 </body></html>`;
 
-const browser = await chromium.launch();
+const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
 
 await page.setContent(OG_HTML, { waitUntil: 'load' });

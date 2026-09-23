@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const SITE = 'https://ignaciop.vercel.app';
+const SITE = 'https://ignaciopalmeri.dev';
 
 // FEATURED_PROJECTS lives in app.js (no build step), so lift it out of there.
 const appJs = await readFile(path.join(rootDir, 'app.js'), 'utf8');
@@ -51,7 +51,7 @@ function cardHtml(p, media) {
       <p>${esc(p.description.es)}</p>
       <div class="tags">${p.stack.slice(0, 4).map((t) => `<span>${esc(t)}</span>`).join('')}</div>
     </div>
-    <div class="who">Ignacio Palmeri · ignaciop.vercel.app</div>
+    <div class="who">Ignacio Palmeri · ignaciopalmeri.dev</div>
   </div>
   <div class="shot">${media ? `<img src="${media}">` : ''}</div>
 </body></html>`;
