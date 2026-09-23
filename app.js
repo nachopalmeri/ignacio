@@ -1554,6 +1554,7 @@ const FEATURED_PROJECTS = [
     href: 'https://jobbot-lime.vercel.app',
     media: 'project-assets/job-bot.webp',
     video: 'project-assets/video/jobbot-demo.mp4',
+    preview: 'project-assets/video/jobbot-preview.mp4',
     status: 'ACTIVE',
     kind: { es: 'Automation SaaS', en: 'Automation SaaS' },
     description: {
@@ -1592,6 +1593,7 @@ const FEATURED_PROJECTS = [
     href: 'https://polytools-omega.vercel.app',
     media: 'project-assets/polymarktporyect.webp',
     video: 'project-assets/video/polytools-demo.mp4',
+    preview: 'project-assets/video/polytools-preview.mp4',
     status: 'BETA',
     kind: { es: 'Product lab', en: 'Product lab' },
     description: {
@@ -1628,6 +1630,7 @@ const FEATURED_PROJECTS = [
     title: 'Darter',
     media: 'project-assets/darter.webp',
     video: 'project-assets/video/darter-demo.mp4',
+    preview: 'project-assets/video/darter-preview.mp4',
     status: 'PRIVATE',
     kind: { es: 'Sistema financiero personal', en: 'Personal finance OS' },
     description: {
@@ -1666,6 +1669,7 @@ const FEATURED_PROJECTS = [
     href: '/agents',
     media: 'project-assets/agents-system.webp',
     video: 'project-assets/video/agents-system-demo.mp4',
+    preview: 'project-assets/video/agents-system-preview.mp4',
     status: 'LOCAL',
     kind: { es: 'Workflow system', en: 'Workflow system' },
     description: {
@@ -1704,6 +1708,7 @@ const FEATURED_PROJECTS = [
     href: 'https://franqui-ya.vercel.app',
     media: 'project-assets/franquiya.webp',
     video: 'project-assets/video/franqui-demo.mp4',
+    preview: 'project-assets/video/franqui-preview.mp4',
     status: 'LIVE',
     kind: { es: 'Gestión de franquicias', en: 'Franchise operations OS' },
     description: {
@@ -1742,6 +1747,7 @@ const FEATURED_PROJECTS = [
     href: 'https://dulcescreaciones.vercel.app',
     media: 'project-assets/dulcescreaciones.webp',
     video: 'project-assets/video/dulces-demo.mp4',
+    preview: 'project-assets/video/dulces-preview.mp4',
     loop: 'project-assets/video/dulces-loop.mp4',
     status: 'PUBLIC',
     kind: { es: 'Commerce Landing', en: 'Commerce Landing' },
@@ -1781,6 +1787,7 @@ const FEATURED_PROJECTS = [
     href: 'https://prode-mundial-2026-ten-omega.vercel.app',
     media: 'project-assets/prode-mundial-2026.webp',
     video: 'project-assets/video/prode-demo.mp4',
+    preview: 'project-assets/video/prode-preview.mp4',
     loop: 'project-assets/video/prode-loop.mp4',
     status: 'LIVE',
     kind: { es: 'Analytics de deportes', en: 'Sports analytics' },
@@ -1820,6 +1827,7 @@ const FEATURED_PROJECTS = [
     href: 'https://piscubi-store.vercel.app',
     media: 'project-assets/piscubi.webp',
     video: 'project-assets/video/piscubi-demo.mp4',
+    preview: 'project-assets/video/piscubi-preview.mp4',
     loop: 'project-assets/video/piscubi-loop.mp4',
     status: 'PUBLIC',
     kind: { es: 'E-commerce libros', en: 'E-commerce bookstore' },
@@ -1896,6 +1904,7 @@ const FEATURED_PROJECTS = [
     href: 'https://fulbotracker.vercel.app',
     media: 'project-assets/futtracker.webp',
     video: 'project-assets/video/fulbotracker-demo.mp4',
+    preview: 'project-assets/video/fulbotracker-preview.mp4',
     loop: 'project-assets/video/fulbotracker-loop.mp4',
     status: 'PUBLIC',
     kind: { es: 'Sports Product', en: 'Sports Product' },
@@ -1935,6 +1944,7 @@ const FEATURED_PROJECTS = [
     href: 'https://comidadebarrio.vercel.app',
     media: 'project-assets/comidadebarrio.webp',
     video: 'project-assets/video/comidadebarrio-demo.mp4',
+    preview: 'project-assets/video/comidadebarrio-preview.mp4',
     loop: 'project-assets/video/comidadebarrio-loop.mp4',
     status: 'PUBLIC',
     kind: { es: 'Local Commerce', en: 'Local Commerce' },
@@ -2069,7 +2079,9 @@ function projectImage(project, index, variant = 'mission') {
 
 function renderProjectPreview(project, index, mode = 'active') {
   const previewClass = mode === 'hover' ? 'hover' : 'active';
-  const videoSrc = project.loop || project.video;
+  // preview = the small silent clip built for hover; loop/video are the full
+  // demos and stay reserved for the click-to-open lightbox.
+  const videoSrc = project.preview || project.loop || project.video;
   return `
     <article class="project-preview ${previewClass}" data-project-id="${project.id}" data-reveal="zoom" data-reveal-delay="${index * 90}">
       <figure class="project-preview-media project-media-container" data-project-id="${project.id}" ${project.video ? `data-video="${project.video}" tabindex="0" role="button" aria-label="${escapeHtml(project.title)} video preview"` : ''}>
@@ -2116,7 +2128,7 @@ function renderProjectCarousel() {
       const tag = project.href ? 'a' : 'div';
       const hrefAttr = project.href ? ` href="${project.href}"` : '';
       const targetAttr = project.href && !isInternalHref(project.href) ? ' target="_blank" rel="noopener noreferrer"' : ` data-route="${(project.href || '').replace(/^\//, '')}"`;
-      const videoSrc = project.loop || project.video;
+      const videoSrc = project.preview || project.loop || project.video;
       return `
       <${tag} class="archive-row ${index < 4 ? 'archive-row-featured' : 'archive-row-secondary'}" data-project-id="${project.id}" data-reveal="${index % 2 === 0 ? 'left' : 'right'}"${hrefAttr}${targetAttr}>
         <span class="archive-number">${String(index + 1).padStart(2, '0')}</span>
