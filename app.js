@@ -431,6 +431,12 @@ function applyStaticCopy() {
   document.querySelectorAll('[data-lang-btn]').forEach((btn) => {
     btn.classList.toggle('active', btn.dataset.langBtn === currentLang);
   });
+  // Each language downloads its own CV.
+  document.querySelectorAll('[data-cv-link]').forEach((a) => {
+    const en = currentLang === 'en';
+    a.setAttribute('href', en ? '/cv-en.pdf' : '/cv.pdf');
+    a.setAttribute('download', en ? 'Ignacio-Palmeri-CV-EN.pdf' : 'Ignacio-Palmeri-CV.pdf');
+  });
   secureExternalLinks(document);
   resetTerminal();
   splitHeroTitle();

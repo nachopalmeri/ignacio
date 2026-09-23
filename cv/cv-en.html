@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ignacio Palmeri - CV</title>
+<!-- English translation of cv.pdf (the Spanish CV). Source for cv-en.pdf:
+     rebuild with `node scripts/build-cv.mjs`. Keep both versions in sync. -->
+<style>
+  @page { size: A4; margin: 16mm 15mm 14mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Helvetica, Arial, sans-serif; color: #1f2937; font-size: 10.4pt; line-height: 1.42; }
+  h1 { font-size: 25pt; color: #111827; letter-spacing: -0.3px; line-height: 1.1; }
+  .role { margin-top: 5px; color: #2563eb; font-weight: 700; font-size: 12pt; letter-spacing: 0.2px; }
+  .contact { margin-top: 7px; color: #4b5563; font-size: 9.6pt; display: flex; flex-wrap: wrap; gap: 4px 16px; }
+  .contact a { color: #4b5563; text-decoration: none; }
+  .rule { border: 0; border-top: 2px solid #111827; margin: 10px 0 12px; }
+  h2 { font-size: 12.5pt; color: #111827; text-transform: uppercase; letter-spacing: 0.3px;
+       border-left: 4px solid #2563eb; padding-left: 8px; margin: 14px 0 6px; }
+  p { text-align: justify; }
+  .row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 4px; }
+  .row b { color: #111827; }
+  .when { color: #4b5563; font-size: 9.6pt; white-space: nowrap; }
+  .sub { font-style: italic; color: #4b5563; margin-top: 1px; }
+  ul { margin: 3px 0 0 16px; }
+  li { margin: 2px 0; }
+  .proj { margin-top: 8px; font-weight: 700; color: #111827; }
+  table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+  td { vertical-align: top; padding: 3px 0; }
+  td:first-child { width: 150px; font-weight: 700; color: #111827; padding-right: 10px; }
+  td:last-child { color: #374151; }
+  section { break-inside: avoid-page; }
+</style>
+</head>
+<body>
+  <h1>Ignacio Palmeri</h1>
+  <div class="role">IT MANAGEMENT STUDENT | AI-FIRST AUTOMATION BUILDER</div>
+  <div class="contact">
+    <span>Temperley, Buenos Aires, Argentina</span>
+    <a href="mailto:ignaciopalmeri1@gmail.com">ignaciopalmeri1@gmail.com</a>
+    <a href="https://linkedin.com/in/nachopalmeri">linkedin.com/in/nachopalmeri</a>
+    <a href="https://github.com/nachopalmeri">github.com/nachopalmeri</a>
+    <a href="https://ignaciop.vercel.app">ignaciop.vercel.app</a>
+  </div>
+  <hr class="rule">
+
+  <section>
+    <h2>Professional profile</h2>
+    <p>Second-year student in the Bachelor's in Information Technology Management at UADE. Passionate about the
+    convergence of Artificial Intelligence, finance and systems architecture. I learn continuously and respond fast:
+    I constantly research, test and integrate cutting-edge tools into my workflows. As an <b>AI-First Builder</b>, I
+    specialize in using advanced assistants (Claude Code, Cursor, Aider) for rapid prototyping (vibe coding), data
+    analysis and process automation. I complement this technical focus with real experience in the operational and
+    financial management of a retail business, connecting technology solutions with business impact.</p>
+  </section>
+
+  <section>
+    <h2>Education</h2>
+    <div class="row"><b>Universidad Argentina de la Empresa (UADE)</b><span class="when">2025 - Present (in progress)</span></div>
+    <div class="sub">Bachelor's in Information Technology Management</div>
+    <ul>
+      <li>Coursework: Business Process Modeling, Data Analysis, Corporate Finance and IT Governance.</li>
+      <li><b>Expected graduation:</b> December 2028 (broad availability for long-term internship programs).</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Work experience</h2>
+    <div class="row"><span><b>Operations &amp; Customer Service Analyst</b> | Retail franchise (Grido)</span><span class="when">October 2024 - Present</span></div>
+    <ul>
+      <li>Mapping and control of commercial processes: daily cash flow, account reconciliation and billing audits.</li>
+      <li>Logistics control and inventory optimization in high-demand, constant-pressure environments.</li>
+      <li>Ongoing analysis of the sales floor to detect administrative inefficiencies and apply data-backed improvements.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Projects &amp; software architecture (AI-driven)</h2>
+    <div class="proj">JobBot — Automation &amp; Web Scraping SaaS</div>
+    <ul>
+      <li>Built a full-stack platform with a Next.js (App Router) dashboard and a robust FastAPI backend on PostgreSQL.</li>
+      <li>Implemented secure authentication (JWT), payment gateways (Stripe/MercadoPago) and a Telegram bot for notifications.</li>
+      <li>AI-guided development methodology to accelerate delivery, with continuous integration (CI/CD), security reviews
+          (httpOnly cookies) and native deployment on Vercel.</li>
+    </ul>
+    <div class="proj">Predictive AI &amp; Data Analytics Engine (Sports)</div>
+    <ul>
+      <li>Designed and implemented a predictive statistical system consolidating 10 data sources and APIs (including Polymarket).</li>
+      <li>Modeling with a 7x7 Poisson probability matrix and Monte Carlo simulations to project results and expected value.</li>
+      <li>Fully automated data pipeline and weight recalibration using stateless Python scripts run on GitHub Actions,
+          connected to a dashboard on Vercel.</li>
+    </ul>
+    <div class="proj">Agents System — Local Orchestration &amp; Workflow Infrastructure</div>
+    <ul>
+      <li>Built a global dotfiles and local scaffolding system to standardize and optimize multi-tool workflows.</li>
+      <li>Context management, task routing and automation of AI development environments with PowerShell and Bash scripts.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Technical skills</h2>
+    <table>
+      <tr><td>Certifications</td><td>Red Hat System Administration I (RH124) | CCNA (core concepts) | AI-Workflows.</td></tr>
+      <tr><td>AI &amp; Automation</td><td>AI prototyping (Claude, Cursor, Aider), Model Context Protocol (MCP), LLM API integration, prompt engineering, RAG, AI agents, vibe coding.</td></tr>
+      <tr><td>Development &amp; Infra</td><td>Python, JavaScript (Next.js), PostgreSQL, REST APIs, Git, GitHub Actions (CI/CD), Vercel, Linux (Ubuntu/WSL2).</td></tr>
+      <tr><td>Business &amp; IT Mgmt</td><td>Business process modeling, corporate finance, stock auditing, Jira, Agile methodologies, advanced spreadsheets (Excel).</td></tr>
+      <tr><td>Languages</td><td>Spanish (native) | English (technical intermediate, B1+; fluent reading of technical documentation and systems papers).</td></tr>
+    </table>
+  </section>
+</body>
+</html>
