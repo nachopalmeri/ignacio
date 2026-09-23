@@ -58,7 +58,8 @@ const UI_COPY = {
       scrollHint: 'Deslizá el calendario para ver el año completo.',
       calendarLabel: 'Calendario de contribuciones públicas',
       legendLabel: 'De menos a más contribuciones',
-      updated: 'Actualizado'
+      updated: 'Actualizado',
+      recentTitle: 'Últimos commits públicos'
     },
     orchestration: {
       body: 'Evidencia visible.'
@@ -240,7 +241,8 @@ const UI_COPY = {
       scrollHint: 'Swipe the calendar to view the full year.',
       calendarLabel: 'Public contribution calendar',
       legendLabel: 'Less to more contributions',
-      updated: 'Updated'
+      updated: 'Updated',
+      recentTitle: 'Latest public commits'
     },
     orchestration: {
       body: 'Visible proof.'
@@ -450,6 +452,7 @@ function applyStaticCopy() {
   splitHeroTitle();
   if (document.getElementById('project-carousel')) renderProjectCarousel();
   if (githubContributionData) renderGithubCalendar(githubContributionData);
+  renderGithubRecent();
 }
 
 // The hero title enters word by word on load. It has to run after
@@ -581,6 +584,42 @@ function renderGithubCalendar(data) {
   calendar.hidden = false;
   calendar.dataset.state = 'ready';
   fallback.hidden = true;
+}
+
+// Latest public commits (api/github-activity.js). The section stays hidden
+// unless real data arrives, so a GitHub outage never shows an empty box.
+let githubRecentData = null;
+
+function renderGithubRecent() {
+  const wrap = document.querySelector('[data-github-recent]');
+  const list = document.querySelector('[data-github-recent-list]');
+  if (!wrap || !list || !githubRecentData || !githubRecentData.commits?.length) return;
+  const rtf = new Intl.RelativeTimeFormat(currentLang === 'en' ? 'en' : 'es', { numeric: 'auto' });
+  const ago = (iso) => {
+    const diff = (Date.parse(iso) - Date.now()) / 1000;
+    const steps = [['year', 31536000], ['month', 2592000], ['week', 604800], ['day', 86400], ['hour', 3600], ['minute', 60]];
+    for (const [unit, secs] of steps) if (Math.abs(diff) >= secs) return rtf.format(Math.round(diff / secs), unit);
+    return rtf.format(0, 'minute');
+  };
+  list.innerHTML = githubRecentData.commits.map((c) => `
+    <li>
+      <span class="github-recent-repo">${escapeHtml(c.repo)}</span>
+      <a href="${escapeHtml(c.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(c.message)}</a>
+      <time datetime="${escapeHtml(c.date)}">${escapeHtml(ago(c.date))}</time>
+    </li>`).join('');
+  wrap.hidden = false;
+}
+
+async function setupGithubRecent() {
+  if (!document.querySelector('[data-github-recent]')) return;
+  try {
+    const res = await fetch('/api/github-activity', { headers: { Accept: 'application/json' } });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!Array.isArray(data.commits)) return;
+    githubRecentData = data;
+    renderGithubRecent();
+  } catch (_e) {}
 }
 
 async function setupGithubContributions() {
@@ -2980,6 +3019,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupProjectCarousel();
   setupAiOpsHero();
   setupGithubContributions();
+  setupGithubRecent();
   initHeroRoleRotator();
   initNavbarScroll();
   initScrollReveal();

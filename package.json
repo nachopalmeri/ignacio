@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "test:syntax": "node --check app.js",
-    "test:unit": "node --test tests/github-contributions.unit.cjs",
+    "test:unit": "node --test tests/github-contributions.unit.cjs tests/github-activity.unit.cjs",
     "test:e2e": "node tests/portfolio.e2e.mjs",
     "verify": "npm run test:syntax && npm run test:unit"
   },
