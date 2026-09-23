@@ -812,33 +812,71 @@ function sqL(field) { if (field == null) return ''; return typeof field === 'str
 function esc(s) { return escapeHtml(String(s)); }
 function sqHash(str) { let h = 7; for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0; return h; }
 
-const SQ_BOOKS = [
-  { title: 'El sueño de los héroes', poster: 'project-assets/side-quests/el-sueno-de-los-heroes.jpg', color: '#c9a05c', cat: { es: 'Libro', en: 'Book' }, meta: 'Adolfo Bioy Casares · 1954',
-    premise: { es: 'Buenos Aires, carnaval de 1927. Emilio Gauna, un mecánico de veintiún años, gana plata en las carreras y se la gasta en tres noches de joda con sus amigos y el doctor Valerga. De esas noches solo recuerda un momento de plenitud que no sabe explicar. Tres años después intenta repetirlas, paso por paso, para volver a encontrarlo.', en: 'Buenos Aires, carnival of 1927. Emilio Gauna, a 21-year-old mechanic, wins money at the races and burns it on three wild nights with his friends and Doctor Valerga. All he remembers is one moment of fullness he cannot explain. Three years later he tries to relive those nights, step by step, to find it again.' },
-    why: { es: 'Porque es una novela sobre querer repetir el mejor momento de tu vida, escrita como un policial de barrio. Lo fantástico aparece sin efectos especiales: solo con el tiempo.', en: 'Because it is a novel about trying to relive the best moment of your life, told like a neighbourhood crime story. The fantastic shows up with no special effects: just time.' },
-    pages: 227, genre: { es: 'Novela fantástica argentina', en: 'Argentine fantastic novel' },
-    intel: { tags: ['fantástico', 'tiempo', 'argentino'], mood: { es: 'onírico y preciso', en: 'dreamlike and precise' }, time: '≈ 230 páginas', energy: { es: 'media', en: 'medium' }, bestMoment: { es: 'el regreso al carnaval, tres años después, cuando todo empieza a repetirse', en: 'the return to carnival three years later, when everything starts repeating' }, paraQuien: { es: 'para quien alguna vez quiso volver a una noche perfecta', en: 'for anyone who ever wanted to go back to a perfect night' }, snd: 'cozy' } },
-  { title: 'Crimen y castigo', poster: 'project-assets/side-quests/crimen-y-castigo.jpg', color: '#c96a5a', cat: { es: 'Libro', en: 'Book' }, meta: 'Fiódor Dostoievski · 1866',
-    premise: { es: 'San Petersburgo. Raskólnikov, un ex estudiante que vive en la miseria, se convence de que los hombres "extraordinarios" tienen derecho a cruzar cualquier límite, y mata a una vieja prestamista. El crimen ocurre al principio: el resto del libro es lo que esa idea le hace a su cabeza, mientras el juez Porfiri lo va cercando.', en: 'St Petersburg. Raskolnikov, a destitute former student, convinces himself that "extraordinary" men have the right to cross any line, and kills an old pawnbroker. The crime happens early: the rest of the book is what that idea does to his mind, while the investigator Porfiry closes in.' },
-    why: { es: 'Porque el suspenso no está en quién lo hizo sino en si va a poder vivir con eso. Los duelos de palabras con Porfiri son de lo mejor que leí.', en: 'Because the suspense is not who did it but whether he can live with it. The verbal duels with Porfiry are some of the best scenes I have read.' },
-    pages: 550, genre: { es: 'Novela psicológica', en: 'Psychological novel' },
-    intel: { tags: ['psicológico', 'culpa', 'clásico'], mood: { es: 'urgente y claustrofóbico', en: 'urgent and claustrophobic' }, time: '≈ 550 páginas', energy: { es: 'alta', en: 'high' }, bestMoment: { es: 'los interrogatorios de Porfiri: ajedrez verbal', en: "Porfiry's interrogations: verbal chess" }, paraQuien: { es: 'para quien disfruta de que un libro lo incomode', en: 'for anyone who enjoys a book that makes them uneasy' }, snd: 'dark' } },
-  { title: 'The Almanack of Naval Ravikant', poster: 'project-assets/side-quests/naval-almanack.jpg', color: '#d4b45c', cat: { es: 'Libro', en: 'Book' }, meta: 'Eric Jorgenson · 2020',
-    premise: { es: 'Una recopilación de tweets, entrevistas y podcasts de Naval Ravikant, inversor y cofundador de AngelList, ordenada en dos partes: cómo generar riqueza (conocimiento específico, apalancamiento, criterio) y cómo ser feliz. Se lee en cualquier orden.', en: 'A compilation of tweets, interviews and podcasts from Naval Ravikant, investor and co-founder of AngelList, arranged in two parts: building wealth (specific knowledge, leverage, judgment) and being happy. It reads in any order.' },
-    why: { es: 'Porque me ordenó cómo pienso el trabajo: buscar apalancamiento con código y contenido en vez de sumar horas. Lo releo por partes.', en: 'Because it reshaped how I think about work: look for leverage through code and content instead of adding hours. I reread it in pieces.' },
-    pages: 242, genre: { es: 'No ficción · decisiones y trabajo', en: 'Non-fiction · decisions and work' },
-    intel: { tags: ['decisiones', 'trabajo', 'bolsillo'], mood: { es: 'compacto y pragmático', en: 'compact and pragmatic' }, time: '≈ 240 páginas', energy: { es: 'media', en: 'medium' }, bestMoment: { es: 'la sección sobre apalancamiento: código y medios como trabajo que escala', en: 'the leverage section: code and media as work that scales' }, paraQuien: { es: 'para quien quiere ideas densas en formato bolsillo', en: 'for anyone who wants dense ideas in pocket form' }, snd: 'focus' } },
-  { title: 'The Perks of Being a Wallflower', poster: 'project-assets/side-quests/perks-wallflower.jpg', color: '#6aa8b8', cat: { es: 'Libro', en: 'Book' }, meta: 'Stephen Chbosky · 1999',
-    premise: { es: 'Charlie, un chico tímido de las afueras de Pittsburgh, empieza la secundaria y le escribe cartas a un desconocido contándole su año: la amistad con Sam y Patrick, la música, los libros que le presta su profesor y un pasado que todavía no se anima a mirar.', en: 'Charlie, a shy kid outside Pittsburgh, starts high school and writes letters to a stranger about his year: his friendship with Sam and Patrick, music, the books his teacher lends him, and a past he is not ready to look at.' },
-    why: { es: 'Porque cuenta la adolescencia sin nostalgia falsa, desde adentro. El formato de cartas hace que se sienta como leer un diario ajeno.', en: 'Because it tells adolescence from the inside, without fake nostalgia. The letter format makes it feel like reading someone else\'s diary.' },
-    pages: 231, genre: { es: 'Novela epistolar · coming of age', en: 'Epistolary novel · coming of age' },
-    intel: { tags: ['coming of age', 'honesto', 'breve'], mood: { es: 'tierno y directo', en: 'tender and direct' }, time: '≈ 230 páginas', energy: { es: 'media-baja', en: 'medium-low' }, bestMoment: { es: 'el túnel: "and in that moment, I swear we were infinite"', en: 'the tunnel: "and in that moment, I swear we were infinite"' }, paraQuien: { es: 'para quien quiere una historia corta que pega fuerte', en: 'for anyone who wants a short story that hits hard' }, snd: 'cozy' } },
-  { title: 'Flowers for Algernon', poster: 'project-assets/side-quests/flowers-algernon.jpg', color: '#d4799a', cat: { es: 'Libro', en: 'Book' }, meta: 'Daniel Keyes · 1966',
-    premise: { es: 'Charlie Gordon, un hombre con discapacidad intelectual, acepta una cirugía experimental que ya funcionó en Algernon, un ratón de laboratorio. Todo se cuenta a través de sus propios reportes de progreso: la ortografía, el vocabulario y la forma de ver a la gente van cambiando página a página.', en: 'Charlie Gordon, a man with an intellectual disability, agrees to an experimental surgery that already worked on Algernon, a lab mouse. Everything is told through his own progress reports: his spelling, vocabulary and view of people change page by page.' },
-    why: { es: 'Porque usa la forma del texto para contar la historia: ves la inteligencia de Charlie en cómo escribe. Es la ciencia ficción más humana que leí.', en: 'Because the form of the text tells the story: you see Charlie\'s intelligence in how he writes. It is the most human science fiction I have read.' },
-    pages: 311, genre: { es: 'Ciencia ficción', en: 'Science fiction' },
-    intel: { tags: ['ciencia ficción', 'triste', 'breve'], mood: { es: 'devastador y limpio', en: 'devastating and clean' }, time: '≈ 310 páginas', energy: { es: 'media-alta', en: 'medium-high' }, bestMoment: { es: 'cuando los reportes empiezan a cambiar de estilo', en: 'when the reports start changing style' }, paraQuien: { es: 'para quien quiere una ciencia ficción que no es sobre tecnología', en: 'for anyone who wants science fiction that is not about technology' }, snd: 'cozy' } }
+// Books from Goodreads (shelves: favorites, read, currently-reading). The
+// premise is plot; the take is written in Ignacio's voice and is his to edit.
+const SQ_BOOK_DATA = [
+  {"title": "El sueño de los héroes", "author": "Adolfo Bioy Casares", "year": 1954, "pages": 227, "poster": "project-assets/side-quests/el-sueno-de-los-heroes.jpg", "color": "#8a7fd1", "genre": {"es": "Novela fantástica argentina", "en": "Argentine fantastic novel"}, "tags": ["fantástico", "argentino", "tiempo"], "premise": {"es": "Carnaval de 1927 en Buenos Aires. Gauna, un mecánico de 21 años, gana plata en las carreras y se la gasta en tres noches con sus amigos y el doctor Valerga. De esas noches solo se acuerda de un momento que no sabe explicar, y tres años después sale a repetirlas para encontrarlo.", "en": "Buenos Aires, carnival of 1927. Gauna, a 21-year-old mechanic, wins money at the races and burns it on three nights out with his friends and Doctor Valerga. He only remembers one moment he can't explain, and three years later he tries to repeat those nights to find it again."}, "take": {"es": "Mi favorito. Es una historia de barrio, con carreras, bares y amigos, y de a poco te das cuenta de que está pasando algo más raro. Te deja pensando en esa noche que quisieras volver a vivir.", "en": "My favourite. It reads like a neighbourhood story, races, bars and friends, and slowly you realise something stranger is going on. It leaves you thinking about that one night you'd want to live again."}, "fav": true, "reading": false, "best": {"es": "la vuelta al carnaval, tres años después", "en": "going back to carnival three years later"}, "snd": "cozy"},
+  {"title": "The Almanack of Naval Ravikant", "author": "Eric Jorgenson", "year": 2020, "pages": 244, "poster": "project-assets/side-quests/naval-almanack.jpg", "color": "#c9a36a", "genre": {"es": "No ficción · trabajo y decisiones", "en": "Non-fiction · work and decisions"}, "tags": ["trabajo", "decisiones", "bolsillo"], "premise": {"es": "Tweets, entrevistas y podcasts de Naval Ravikant, inversor y cofundador de AngelList, ordenados en dos partes: cómo generar riqueza y cómo ser feliz.", "en": "Tweets, interviews and podcasts from Naval Ravikant, investor and AngelList co-founder, arranged in two parts: building wealth and being happy."}, "take": {"es": "Lo releo por partes. Me cambió cómo pienso el laburo: buscar apalancamiento con código en vez de sumar horas. Se lee en cualquier orden.", "en": "I reread it in pieces. It changed how I think about work: get leverage from code instead of adding hours. You can open it anywhere."}, "fav": true, "reading": false, "best": {"es": "la parte de apalancamiento", "en": "the leverage section"}, "snd": "focus"},
+  {"title": "The Perks of Being a Wallflower", "author": "Stephen Chbosky", "year": 1999, "pages": 231, "poster": "project-assets/side-quests/perks-wallflower.jpg", "color": "#b8c94a", "genre": {"es": "Novela en cartas · coming of age", "en": "Novel in letters · coming of age"}, "tags": ["coming of age", "breve", "música"], "premise": {"es": "Charlie empieza la secundaria en las afueras de Pittsburgh y le escribe cartas a alguien que no conoce contándole su año: Sam, Patrick, la música, los libros que le presta un profe y cosas de su pasado que todavía no mira.", "en": "Charlie starts high school outside Pittsburgh and writes letters to someone he doesn't know about his year: Sam, Patrick, music, the books a teacher lends him and things from his past he isn't ready to look at."}, "take": {"es": "Libro y peli, los dos. Como son cartas se siente como leer el diario de alguien. Y la playlist de la peli la sigo escuchando.", "en": "Book and film, both. Since it's letters it feels like reading someone's diary. And I still listen to the film's playlist."}, "fav": true, "reading": false, "best": {"es": "el túnel", "en": "the tunnel"}, "snd": "cozy"},
+  {"title": "Flores para Algernon", "author": "Daniel Keyes", "year": 1966, "pages": 311, "poster": "project-assets/side-quests/flowers-algernon.jpg", "color": "#6f8fc0", "genre": {"es": "Ciencia ficción", "en": "Science fiction"}, "tags": ["ciencia ficción", "triste", "breve"], "premise": {"es": "Charlie Gordon tiene una discapacidad intelectual y acepta una cirugía experimental que ya funcionó con Algernon, un ratón de laboratorio. Todo está contado en sus propios informes de progreso.", "en": "Charlie Gordon has an intellectual disability and agrees to an experimental surgery that already worked on Algernon, a lab mouse. It's all told through his own progress reports."}, "take": {"es": "Ves cómo cambia Charlie por cómo escribe: la ortografía, las palabras, lo que entiende de la gente. Es triste y está muy bien hecho.", "en": "You see Charlie change through how he writes: spelling, words, what he understands about people. It's sad and really well made."}, "fav": true, "reading": false, "best": {"es": "cuando los informes empiezan a cambiar", "en": "when the reports start to change"}, "snd": "cozy"},
+  {"title": "Crimen y castigo", "author": "Fiódor Dostoievski", "year": 1866, "pages": 550, "poster": "project-assets/side-quests/crimen-y-castigo.jpg", "color": "#c9a94a", "genre": {"es": "Novela psicológica", "en": "Psychological novel"}, "tags": ["clásico", "culpa", "largo"], "premise": {"es": "Raskólnikov, un ex estudiante sin un peso en San Petersburgo, se convence de que algunas personas tienen derecho a cruzar cualquier límite y mata a una prestamista. El libro es lo que le pasa después.", "en": "Raskolnikov, a broke former student in St Petersburg, convinces himself some people have the right to cross any line and kills a pawnbroker. The book is what happens to him afterwards."}, "take": {"es": "Largo y pesado por partes, pero las charlas con Porfiri, el juez, valen todo el libro.", "en": "Long and heavy in places, but the conversations with Porfiry, the investigator, are worth the whole book."}, "fav": false, "reading": false, "best": {"es": "los interrogatorios de Porfiri", "en": "Porfiry's interrogations"}, "snd": "dark"},
+  {"title": "The Catcher in the Rye", "author": "J.D. Salinger", "year": 1951, "pages": 277, "poster": "project-assets/side-quests/books/the-catcher-in-the-rye.jpg", "color": "#d16e47", "genre": {"es": "Novela · clásico", "en": "Novel · classic"}, "tags": ["clásico", "coming of age"], "premise": {"es": "A Holden Caulfield lo echan del colegio y se pasa tres días dando vueltas por Nueva York antes de animarse a volver a su casa.", "en": "Holden Caulfield gets kicked out of school and spends three days wandering New York before he can face going home."}, "take": {"es": "Holden es insoportable y aun así te reconocés en varias cosas que dice. Leído después de Perks, se nota de dónde sale Charlie.", "en": "Holden is unbearable and you still recognise yourself in some of what he says. Read after Perks, you can tell where Charlie comes from."}, "fav": false, "reading": false, "best": null, "snd": "cozy"},
+  {"title": "The Hobbit", "author": "J.R.R. Tolkien", "year": 1937, "pages": 366, "poster": "project-assets/side-quests/books/the-hobbit-or-there-and-back-again.jpg", "color": "#6fae5f", "genre": {"es": "Fantasía", "en": "Fantasy"}, "tags": ["fantasía", "aventura"], "premise": {"es": "Bilbo, que no quería salir de su casa, termina en un viaje con trece enanos para recuperar un tesoro que cuida un dragón.", "en": "Bilbo, who had no wish to leave home, ends up travelling with thirteen dwarves to take back a treasure guarded by a dragon."}, "take": {"es": "Después de ver las tres de El Señor de los Anillos quería el original. Es más liviano y se lee como un cuento.", "en": "After watching the three Lord of the Rings films I wanted the original. It's lighter and reads like a bedtime story."}, "fav": false, "reading": false, "best": null, "snd": "epic"},
+  {"title": "AI Engineering", "author": "Chip Huyen", "year": 2025, "pages": 532, "poster": "project-assets/side-quests/books/ai-engineering.jpg", "color": "#c99090", "genre": {"es": "Técnico · IA", "en": "Technical · AI"}, "tags": ["ia", "trabajo", "técnico"], "premise": {"es": "Cómo se construyen aplicaciones con modelos de lenguaje: evaluación, prompts, RAG, agentes, fine-tuning y costos.", "en": "How to build applications on language models: evaluation, prompting, RAG, agents, fine-tuning and cost."}, "take": {"es": "El más útil para lo que hago. Me ordenó la parte de evaluar, que es la que más fácil se saltea cuando armás algo con IA.", "en": "The most useful one for what I do. It sorted out evaluation for me, the part that's easiest to skip when you build with AI."}, "fav": false, "reading": false, "best": null, "snd": "focus"},
+  {"title": "El candor del padre Brown", "author": "G.K. Chesterton", "year": 1911, "pages": 252, "poster": "project-assets/side-quests/books/el-candor-del-padre-brown.jpg", "color": "#b8b27a", "genre": {"es": "Cuentos policiales", "en": "Detective stories"}, "tags": ["policial", "cuentos"], "premise": {"es": "Cuentos de un cura bajito y distraído que resuelve crímenes porque entiende cómo piensa el culpable.", "en": "Stories about a short, absent-minded priest who solves crimes because he understands how the guilty think."}, "take": {"es": "Para leer de a un cuento. Me gusta que gane por entender a la gente y no por la lupa.", "en": "One story at a time. I like that he wins by understanding people, not with a magnifying glass."}, "fav": false, "reading": false, "best": null, "snd": "cozy"},
+  {"title": "El retrato de Dorian Gray", "author": "Oscar Wilde", "year": 1890, "pages": 306, "poster": "project-assets/side-quests/books/el-retrato-de-dorian-gray.jpg", "color": "#698fb6", "genre": {"es": "Novela · clásico", "en": "Novel · classic"}, "tags": ["clásico", "oscuro"], "premise": {"es": "Un retrato envejece en lugar de Dorian, que sigue joven mientras se vuelve cada vez peor persona.", "en": "A portrait ages instead of Dorian, who stays young while he becomes a worse and worse person."}, "take": {"es": "Lord Henry tiene las mejores frases del libro, y casi todas son para discutirlas.", "en": "Lord Henry gets the best lines in the book, and nearly all of them are worth arguing with."}, "fav": false, "reading": false, "best": null, "snd": "dark"},
+  {"title": "Romeo y Julieta", "author": "William Shakespeare", "year": 1597, "pages": 166, "poster": "project-assets/side-quests/books/romeo-y-julieta.jpg", "color": "#d19a47", "genre": {"es": "Teatro", "en": "Play"}, "tags": ["clásico", "breve"], "premise": {"es": "Dos chicos de familias enemigas en Verona se enamoran en una fiesta y en cinco días pasa todo.", "en": "Two kids from rival families in Verona fall in love at a party and everything happens in five days."}, "take": {"es": "Quería leer el original detrás de todas las referencias. Más que una de amor, me pareció una de apurarse.", "en": "I wanted the original behind all the references. It felt less like a love story and more like one about rushing."}, "fav": false, "reading": false, "best": null, "snd": "cozy"},
+  {"title": "El mito de Sísifo", "author": "Albert Camus", "year": 1942, "pages": 179, "poster": "project-assets/side-quests/books/el-mito-de-sisifo.jpg", "color": "#a8746c", "genre": {"es": "Ensayo · filosofía", "en": "Essay · philosophy"}, "tags": ["filosofía", "breve"], "premise": {"es": "Camus sobre el absurdo: si la vida no trae un sentido de fábrica, qué hacés con eso.", "en": "Camus on the absurd: if life doesn't come with a built-in meaning, what do you do about it."}, "take": {"es": "Denso pero corto. Me quedó el final: hay que imaginarse a Sísifo feliz.", "en": "Dense but short. The ending stayed with me: one must imagine Sisyphus happy."}, "fav": false, "reading": false, "best": null, "snd": "focus"},
+  {"title": "El jugador", "author": "Fiódor Dostoievski", "year": 1866, "pages": 246, "poster": "project-assets/side-quests/books/el-jugador.jpg", "color": "#b8b27a", "genre": {"es": "Novela", "en": "Novel"}, "tags": ["clásico", "breve"], "premise": {"es": "Un tutor ruso en un pueblo alemán lleno de casinos se engancha con la ruleta y con Polina.", "en": "A Russian tutor in a German casino town gets hooked on roulette and on Polina."}, "take": {"es": "Dostoievski lo escribió en menos de un mes para pagar deudas de juego, y se nota que sabía de qué hablaba.", "en": "Dostoevsky wrote it in under a month to pay off gambling debts, and you can tell he knew the subject."}, "fav": false, "reading": false, "best": null, "snd": "cozy"},
+  {"title": "El Alquimista", "author": "Paulo Coelho", "year": 1988, "pages": 203, "poster": "project-assets/side-quests/books/el-alquimista.jpg", "color": "#b77d60", "genre": {"es": "Novela", "en": "Novel"}, "tags": ["breve", "viaje"], "premise": {"es": "Santiago, un pastor andaluz, viaja hasta Egipto buscando un tesoro que vio en un sueño.", "en": "Santiago, an Andalusian shepherd, travels to Egypt looking for a treasure he saw in a dream."}, "take": {"es": "Se lee en una tarde. Hay frases que ya viste en mil lados, pero la idea de seguir tu camino está bien contada.", "en": "You finish it in an afternoon. Some lines you've seen everywhere, but the idea of following your own path is told well."}, "fav": false, "reading": false, "best": null, "snd": "cozy"},
+  {"title": "Demian", "author": "Hermann Hesse", "year": 1919, "pages": 276, "poster": "project-assets/side-quests/books/demian.jpg", "color": "#8a78b8", "genre": {"es": "Novela", "en": "Novel"}, "tags": ["coming of age", "filosofía"], "premise": {"es": "Emil Sinclair crece entre el mundo ordenado de su casa y otro más oscuro, con Max Demian como guía.", "en": "Emil Sinclair grows up between his orderly home and a darker world, with Max Demian as his guide."}, "take": {"es": "Hesse hablando de crecer y de animarse a pensar distinto. Lo leí antes de Siddhartha y los dos se conectan.", "en": "Hesse on growing up and daring to think differently. I read it before Siddhartha and they connect."}, "fav": false, "reading": false, "best": null, "snd": "cozy"},
+  {"title": "1984", "author": "George Orwell", "year": 1949, "pages": 368, "poster": "project-assets/side-quests/books/1984.jpg", "color": "#b46464", "genre": {"es": "Distopía", "en": "Dystopia"}, "tags": ["distopía", "clásico"], "premise": {"es": "Winston Smith reescribe el pasado para el Partido en un país donde te vigilan hasta en tu casa.", "en": "Winston Smith rewrites the past for the Party in a country where you're watched even at home."}, "take": {"es": "Leído hoy, con feeds y algoritmos, da más miedo que cuando te lo nombran en el colegio.", "en": "Read today, with feeds and algorithms, it's scarier than when school first mentions it."}, "fav": false, "reading": false, "best": null, "snd": "dark"},
+  {"title": "La invención de Morel", "author": "Adolfo Bioy Casares", "year": 1940, "pages": 112, "poster": "project-assets/side-quests/books/la-invencion-de-morel.jpg", "color": "#6969b6", "genre": {"es": "Novela fantástica argentina", "en": "Argentine fantastic novel"}, "tags": ["fantástico", "argentino", "breve"], "premise": {"es": "Un fugitivo llega a una isla que parece desierta, hasta que aparece gente que no lo ve.", "en": "A fugitive reaches an island that seems deserted, until people show up who can't see him."}, "take": {"es": "Cien páginas y un final que te hace releer todo. Si te gustó El sueño de los héroes, es más corto y más raro.", "en": "A hundred pages and an ending that makes you reread everything. If you liked El sueño de los héroes, it's shorter and stranger."}, "fav": false, "reading": false, "best": null, "snd": "cozy"},
+  {"title": "El túnel", "author": "Ernesto Sabato", "year": 1948, "pages": 158, "poster": "project-assets/side-quests/books/el-tunel.jpg", "color": "#6fa86f", "genre": {"es": "Novela argentina", "en": "Argentine novel"}, "tags": ["argentino", "oscuro", "breve"], "premise": {"es": "Castel, un pintor, arranca contando que mató a María Iribarne y después explica cómo llegó a eso.", "en": "Castel, a painter, opens by saying he killed María Iribarne and then explains how he got there."}, "take": {"es": "Estás adentro de la cabeza de alguien que se convence solo de todo. Corto y muy incómodo.", "en": "You're inside the head of someone who talks himself into everything. Short and very uncomfortable."}, "fav": false, "reading": false, "best": null, "snd": "dark"},
+  {"title": "La metamorfosis", "author": "Franz Kafka", "year": 1915, "pages": 125, "poster": "project-assets/side-quests/books/la-metamorfosis.jpg", "color": "#b8b27a", "genre": {"es": "Novela corta", "en": "Novella"}, "tags": ["clásico", "breve"], "premise": {"es": "Gregor Samsa se despierta convertido en un insecto, y lo primero que le preocupa es llegar tarde al trabajo.", "en": "Gregor Samsa wakes up as an insect, and his first worry is being late for work."}, "take": {"es": "Lo que más me quedó no es el bicho sino la familia, que se va acostumbrando.", "en": "What stayed with me isn't the bug, it's the family slowly getting used to it."}, "fav": false, "reading": false, "best": null, "snd": "cozy"},
+  {"title": "La paloma", "author": "Patrick Süskind", "year": 1987, "pages": 126, "poster": "project-assets/side-quests/books/la-paloma.jpg", "color": "#8fa0a8", "genre": {"es": "Novela corta", "en": "Novella"}, "tags": ["breve", "raro"], "premise": {"es": "Jonathan Noel, un guardia de banco con una vida súper ordenada, entra en crisis porque aparece una paloma en su pasillo.", "en": "Jonathan Noel, a bank guard with a very orderly life, falls apart because a pigeon shows up in his hallway."}, "take": {"es": "Un libro entero sobre un día que se desarma por algo mínimo. Raro y muy bueno.", "en": "A whole book about one day unravelling over something tiny. Strange and very good."}, "fav": false, "reading": false, "best": null, "snd": "cozy"},
+  {"title": "La vuelta al mundo en 80 días", "author": "Julio Verne", "year": 1872, "pages": 250, "poster": "project-assets/side-quests/books/la-vuelta-al-mundo-en-80-dias.jpg", "color": "#ba8c5e", "genre": {"es": "Aventura", "en": "Adventure"}, "tags": ["aventura", "clásico"], "premise": {"es": "Phileas Fogg apuesta que puede dar la vuelta al mundo en 80 días y sale esa misma noche con Passepartout.", "en": "Phileas Fogg bets he can go around the world in 80 days and leaves that same night with Passepartout."}, "take": {"es": "Aventura liviana, buena para cortar entre libros pesados.", "en": "Light adventure, good for a break between heavy books."}, "fav": false, "reading": false, "best": null, "snd": "epic"},
+  {"title": "Memorias del subsuelo", "author": "Fiódor Dostoievski", "year": 1864, "pages": 195, "poster": "project-assets/side-quests/books/memorias-del-subsuelo.jpg", "color": "#6f9a6f", "genre": {"es": "Novela corta", "en": "Novella"}, "tags": ["clásico", "oscuro", "breve"], "premise": {"es": "Un ex funcionario amargado habla desde su \"subsuelo\" contra todo, empezando por él mismo.", "en": "A bitter former official speaks from his \"underground\" against everything, starting with himself."}, "take": {"es": "Incómodo porque el narrador tiene razón en algunas cosas y es insoportable en todas.", "en": "Uncomfortable because the narrator is right about some things and unbearable about all of them."}, "fav": false, "reading": false, "best": null, "snd": "dark"},
+  {"title": "Sapiens", "author": "Yuval Noah Harari", "year": 2011, "pages": 512, "poster": "project-assets/side-quests/books/sapiens.jpg", "color": "#c98a7a", "genre": {"es": "No ficción · historia", "en": "Non-fiction · history"}, "tags": ["historia", "no ficción"], "premise": {"es": "La historia de la humanidad contada en tres revoluciones: cognitiva, agrícola y científica.", "en": "Human history told through three revolutions: cognitive, agricultural and scientific."}, "take": {"es": "Te cambia la escala con la que mirás las cosas. Por eso ahora estoy con Nexus.", "en": "It changes the scale you look at things with. That's why I'm reading Nexus now."}, "fav": false, "reading": false, "best": null, "snd": "focus"},
+  {"title": "Siddhartha", "author": "Hermann Hesse", "year": 1922, "pages": 152, "poster": "project-assets/side-quests/books/siddharta.jpg", "color": "#cd6b4a", "genre": {"es": "Novela", "en": "Novel"}, "tags": ["filosofía", "breve"], "premise": {"es": "Siddhartha deja todo para buscar la iluminación y termina aprendiendo de un río.", "en": "Siddhartha leaves everything to seek enlightenment and ends up learning from a river."}, "take": {"es": "Corto y tranquilo. Me quedó la idea de que hay cosas que no te las puede enseñar nadie, las tenés que vivir.", "en": "Short and calm. The idea that some things nobody can teach you, you have to live them, stuck with me."}, "fav": false, "reading": false, "best": null, "snd": "cozy"},
+  {"title": "Siete breves lecciones de física", "author": "Carlo Rovelli", "year": 2014, "pages": 57, "poster": "project-assets/side-quests/books/siete-breves-lecciones-de-fisica.jpg", "color": "#8a7a9a", "genre": {"es": "Divulgación", "en": "Popular science"}, "tags": ["ciencia", "breve"], "premise": {"es": "Siete clases cortas: relatividad, cuántica, agujeros negros y qué es el tiempo.", "en": "Seven short lessons: relativity, quantum physics, black holes and what time is."}, "take": {"es": "Menos de 60 páginas. Lo más cerca que estuve de entender física moderna sin una sola fórmula.", "en": "Under 60 pages. The closest I've come to understanding modern physics without a single formula."}, "fav": false, "reading": false, "best": null, "snd": "focus"},
+  {"title": "The Book of Elon", "author": "Eric Jorgenson", "year": null, "pages": 371, "poster": "project-assets/side-quests/books/the-book-of-elon.jpg", "color": "#d1475e", "genre": {"es": "No ficción · trabajo", "en": "Non-fiction · work"}, "tags": ["trabajo", "ingeniería"], "premise": {"es": "Ideas de Elon Musk sobre ingeniería, trabajo y riesgo, armado por el mismo autor del libro de Naval.", "en": "Elon Musk's ideas on engineering, work and risk, compiled by the author of the Naval book."}, "take": {"es": "Lo agarré por el formato del de Naval. Lo que más uso: primero sacar pasos del proceso, después recién optimizar.", "en": "I picked it up because of the Naval format. What I use most: remove steps from a process first, optimise after."}, "fav": false, "reading": false, "best": null, "snd": "focus"},
+  {"title": "Zero to One", "author": "Peter Thiel", "year": 2014, "pages": 195, "poster": "project-assets/side-quests/books/zero-to-one.jpg", "color": "#698fb6", "genre": {"es": "No ficción · startups", "en": "Non-fiction · startups"}, "tags": ["startups", "trabajo"], "premise": {"es": "Peter Thiel sobre armar empresas que hagan algo nuevo en vez de copiar lo que ya funciona.", "en": "Peter Thiel on building companies that do something new instead of copying what already works."}, "take": {"es": "Me quedó dando vueltas su pregunta: qué cosa importante creés que casi nadie cree.", "en": "His question stuck with me: what important truth do very few people agree with you on."}, "fav": false, "reading": false, "best": null, "snd": "focus"},
+  {"title": "Los hermanos Karamázov", "author": "Fiódor Dostoievski", "year": 1880, "pages": 608, "poster": "project-assets/side-quests/books/los-hermanos-karamazov.jpg", "color": "#b46464", "genre": {"es": "Novela", "en": "Novel"}, "tags": ["clásico", "largo"], "premise": {"es": "Tres hermanos, un padre insoportable y un asesinato. El último Dostoievski.", "en": "Three brothers, an awful father and a murder. Dostoevsky's last novel."}, "take": {"es": "Lo estoy leyendo ahora.", "en": "Reading it right now."}, "fav": false, "reading": true, "best": null, "snd": "cozy"},
+  {"title": "El proceso", "author": "Franz Kafka", "year": 1925, "pages": 256, "poster": "project-assets/side-quests/books/el-proceso.jpg", "color": "#de947c", "genre": {"es": "Novela", "en": "Novel"}, "tags": ["clásico", "raro"], "premise": {"es": "A Josef K. lo arrestan una mañana y nadie le dice de qué lo acusan.", "en": "Josef K. is arrested one morning and nobody tells him what for."}, "take": {"es": "Lo estoy leyendo ahora.", "en": "Reading it right now."}, "fav": false, "reading": true, "best": null, "snd": "cozy"},
+  {"title": "Fooled by Randomness", "author": "Nassim Nicholas Taleb", "year": 2001, "pages": 368, "poster": "project-assets/side-quests/books/fooled-by-randomness.jpg", "color": "#c99090", "genre": {"es": "No ficción · azar", "en": "Non-fiction · chance"}, "tags": ["decisiones", "mercados"], "premise": {"es": "Cuánto de lo que llamamos talento es suerte, sobre todo en los mercados.", "en": "How much of what we call skill is luck, especially in markets."}, "take": {"es": "Lo estoy leyendo ahora.", "en": "Reading it right now."}, "fav": false, "reading": true, "best": null, "snd": "cozy"},
+  {"title": "Nexus", "author": "Yuval Noah Harari", "year": 2024, "pages": 528, "poster": "project-assets/side-quests/books/nexus.jpg", "color": "#c99090", "genre": {"es": "No ficción · historia", "en": "Non-fiction · history"}, "tags": ["historia", "ia"], "premise": {"es": "Historia de las redes de información, de la piedra a la IA.", "en": "A history of information networks, from the Stone Age to AI."}, "take": {"es": "Lo estoy leyendo ahora.", "en": "Reading it right now."}, "fav": false, "reading": true, "best": null, "snd": "cozy"},
+  {"title": "Co-Intelligence", "author": "Ethan Mollick", "year": 2024, "pages": 243, "poster": "project-assets/side-quests/books/co-intelligence.jpg", "color": "#debd7c", "genre": {"es": "No ficción · IA", "en": "Non-fiction · AI"}, "tags": ["ia", "trabajo"], "premise": {"es": "Cómo trabajar con IA como compañero y no como buscador.", "en": "How to work with AI as a collaborator rather than a search box."}, "take": {"es": "Lo estoy leyendo ahora.", "en": "Reading it right now."}, "fav": false, "reading": true, "best": null, "snd": "cozy"},
+  {"title": "Las lecciones de la historia", "author": "Will Durant", "year": 1968, "pages": 134, "poster": "project-assets/side-quests/books/las-lecciones-de-la-historia.jpg", "color": "#b48c64", "genre": {"es": "Ensayo · historia", "en": "Essay · history"}, "tags": ["historia", "breve"], "premise": {"es": "Lo que dejan 5.000 años de historia, en 100 páginas.", "en": "What 5,000 years of history teach, in 100 pages."}, "take": {"es": "Lo estoy leyendo ahora.", "en": "Reading it right now."}, "fav": false, "reading": true, "best": null, "snd": "cozy"},
+  {"title": "Greenlights", "author": "Matthew McConaughey", "year": 2020, "pages": 289, "poster": "project-assets/side-quests/books/greenlights.jpg", "color": "#b77d60", "genre": {"es": "Memorias", "en": "Memoir"}, "tags": ["memorias"], "premise": {"es": "Las memorias de McConaughey, armadas con sus diarios de 35 años.", "en": "McConaughey's memoir, built from 35 years of his journals."}, "take": {"es": "Lo estoy leyendo ahora.", "en": "Reading it right now."}, "fav": false, "reading": true, "best": null, "snd": "cozy"}
 ];
+
+const SQ_BOOKS = SQ_BOOK_DATA.map((b) => {
+  const pages = Number(b.pages) || 0;
+  return {
+    title: b.title,
+    poster: b.poster,
+    color: b.color,
+    fav: !!b.fav,
+    reading: !!b.reading,
+    cat: b.reading ? { es: 'Leyendo ahora', en: 'Reading now' } : b.fav ? { es: 'Libro favorito', en: 'Favourite book' } : { es: 'Libro', en: 'Book' },
+    meta: b.author + (b.year ? ' · ' + b.year : ''),
+    premise: b.premise,
+    why: b.take,
+    pages,
+    genre: b.genre,
+    intel: {
+      tags: b.tags,
+      mood: b.genre,
+      time: pages ? '≈ ' + pages + ' páginas' : '—',
+      energy: pages > 400 ? { es: 'alta', en: 'high' } : pages > 200 ? { es: 'media', en: 'medium' } : { es: 'baja', en: 'low' },
+      bestMoment: b.best || null,
+      paraQuien: null,
+      snd: b.snd || 'cozy'
+    }
+  };
+});
+
 
 const SQ_FILM_TAGS = {
   'showgirls': { t: ['camp', 'drama', 'años 90'], m: { es: 'demencial y sincero', en: 'deranged and sincere' }, s: 'fun' },
@@ -900,6 +938,58 @@ const SQ_FILMS = (() => {
   } catch (e) { return []; }
 })();
 
+// One line per film from the Letterboxd diary, in Ignacio's voice (his to edit).
+const SQ_FILM_TAKES = {
+  "braveheart": { es: "Tres horas de Mel Gibson con la cara pintada gritando libertad. Históricamente no se sostiene, pero la batalla de Stirling sigue funcionando.", en: "Three hours of Mel Gibson in face paint yelling freedom. Historically it doesn't hold up, but the Stirling battle still works." },
+  "obsession-2025": { es: "Suspenso reciente que vi sin saber casi nada. Mejor así.", en: "Recent thriller I watched knowing almost nothing. Better that way." },
+  "the-odyssey-2026": { es: "Nolan haciendo la Odisea. Hecha para verla en la pantalla más grande que tengas cerca.", en: "Nolan doing the Odyssey. Made for the biggest screen near you." },
+  "ted": { es: "Un oso de peluche que habla y dice lo peor posible. Para apagar la cabeza un rato.", en: "A talking teddy bear saying the worst possible things. For switching your brain off for a bit." },
+  "the-hunger-games-the-ballad-of-songbirds-snakes": { es: "Cierre de la maratón: cómo Snow llega a ser Snow. Después de ver las otras cuatro, cambia bastante cómo lo mirás.", en: "End of the marathon: how Snow became Snow. After the other four, it changes how you see him." },
+  "the-hunger-games-mockingjay-part-2": { es: "El final de Katniss. Más oscuro de lo que me acordaba.", en: "Katniss's ending. Darker than I remembered." },
+  "the-hunger-games-mockingjay-part-1": { es: "La del medio, más de propaganda que de acción. Justo por eso me interesó.", en: "The middle one, more propaganda than action. That's exactly why it interested me." },
+  "the-hunger-games-catching-fire": { es: "Para mí la mejor de la saga. El reloj de la arena está muy bien pensado.", en: "The best of the saga for me. The clock arena is really well thought out." },
+  "the-hunger-games": { es: "Arranqué una maratón: cinco pelis en nueve días.", en: "Started a marathon: five films in nine days." },
+  "the-perks-of-being-a-wallflower": { es: "Vi la peli y leí el libro casi a la par. La escena del túnel con Heroes de fondo es de esas que no se van.", en: "Watched the film and read the book almost side by side. The tunnel scene with Heroes playing is one of those that stays." },
+  "the-prestige": { es: "Dos magos que se arruinan la vida por ganarle al otro. La vez dos veces y es otra peli.", en: "Two magicians ruining their lives to beat each other. Watch it twice and it's a different film." },
+  "el-sueno-de-los-heroes": { es: "La versión de Sergio Renán de mi libro favorito. La vi un mes después de leerlo.", en: "Sergio Renán's version of my favourite book. I watched it a month after reading it." },
+  "trainspotting": { es: "Edimburgo, heroína y una banda de sonido que la levanta entera. Choose life.", en: "Edinburgh, heroin and a soundtrack that carries the whole thing. Choose life." },
+  "her": { es: "Un tipo se enamora de un sistema operativo. En 2013 era ciencia ficción; ahora ya no tanto.", en: "A guy falls in love with an operating system. In 2013 it was sci-fi; now, not so much." },
+  "ex-machina-2015": { es: "Un test de Turing que sale mal. Casi todo pasa en una casa y no necesita más.", en: "A Turing test gone wrong. Almost all of it happens in one house and it doesn't need more." },
+  "the-spanish-prisoner": { es: "Una estafa armada de a poco donde nunca sabés quién está engañando a quién.", en: "A slow-built con where you never know who is fooling whom." },
+  "eastern-promises": { es: "Mafia rusa en Londres. Viggo Mortensen está increíble y hay una pelea en un sauna que no te olvidás.", en: "Russian mob in London. Viggo Mortensen is great and there's a sauna fight you don't forget." },
+  "return-of-the-jedi": { es: "Cierre de la trilogía original, vista en cinco días.", en: "End of the original trilogy, watched in five days." },
+  "my-2-cents": { es: "Estreno de este año.", en: "A new release this year." },
+  "the-empire-strikes-back": { es: "Para mí la mejor de las tres.", en: "The best of the three, for me." },
+  "star-wars": { es: "La trilogía original en orden, en cinco días.", en: "The original trilogy in order, over five days." },
+  "the-lord-of-the-rings-the-return-of-the-king": { es: "Tres pelis en nueve días. El final tiene como cinco finales y no le sobra ninguno.", en: "Three films in nine days. The ending has about five endings and none of them is too many." },
+  "the-lord-of-the-rings-the-two-towers": { es: "Abismo de Helm. Para esto hice la maratón.", en: "Helm's Deep. This is what I did the marathon for." },
+  "the-lord-of-the-rings-the-fellowship-of-the-ring": { es: "Arranque de la maratón del Señor de los Anillos. Unos meses después leí El Hobbit.", en: "Start of the Lord of the Rings marathon. A few months later I read The Hobbit." },
+  "escape-from-alcatraz": { es: "Clint Eastwood planeando una fuga con paciencia y una cuchara. Casi sin diálogo y no le hace falta.", en: "Clint Eastwood planning an escape with patience and a spoon. Barely any dialogue and it doesn't need it." },
+  "tropic-thunder": { es: "Actores que creen que están filmando una peli y en realidad están en una guerra. Se ríe de Hollywood entero.", en: "Actors who think they're shooting a film and are actually in a war. It laughs at all of Hollywood." },
+  "jennifers-body": { es: "Terror adolescente con humor. En su momento le fue mal y hoy se entiende mejor.", en: "Teen horror with jokes. It flopped at the time and makes more sense today." },
+  "all-quiet-on-the-western-front-2022": { es: "La Primera Guerra desde las trincheras alemanas. No hay heroísmo, y está bien que no haya.", en: "World War I from the German trenches. There's no heroism in it, and rightly so." },
+  "a-beautiful-mind": { es: "John Nash, matemático, y todo lo que no se ve de su cabeza. El giro de la mitad me agarró.", en: "John Nash, mathematician, and everything you can't see in his head. The midpoint twist got me." },
+  "chronicles-of-a-wandering-saint": { es: "Argentina, un pueblo, una mujer que quiere que la vean hacer un milagro. Chiquita y rara, en el buen sentido.", en: "Argentina, a small town, a woman who wants to be seen performing a miracle. Small and strange, in a good way." },
+  "too-big-to-fail": { es: "La crisis de 2008 desde adentro de los bancos y el Tesoro. Para mí, más clara que muchas clases.", en: "The 2008 crisis from inside the banks and the Treasury. Clearer to me than a lot of classes." },
+  "lethal-weapon": { es: "La buddy cop de manual: uno está al límite y el otro está viejo para esto.", en: "The textbook buddy cop: one is on the edge, the other is too old for this." },
+  "point-break": { es: "Un policía se infiltra en una banda de surfistas que roba bancos. Noventas puros.", en: "A cop goes undercover with surfers who rob banks. Pure nineties." },
+  "training-day": { es: "Un día de patrulla con Denzel Washington, y cada hora es peor que la anterior. Se lo come todo.", en: "One day on patrol with Denzel Washington, each hour worse than the last. He owns every scene." },
+  "clue": { es: "El juego de mesa hecho peli, con tres finales distintos. Comedia de las que ya no se hacen.", en: "The board game as a film, with three different endings. The kind of comedy nobody makes anymore." },
+  "about-time": { es: "Viajar en el tiempo para arreglar cosas chicas, y darte cuenta de que no hace falta. Me dejó tocado.", en: "Time travel to fix small things, and realising you don't need to. It got to me." },
+  "limitless": { es: "Una pastilla que te hace usar todo el cerebro. La idea es más divertida que la peli, igual la vi entera.", en: "A pill that lets you use your whole brain. The idea is more fun than the film, and I still watched all of it." },
+  "zodiac": { es: "Fincher y un caso que nunca se cerró. La obsesión de los que investigan da más miedo que el asesino.", en: "Fincher and a case that never closed. The investigators' obsession is scarier than the killer." },
+  "the-darjeeling-limited": { es: "Tres hermanos que no se hablan en un tren por India. Wes Anderson en modo triste.", en: "Three brothers who don't talk, on a train through India. Wes Anderson in sad mode." },
+  "pretty-woman": { es: "Clásico de los noventa, Julia Roberts y Richard Gere. Se entiende por qué la citan tanto.", en: "Nineties classic, Julia Roberts and Richard Gere. You can see why it gets quoted so much." },
+  "idiocracy": { es: "Un tipo promedio se despierta 500 años después y es el más inteligente del planeta. Da menos risa cada año.", en: "An average guy wakes up 500 years later as the smartest person alive. Funnier-sad every year." },
+  "peaky-blinders-the-immortal-man": { es: "Tommy Shelby de vuelta, esta vez en formato peli.", en: "Tommy Shelby back, this time as a film." },
+  "office-space": { es: "Un empleado de oficina deja de hacerle caso a todo y le va mejor. La escena de la impresora es de las mejores de la historia.", en: "An office worker stops caring and does better for it. The printer scene is an all-timer." },
+  "avatar-fire-and-ash": { es: "Para verla en pantalla grande. El guion importa poco, Pandora mucho.", en: "A big-screen movie. The script matters little, Pandora a lot." },
+  "f1": { es: "Brad Pitt corriendo en F1 con autos de verdad. Fui por las carreras y las carreras cumplen.", en: "Brad Pitt racing in F1 with real cars. I went for the races and the races deliver." },
+  "demolition": { es: "Un tipo que pierde a su mujer y empieza a desarmar cosas, literal. Rara y muy honesta.", en: "A man who loses his wife and starts taking things apart, literally. Odd and very honest." },
+  "jujutsu-kaisen-0": { es: "La precuela de la serie, con Yuta de protagonista. Las peleas están animadas a otro nivel.", en: "The prequel to the series, with Yuta in the lead. The fights are animated on another level." },
+  "city-of-god": { es: "Río de Janeiro, dos chicos, dos caminos. Arranqué el diario con esta y la vara quedó alta.", en: "Rio de Janeiro, two kids, two paths. I started the diary with this one and the bar stayed high." }
+};
+
 const SIDE_QUESTS = SQ_FILMS.map(f => ({
   title: f.name,
   year: f.year,
@@ -912,9 +1002,9 @@ const SIDE_QUESTS = SQ_FILMS.map(f => ({
     const en = isNaN(d) ? f.watched : 'Watched ' + d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
     return { es: es, en: en };
   })(),
-  why: { es: (SQ_FILM_TAGS[f.slug] || {}).m ? 'En tu diary figura como ' + sqL((SQ_FILM_TAGS[f.slug]).m) + '.' : 'Del diario real de Letterboxd.', en: (SQ_FILM_TAGS[f.slug] || {}).m ? 'Your diary marks it as ' + sqL((SQ_FILM_TAGS[f.slug]).m) + '.' : 'From your real Letterboxd diary.' },
+  why: SQ_FILM_TAKES[f.slug] || { es: 'Del diario de Letterboxd.', en: 'From the Letterboxd diary.' },
   kind: 'film', slug: f.slug, watched: f.watched
-})).concat(SQ_BOOKS.map(b => ({ title: b.title, poster: b.poster, color: b.color, cat: b.cat, meta: b.meta, why: b.why, premise: b.premise, pages: b.pages, genre: b.genre, kind: 'book' })));
+})).concat(SQ_BOOKS.map(b => ({ title: b.title, poster: b.poster, color: b.color, cat: b.cat, meta: b.meta, why: b.why, premise: b.premise, pages: b.pages, genre: b.genre, fav: b.fav, reading: b.reading, kind: 'book' })));
 
 function sqFilmColor(slug) {
   const h = sqHash(slug) % 360;
@@ -1014,7 +1104,15 @@ function setupSideQuests() {
     buildKindSwitch();
     const freq = {};
     SIDE_QUESTS.forEach(q => { (sqIntel(q) || { tags: [] }).tags.forEach(t => { freq[t] = (freq[t] || 0) + 1; }); });
-    if (filterCat !== 'book') Object.keys(freq).sort((a, b) => freq[b] - freq[a]).slice(0, 4).forEach(t => mk(t, t));
+    if (filterCat === 'book' || filterCat.startsWith('book-')) {
+      const books = SIDE_QUESTS.filter(q => q.kind === 'book');
+      const en = currentLang === 'en';
+      mk('book-fav', (en ? '★ Favourites ' : '★ Favoritos ') + books.filter(q => q.fav).length);
+      mk('book-read', (en ? 'Read ' : 'Leídos ') + books.filter(q => !q.reading).length);
+      mk('book-reading', (en ? 'Reading now ' : 'Leyendo ahora ') + books.filter(q => q.reading).length);
+    } else {
+      Object.keys(freq).sort((a, b) => freq[b] - freq[a]).slice(0, 4).forEach(t => mk(t, t));
+    }
     chipRow.querySelectorAll('.sq-col-chip').forEach(c => c.classList.toggle('active', c.dataset.col === filterCat));
   }
 
@@ -1032,7 +1130,7 @@ function setupSideQuests() {
     const en = currentLang === 'en';
     const count = (k) => SIDE_QUESTS.filter(q => q.kind === k).length;
     const opts = [['all', en ? 'All' : 'Todo', SIDE_QUESTS.length], ['film', en ? 'Films' : 'Pelis', count('film')], ['book', en ? 'Books' : 'Libros', count('book')]];
-    sw.innerHTML = opts.map(([id, label, n]) => '<button type="button" role="tab" class="sq-kind' + (filterCat === id ? ' active' : '') + '" data-kind="' + id + '" aria-selected="' + (filterCat === id) + '">' + (id === 'book' ? '<span aria-hidden="true">📚</span> ' : id === 'film' ? '<span aria-hidden="true">🎬</span> ' : '') + esc(label) + ' <b>' + n + '</b></button>').join('');
+    sw.innerHTML = opts.map(([id, label, n]) => '<button type="button" role="tab" class="sq-kind' + (filterCat === id || (id === 'book' && filterCat.startsWith('book-')) ? ' active' : '') + '" data-kind="' + id + '" aria-selected="' + (filterCat === id) + '">' + (id === 'book' ? '<span aria-hidden="true">📚</span> ' : id === 'film' ? '<span aria-hidden="true">🎬</span> ' : '') + esc(label) + ' <b>' + n + '</b></button>').join('');
     sw.querySelectorAll('.sq-kind').forEach((btn) => btn.addEventListener('click', () => {
       filterCat = btn.dataset.kind;
       const vis = visibleQuests();
@@ -1042,13 +1140,16 @@ function setupSideQuests() {
   }
 
   function visibleQuests() {
+    if (filterCat === 'book-fav') return SIDE_QUESTS.filter(q => q.kind === 'book' && q.fav);
+    if (filterCat === 'book-read') return SIDE_QUESTS.filter(q => q.kind === 'book' && !q.reading);
+    if (filterCat === 'book-reading') return SIDE_QUESTS.filter(q => q.kind === 'book' && q.reading);
     return SIDE_QUESTS.filter(q => filterCat === 'all' || q.kind === filterCat ||
       (sqIntel(q) || { tags: [] }).tags.some(t => t.toLowerCase() === filterCat.toLowerCase()));
   }
 
   function buildStrip() {
     strip.innerHTML = '';
-    strip.classList.toggle('is-shelf', filterCat === 'book');
+    strip.classList.toggle('is-shelf', filterCat === 'book' || filterCat.startsWith('book-'));
     const seen = sqSeenGet();
     const taste = sqTasteGet();
     visibleQuests().forEach(item => {
@@ -1173,10 +1274,10 @@ function setupSideQuests() {
       '<p class="sq-book-premise">' + esc(localize(item.premise || '')) + '</p>' +
       '<dl class="sq-book-facts">' +
         '<div><dt>' + (en ? 'Genre' : 'Género') + '</dt><dd>' + esc(localize(item.genre || '')) + '</dd></div>' +
-        '<div><dt>' + (en ? 'Length' : 'Extensión') + '</dt><dd>≈ ' + esc(String(item.pages || '')) + (en ? ' pages' : ' páginas') + '</dd></div>' +
+        (item.pages ? '<div><dt>' + (en ? 'Length' : 'Extensión') + '</dt><dd>≈ ' + esc(String(item.pages)) + (en ? ' pages' : ' páginas') + '</dd></div>' : '') +
         (intel.bestMoment ? '<div class="wide"><dt>' + (en ? 'Best moment' : 'El mejor momento') + '</dt><dd>' + esc(localize(intel.bestMoment)) + '</dd></div>' : '') +
       '</dl>' +
-      '<p class="sq-book-label">' + (en ? 'Why I recommend it' : 'Por qué lo recomiendo') + '</p>';
+      '<p class="sq-book-label">' + (item.reading ? (en ? 'Status' : 'Estado') : (en ? 'What I thought' : 'Qué me pareció')) + '</p>';
   }
 
   function sqBestForYou() {
@@ -4107,23 +4208,31 @@ function stopEcosystemLoop() {
 
 
 
-// ═══════════════════ SIDE QUESTS × AGENT CREW (v3) ═══════════════════
-// Reviews with debate, hidden-quest unlocks, share OG image hook and
-// a conversational router. The technical route stays collapsed in <details>.
-
-const SQ_AGENTS = [
-  { id: 'curador', name: 'curador', role: { es: 'Curador de catálogo', en: 'Catalog curator' }, avatar: 'project-assets/agent-avatars/content.jpg', skills: ['catalog.index', 'genre.classify', 'pair.graph'] },
-  { id: 'critico', name: 'critico', role: { es: 'Crítico residente', en: 'Resident critic' }, avatar: 'project-assets/agent-avatars/reviewer.jpg', skills: ['tone.analysis', 'verdict.draft', 'spoiler.guard'] },
-  { id: 'estratega', name: 'estratega', role: { es: 'Estratega de maratones', en: 'Marathon strategist' }, avatar: 'project-assets/agent-avatars/growth.jpg', skills: ['marathon.plan', 'timebox.estimate'] }
-];
+// ═══════════════════ SIDE QUESTS · details under the poster ═══════════════════
+// Three plain cards: the facts, what Ignacio thought, and where to go next
+// within his own list. No invented scores, no fake agents: every sentence
+// comes from the Letterboxd diary, Goodreads or his own takes.
 
 const SQ_WORKFLOWS = [
-  { id: 'deep', label: { es: 'Análisis', en: 'Deep' }, seq: ['curador', 'critico'] },
-  { id: 'match', label: { es: 'Match', en: 'Match' }, seq: ['memoria', 'critico'] },
-  { id: 'marathon', label: { es: 'Maratón', en: 'Marathon' }, seq: ['curador', 'estratega'] }
+  { id: 'deep', label: { es: 'Detalle', en: 'Details' } },
+  { id: 'match', label: { es: 'Parecidas', en: 'Similar' } },
+  { id: 'marathon', label: { es: 'Maratón', en: 'Marathon' } }
 ];
 
+const SQ_CARDS = {
+  facts: { glyph: 'i', name: { es: 'La ficha', en: 'The facts' } },
+  me: { glyph: '✎', name: { es: 'Qué me pareció', en: 'What I thought' } },
+  next: { glyph: '→', name: { es: 'Para seguir', en: 'Up next' } }
+};
+
 function sqRouteLog() { return document.getElementById('sq-route-log'); }
+
+// Franchises in the diary were watched as real marathons; keep them together.
+const SQ_FRANCHISES = [
+  { key: 'hunger', match: /hunger games/i, label: { es: 'Los juegos del hambre', en: 'The Hunger Games' } },
+  { key: 'lotr', match: /lord of the rings/i, label: { es: 'El Señor de los Anillos', en: 'The Lord of the Rings' } },
+  { key: 'starwars', match: /^(star wars|the empire strikes back|return of the jedi)$/i, label: { es: 'Star Wars, trilogía original', en: 'Star Wars, original trilogy' } }
+];
 
 function setupSideQuestAgents() {
   const crewEl = document.getElementById('sq-crew');
@@ -4134,202 +4243,133 @@ function setupSideQuestAgents() {
   const cardsEl = document.getElementById('sq-crew-cards');
   const lineEl = document.getElementById('sq-crew-line');
   const logEl = sqRouteLog();
+  if (logEl) logEl.closest('details')?.setAttribute('hidden', '');
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const en = () => currentLang === 'en';
+  const esc = s => escapeHtml(s == null ? '' : String(s));
 
   let currentQuest = 0;
   let currentWf = 'deep';
-  let runSeq = 0;
-  let konami = [];
 
   SQ_WORKFLOWS.forEach(wf => {
     const b = document.createElement('button');
     b.type = 'button'; b.className = 'sq-mode'; b.dataset.wf = wf.id;
     b.textContent = sqL(wf.label);
-    b.title = (currentLang === 'en' ? 'Agent route: ' : 'Ruta de agentes: ') + wf.seq.join(' → ');
     b.addEventListener('click', () => { currentWf = wf.id; syncModes(); run(currentQuest); });
     modesEl.appendChild(b);
   });
 
-  // conversational router row
   const askRow = document.createElement('div');
   askRow.className = 'sq-ask-row';
-  askRow.innerHTML = '<input type="text" id="sq-ask-input" aria-label="' + (currentLang === 'en' ? 'Ask the crew for a recommendation' : 'Pedile una recomendación al crew') + '" placeholder="' + (currentLang === 'en' ? 'Tell the crew what you feel like… (e.g. \u201csomething that destroys you\u201d)' : 'Contale al crew qué te apetece… (ej. \u201calgo que te destruya\u201d)') + '" maxlength="80">' +
-    '<button type="button" id="sq-ask-btn">' + (currentLang === 'en' ? 'Route' : 'Enrutar') + '</button>';
+  askRow.innerHTML = '<input type="text" id="sq-ask-input" aria-label="' + (en() ? 'Search my list' : 'Buscar en mi lista') + '" placeholder="' + (en() ? 'What are you in the mood for? (e.g. short, sci-fi, argentine)' : '¿Qué tenés ganas? (ej. algo corto, ciencia ficción, argentino)') + '" maxlength="80">' +
+    '<button type="button" id="sq-ask-btn">' + (en() ? 'Search' : 'Buscar') + '</button>';
   cardsEl.parentNode.insertBefore(askRow, cardsEl);
 
   function syncModes() {
     modesEl.querySelectorAll('.sq-mode').forEach(b => b.classList.toggle('active', b.dataset.wf === currentWf));
   }
 
-  function log(html) {
-    if (!logEl) return;
-    const d = document.createElement('div');
-    d.innerHTML = html;
-    logEl.appendChild(d);
-    logEl.scrollTop = logEl.scrollHeight;
-  }
-  const esc = s => escapeHtml(s == null ? '' : String(s));
-
-  function reviewCard(ag, quote, score, debate) {
-    return '<div class="sq-review in">' +
-      '<div class="rq-top"><img src="' + ag.avatar + '" alt="" loading="lazy">' +
-      '<div><div class="rq-name">' + ag.name + '</div><div class="rq-role">' + esc(sqL(ag.role)) + '</div></div></div>' +
-      (score ? '<span class="rq-score">' + score + '</span>' : '') +
-      (debate ? '<p class="rq-debate">⚠ ' + esc(sqL(debate)) + '</p>' : '') +
-      '<p class="rq-quote">' + quote + '</p></div>';
+  function card(kind, html) {
+    const c = SQ_CARDS[kind];
+    return '<div class="sq-review in"><div class="rq-top"><span class="rq-glyph" aria-hidden="true">' + c.glyph + '</span>' +
+      '<div class="rq-name">' + esc(sqL(c.name)) + '</div></div><p class="rq-quote">' + html + '</p></div>';
   }
 
-  function shimmerCards(count) {
-    cardsEl.innerHTML = '';
-    for (let i = 0; i < count; i++) {
-      const ag = SQ_AGENTS[i % SQ_AGENTS.length];
-      const d = document.createElement('div');
-      d.className = 'sq-review loading';
-      d.innerHTML = '<div class="rq-top"><img src="' + ag.avatar + '" alt=""><div><div class="rq-name">' + ag.name + '</div><div class="rq-role">' + esc(sqL(ag.role)) + '</div></div></div><p class="rq-quote"></p>';
-      cardsEl.appendChild(d);
+  const tagsOf = (q) => (sqIntel(q) || { tags: [] }).tags;
+  // A film and a book can share a title; say which one when they do.
+  const nameOf = (q) => esc(q.title) + (SIDE_QUESTS.some(o => o !== q && o.title === q.title) ? (q.kind === 'book' ? (en() ? ' (book)' : ' (libro)') : (en() ? ' (film)' : ' (peli)')) : '');
+  const franchiseOf = (q) => SQ_FRANCHISES.find(f => f.match.test(q.title));
+
+  // Other items from the list that share the most tags; ties go to the
+  // other medium (a film for a book and vice versa) to make it interesting.
+  function similar(quest, n) {
+    const mine = new Set(tagsOf(quest));
+    return SIDE_QUESTS
+      .filter(q => q !== quest && !q.reading)
+      .map(q => ({ q, s: tagsOf(q).filter(t => mine.has(t)).length * 10 + (q.kind !== quest.kind ? 3 : 0) + (q.fav ? 2 : 0) }))
+      .filter(x => x.s >= 10)
+      .sort((a, b) => b.s - a.s)
+      .slice(0, n)
+      .map(x => x.q);
+  }
+
+  function facts(quest) {
+    const intel = sqIntel(quest) || { tags: [] };
+    if (quest.kind === 'book') {
+      return esc(quest.meta) + (quest.pages ? ' · ' + quest.pages + (en() ? ' pages' : ' páginas') : '') + '<br>' +
+        (quest.reading ? (en() ? 'On my Goodreads as <b>currently reading</b>.' : 'En mi Goodreads como <b>leyendo ahora</b>.') :
+          quest.fav ? (en() ? 'On my Goodreads <b>favourites</b> shelf.' : 'Está en mis <b>favoritos</b> de Goodreads.') :
+          (en() ? 'On my Goodreads <b>read</b> shelf.' : 'En mi estante de <b>leídos</b> de Goodreads.'));
     }
+    return (quest.year ? esc(quest.year) + ' · ' : '') + intel.tags.map(esc).join(', ') + '<br>' + esc(sqL(quest.meta)) + (en() ? ', logged on Letterboxd.' : ', anotada en Letterboxd.');
   }
 
-  function marathonChain(quest) {
-    const chain = [quest];
-    let cur = quest.title;
-    for (let i = 0; i < 2; i++) {
-      const intel = sqIntel(cur);
-      if (!intel || !intel.pairWith || intel.pairWith === cur) break;
-      const next = SIDE_QUESTS.find(q => q.title === intel.pairWith);
-      if (!next || chain.includes(next)) break;
-      chain.push(next); cur = next.title;
-    }
-    return chain;
-  }
-
-  function totalHours(chain) {
-    let mins = 0;
-    for (const q of chain) {
-      const it = sqIntel(q) || { time: '' };
-      const mh = it.time.match(/([\d.,]+)\s*(h|páginas|paginas)/i);
-      if (!mh) continue;
-      const n = parseFloat(mh[1].replace(',', '.'));
-      mins += mh[2].toLowerCase().startsWith('h') ? n * 60 : n * 1.4;
-    }
-    return Math.round(mins / 60 * 10) / 10;
-  }
-
-  function buildReviews(wf, quest) {
-    const intel = sqIntel(quest) || { tags: [], mood: { es: '', en: '' }, time: '—', energy: { es: '', en: '' }, pairWith: '', pairWhy: { es: '', en: '' }, signals: [], bestMoment: null, paraQuien: null, debate: null };
-    const h = sqHash(quest.title + wf.id);
-    const score = (7.6 + (h % 24) / 10).toFixed(1);
+  function buildCards(wf, quest) {
+    const intel = sqIntel(quest) || {};
     const cards = [];
-
-    if (wf.id === 'marathon') {
-      const chain = marathonChain(quest);
-      const names = chain.map(q => '<b>' + esc(q.title) + '</b>').join(' → ');
-      cards.push(reviewCard(SQ_AGENTS[0],
-        (currentLang === 'en' ? 'Chain for this quest: ' : 'Cadena para esta quest: ') + names + '. ' + esc(sqL(intel.pairWhy)), null));
-      cards.push(reviewCard(SQ_AGENTS[1],
-        (currentLang === 'en'
-          ? 'Opening with "' + esc(quest.title) + '" is the right call: ' + sqL(quest.why).toLowerCase()
-          : 'Arrancar con "' + esc(quest.title) + '" es la decisión correcta: ' + sqL(quest.why).toLowerCase()), score + '/10'));
-      cards.push(reviewCard(SQ_AGENTS[2],
-        (currentLang === 'en'
-          ? 'Total estimate for the chain: ~' + totalHours(chain) + ' h. Best pace: one per weekend.'
-          : 'Estimación total de la cadena: ~' + totalHours(chain) + ' h. Mejor ritmo: uno por finde.'), null));
+    if (wf.id === 'deep') {
+      cards.push(card('facts', facts(quest) + (intel.bestMoment ? '<br><span class="rq-bm">' + (en() ? 'best moment: ' : 'el mejor momento: ') + esc(sqL(intel.bestMoment)) + '</span>' : '')));
+      const nexts = similar(quest, 2);
+      if (!nexts.length) cards.push(card('next', en() ? 'Nothing in my list quite like this one.' : 'No tengo nada parecido en la lista.'));
+      nexts.forEach((next, i) => cards.push(card('next', (i === 0 ? (en() ? 'If you liked this, try <b>' : 'Si te gustó, seguí con <b>') : (en() ? 'Or <b>' : 'O <b>')) + nameOf(next) + '</b>. ' + esc(sqL(next.why)))));
+    } else if (wf.id === 'match') {
+      const list = similar(quest, 3);
+      if (!list.length) cards.push(card('next', en() ? 'Nothing in my list quite like this one.' : 'No tengo nada parecido en la lista.'));
+      list.forEach(q => cards.push(card('next', '<b>' + nameOf(q) + '</b> · ' + esc(sqL(q.cat)) + '<br>' + esc(sqL(q.why)))));
     } else {
-      const debate = intel.debate && h % 3 === 0 ? intel.debate : null;
-      cards.push(reviewCard(SQ_AGENTS[0],
-        (currentLang === 'en'
-          ? 'Classified as <b>' + esc(sqL(intel.mood)) + '</b> — ' + intel.tags.join(', ') + '. Closest pair in the catalog: <b>' + esc(intel.pairWith) + '</b>.'
-          : 'Clasificada como <b>' + esc(sqL(intel.mood)) + '</b> — ' + intel.tags.join(', ') + '.' + (intel.pairWith ? ' El par más cercano del catálogo: <b>' + esc(intel.pairWith) + '</b>.' : '')), null));
-      cards.push(reviewCard(SQ_AGENTS[1],
-        (currentLang === 'en'
-          ? 'Verdict: ' + sqL(intel.mood) + '. ' + sqL(quest.why) + (debate ? ' Curador disagrees, and that is fine.' : ' Would not change a single scene.')
-          : 'Veredicto: ' + sqL(intel.mood) + '. ' + sqL(quest.why) + (debate ? ' Discrepo con curador, y está bien.' : ' No cambiaría una sola escena.')) +
-        (intel.bestMoment ? '<br><span class="rq-bm">' + (currentLang === 'en' ? 'best moment: ' : 'mejor momento: ') + esc(sqL(intel.bestMoment)) + '</span>' : ''), score + '/10', debate));
-      cards.push(reviewCard(SQ_AGENTS[2],
-        (currentLang === 'en'
-          ? 'Tiempo: <b>' + esc(intel.time) + '</b> · etiquetas: ' + intel.tags.join(', ') + '. Vistas: ' + sqSeenGet().length + '/' + SIDE_QUESTS.length + '.'
-          : 'Tiempo: <b>' + esc(intel.time) + '</b> · energía: ' + esc(sqL(intel.energy)) + '.' + (intel.paraQuien ? ' Para: ' + esc(sqL(intel.paraQuien)) + '.' : '') + ' Vistas: ' + sqSeenGet().length + '/' + SIDE_QUESTS.length + '.'), null));
+      const fr = franchiseOf(quest);
+      if (fr) {
+        const chain = SIDE_QUESTS.filter(q => q.kind === 'film' && fr.match.test(q.title)).reverse();
+        cards.push(card('facts', (en() ? 'The marathon I actually did: ' : 'La maratón que hice: ') + '<b>' + esc(sqL(fr.label)) + '</b>, ' + chain.length + (en() ? ' films.' : ' pelis.')));
+        cards.push(card('next', chain.map(q => esc(q.title) + ' <span class="rq-bm">' + esc(sqL(q.meta)) + '</span>').join('<br>')));
+      } else {
+        const chain = [quest].concat(similar(quest, 2));
+        const hours = chain.reduce((h, q) => h + (q.kind === 'book' ? (q.pages || 250) * 1.4 / 60 : 2), 0);
+        cards.push(card('facts', (en() ? 'A marathon I would put together from here: ' : 'Una maratón que armaría desde acá: ') + chain.map(q => '<b>' + nameOf(q) + '</b>').join(' → ') + '.'));
+        cards.push(card('next', (en() ? 'Roughly ' : 'Más o menos ') + Math.round(hours) + (en() ? ' hours. One per weekend works.' : ' horas. Una por finde está bien.')));
+      }
     }
     return cards;
   }
 
-  const sleep = ms => new Promise(r => setTimeout(r, reduceMotion ? 0 : ms));
-
-  function crewLine(running, quest, secs) {
-    if (running) {
-      lineEl.innerHTML = '<span class="dot"></span>' + (currentLang === 'en'
-        ? 'agents reviewing <b>' + esc(quest.title) + '</b> · route T0\u2192T3\u2026'
-        : 'agentes analizando <b>' + esc(quest.title) + '</b> · ruta T0\u2192T3\u2026');
-    } else {
-      lineEl.innerHTML = '<span class="dot"></span>' +
-        (currentLang === 'en'
-          ? '3 agents reviewed this quest · route T0\u2192T3 · ' + secs.toFixed(1) + 's · ' + sqSeenGet().length + '/' + SIDE_QUESTS.length + ' completed'
-          : '3 agentes revisaron esta quest · ruta T0\u2192T3 · ' + secs.toFixed(1) + 's · ' + sqSeenGet().length + '/' + SIDE_QUESTS.length + ' completadas');
-    }
+  function status() {
+    const seen = sqSeenGet().length;
+    lineEl.innerHTML = '<span class="dot"></span>' + (en()
+      ? 'From my Letterboxd diary and Goodreads · you marked ' + seen + '/' + SIDE_QUESTS.length
+      : 'Sale de mi diario de Letterboxd y de Goodreads · marcaste ' + seen + '/' + SIDE_QUESTS.length);
   }
 
-  async function run(questIndex) {
-    const seq = ++runSeq;
+  function run(questIndex) {
     const quest = SIDE_QUESTS[questIndex];
     if (!quest) return;
     const wf = SQ_WORKFLOWS.find(w => w.id === currentWf) || SQ_WORKFLOWS[0];
-    const intel = sqIntel(quest);
-    const t0 = performance.now();
-    const alive = () => { if (seq !== runSeq) throw 'cancelled'; };
-
-    crewLine(true, quest);
-    if (logEl) logEl.innerHTML = '';
-    shimmerCards(wf.id === 'marathon' ? 3 : 3);
-
-    const my = () => ((performance.now() - t0) / 1000).toFixed(1);
-    const step = async ms => { await sleep(ms); alive(); };
-
-    try {
-      log(my() + 's T0 route \u25b8 intent.parse("' + esc(quest.title) + '") <span class="ok">\u2713</span>');
-      await step(420); alive();
-      log(my() + 's T1 memoria \u25b8 signals.match(profile) \u2192 ' + (intel ? intel.signals.length : 0) + ' señales <span class="ok">\u2713</span>');
-      await step(400); alive();
-      for (const aid of wf.seq) {
-        log(my() + 's T2 ' + aid + ' \u25b8 ' + aid + '.run("' + esc(quest.title) + '") <span class="ok">\u2713</span>');
-        await step(reduceMotion ? 30 : 400); alive();
-      }
-      log(my() + 's T3 synthesize \u25b8 quality.gate \u2192 briefing <span class="ok">\u2713</span>');
-
-      const secs = (performance.now() - t0) / 1000;
-      crewLine(false, quest, secs);
-      cardsEl.innerHTML = buildReviews(wf, quest).join('');
-      const cards = cardsEl.querySelectorAll('.sq-review');
-      cards.forEach((c, i) => setTimeout(() => c.classList.add('in'), reduceMotion ? 0 : 90 * i));
-
-    } catch (e) { if (e !== 'cancelled') throw e; }
+    status();
+    cardsEl.innerHTML = buildCards(wf, quest).join('');
+    if (!reduceMotion) cardsEl.querySelectorAll('.sq-review').forEach((c, i) => { c.classList.remove('in'); setTimeout(() => c.classList.add('in'), 70 * i); });
   }
 
-  // conversational router: free text -> intent -> crew recommendation
-  const SQ_INTENT_MAP = {
-    'llorar': ['emocional', 'triste', 'devastador'], 'cry': ['emocional', 'triste', 'devastador'],
-    'reír': ['comedia', 'sátira'], 'laugh': ['comedia', 'sátira'],
-    'épico': ['épico', 'escala', 'worldbuilding'], 'epic': ['épico', 'escala', 'worldbuilding'],
-    'tech': ['tech', 'startup'], 'argentino': ['argentino', 'literatura argentina', 'cómic argentino'],
-    'música': ['música'], 'music': ['música'], 'disco': ['música'], 'album': ['música'],
-    'libro': ['libro', 'páginas'], 'book': ['libro', 'páginas'],
-    'juego': ['juego'], 'game': ['juego'],
-    'corto': ['breve'], 'short': ['breve'], 'grande': ['largo aliento', 'compromiso alto', '600'],
-    'serie': ['serie'], 'película': [], 'film': [], 'pelicula': [],
-    'crimen': ['crimen', 'detective', 'antihero'], 'misterio': ['misterio', 'detective'],
-    'destruir': ['devastador', 'psicológico', 'triste'], 'destroy': ['devastador', 'psicológico', 'triste'],
-    'calma': ['baja', 'sereno'], 'calm': ['baja', 'sereno'], 'tiempo': ['tiempo', 'infinito']
+  // Free-text search: match words against tags, titles and takes.
+  const SQ_WORDS = {
+    'corto': 'breve', 'short': 'breve', 'triste': 'triste', 'sad': 'triste', 'llorar': 'triste', 'cry': 'triste',
+    'reír': 'comedia', 'reir': 'comedia', 'laugh': 'comedia', 'comedia': 'comedia', 'comedy': 'comedia',
+    'argentino': 'argentino', 'argentine': 'argentino', 'épico': 'épico', 'epico': 'épico', 'epic': 'épico',
+    'ciencia': 'ciencia ficción', 'sci-fi': 'ciencia ficción', 'scifi': 'ciencia ficción', 'ia': 'ia', 'ai': 'ia',
+    'oscuro': 'oscuro', 'dark': 'oscuro', 'clásico': 'clásico', 'clasico': 'clásico', 'classic': 'clásico',
+    'fantasía': 'fantasía', 'fantasia': 'fantasía', 'fantasy': 'fantasía', 'trabajo': 'trabajo', 'work': 'trabajo'
   };
-
   function routeAsk(text) {
     const norm = text.toLowerCase();
-    const wanted = new Set();
-    Object.keys(SQ_INTENT_MAP).forEach(k => { if (norm.includes(k)) SQ_INTENT_MAP[k].forEach(t => wanted.add(t)); });
-    let best = null, bestS = -1;
-    SIDE_QUESTS.filter(q => !q.hidden || sqUnlockGet().includes(q.title)).forEach(q => {
-      const intel = sqIntel(q) || { tags: [] };
-      let s = sqMatch(q);
-      intel.tags.forEach(t => { if (wanted.has(t)) s += 14; });
-      if (norm.includes(q.title.toLowerCase())) s += 50;
+    const wanted = new Set(Object.keys(SQ_WORDS).filter(k => norm.includes(k)).map(k => SQ_WORDS[k]));
+    const wantBook = /libro|leer|book|read/.test(norm), wantFilm = /peli|película|pelicula|film|movie|ver/.test(norm);
+    let best = null, bestS = 0;
+    SIDE_QUESTS.forEach(q => {
+      if (q.reading) return;
+      let s = 0;
+      tagsOf(q).forEach(t => { if (wanted.has(t)) s += 10; });
+      if (wantBook && q.kind === 'book') s += 4;
+      if (wantFilm && q.kind === 'film') s += 4;
+      if (norm.length > 3 && q.title.toLowerCase().includes(norm)) s += 50;
+      if (q.fav) s += 1;
       if (s > bestS) { bestS = s; best = q; }
     });
     return best;
@@ -4341,25 +4381,16 @@ function setupSideQuestAgents() {
     const q = (askInput.value || '').trim();
     if (!q) return;
     const best = routeAsk(q);
-    const secs = (1 + sqHash(q) % 22 / 10).toFixed(1);
-    if (!best) { sqToast(currentLang === 'en' ? 'No route found — try another feeling' : 'No encontré ruta — probá otro sentir'); return; }
-    const intel = sqIntel(best);
-    cardsEl.innerHTML = reviewCard(SQ_AGENTS[2],
-      (currentLang === 'en'
-        ? 'For "' + esc(q) + '" the crew routes to <b>' + esc(best.title) + '</b> — ' + esc(sqL(intel.mood)) + ', ' + esc(intel.time) + '. Signals: ' + intel.signals.join(', ') + '.'
-        : 'Para "' + esc(q) + '" el crew enruta a <b>' + esc(best.title) + '</b> — ' + esc(sqL(intel.mood)) + ', ' + esc(intel.time) + '. Señales: ' + intel.signals.join(', ') + '.'), null) +
-      '<button type="button" class="sq-act" id="sq-ask-go" style="margin:0 14px 6px">' + (currentLang === 'en' ? '→ open quest' : '→ abrir quest') + '</button>';
+    if (!best) { sqToast(en() ? 'Nothing in my list for that. Try "short" or "sci-fi".' : 'No tengo nada para eso. Probá "corto" o "ciencia ficción".'); return; }
+    cardsEl.innerHTML = card('next', (en() ? 'For "' + esc(q) + '" I would go with ' : 'Para "' + esc(q) + '" iría con ') + '<b>' + nameOf(best) + '</b>. ' + esc(sqL(best.why))) +
+      '<button type="button" class="sq-act" id="sq-ask-go" style="margin:0 14px 6px">' + (en() ? '→ open it' : '→ abrirla') + '</button>';
     document.getElementById('sq-ask-go').addEventListener('click', () => {
       const i = SIDE_QUESTS.indexOf(best);
       if (i >= 0) { currentQuest = i; run(i); window.SQAgentJump && window.SQAgentJump(i); }
     });
-    log('ask ▸ route("' + esc(q) + '") \u2192 ' + esc(best.title) + ' <span class="ok">\u2713</span> ' + secs + 's');
   }
   askBtn.addEventListener('click', doAsk);
   askInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); doAsk(); } });
-
-
-  // marathon completion unlock (El Eternauta) handled inside run()
 
   window.SQAgentHook = function (questIndex) {
     currentQuest = questIndex;

@@ -6953,3 +6953,16 @@ header.app-header.is-scrolled .nav-cta {
   .sq-book-facts { grid-template-columns: 1fr; }
   .sq-strip.is-shelf .sq-thumb { width: 64px; height: 96px; }
 }
+
+.rq-glyph {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(232, 168, 76, 0.14);
+  border: 1px solid rgba(232, 168, 76, 0.35);
+  color: #f5c04e;
+  font: 700 15px/1 'IBM Plex Sans', sans-serif;
+  flex: none;
+}
