@@ -5873,11 +5873,11 @@ header.app-header.is-scrolled .nav-cta {
   }
 }
 
-/* Deeper blur on the floating nav pill, per the reference's glass treatment.
-   The tint stays theme-driven: a flat white 30% would wash out in dark mode. */
+/* Glass on the floating nav pill. Kept moderate: it re-blurs the moving
+   hero wall behind it every frame. The tint stays theme-driven. */
 .header-container {
-  backdrop-filter: blur(24px) saturate(1.4);
-  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
 }
 
 /* ═══════════════════ SIDE QUESTS: fit + scroll on short viewports ═══════════
@@ -6104,6 +6104,7 @@ header.app-header.is-scrolled .nav-cta {
   gap: clamp(14px, 1.6vw, 26px);
   animation: cine-drift 46s linear infinite;
   animation-direction: normal;
+  will-change: transform;
 }
 
 .cine-col:nth-child(even) .cine-col-track {
@@ -6126,21 +6127,36 @@ header.app-header.is-scrolled .nav-cta {
   animation-play-state: paused;
 }
 
+/* Tiles are dimmed by an overlay whose opacity fades, not by a CSS filter:
+   a filter on a tile holding a playing video is re-rasterised every video
+   frame, and the spotlight used to animate it on 40 tiles at once. */
 .cine-tile {
+  position: relative;
   margin: 0;
   border-radius: 12px;
   overflow: hidden;
   background: #16161a;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.55);
-  filter: saturate(0.55) brightness(0.52);
-  transition: filter 0.9s ease, box-shadow 0.9s ease, border-color 0.9s ease;
+  box-shadow: 0 24px 40px rgba(0, 0, 0, 0.5);
+  contain: paint;
+  transition: border-color 0.9s ease;
+}
+
+.cine-tile::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 14, 0.5);
+  pointer-events: none;
+  transition: opacity 0.9s ease;
 }
 
 .cine-tile.is-lit {
-  filter: saturate(1.05) brightness(0.98);
   border-color: rgba(52, 211, 153, 0.55);
-  box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.25), 0 30px 90px rgba(16, 185, 129, 0.28);
+}
+
+.cine-tile.is-lit::after {
+  opacity: 0;
 }
 
 .cine-tile-bar {
@@ -6194,11 +6210,10 @@ header.app-header.is-scrolled .nav-cta {
 
 .cine-grain {
   position: absolute;
-  inset: -50%;
-  opacity: 0.09;
+  inset: 0;
+  opacity: 0.05;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  mix-blend-mode: overlay;
 }
 
 .cine-copy {

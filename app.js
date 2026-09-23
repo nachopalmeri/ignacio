@@ -2656,7 +2656,7 @@ function sideQuestsOpen() {
 // screens across the wall.
 const CINE_COLUMNS = 5;
 const CINE_TILES_PER_COLUMN = 4;
-const CINE_MAX_VIDEOS = 4;
+const CINE_MAX_VIDEOS = 3;
 let cineSpotlightIndex = 0;
 
 function cineProjects() {
@@ -2689,7 +2689,10 @@ function buildCineWall(wall) {
       tiles.push(`<figure class="cine-tile" data-cine-id="${escapeHtml(project.id)}"><span class="cine-tile-bar"><i></i><i></i><i></i><b>${escapeHtml(cineHost(project))}</b></span>${media}</figure>`);
     }
     // Each column holds its tiles twice so the drift loops without a seam.
-    columns.push(`<div class="cine-col" style="--col:${c}"><div class="cine-col-track">${tiles.join('')}${tiles.join('')}</div></div>`);
+    // The second copy shows the poster instead of the clip: two decoders
+    // per video doubled the GPU work for a screen nobody sees at once.
+    const copy = tiles.join('').replace(/<video src="[^"]*" poster="([^"]*)"[^>]*><\/video>/g, '<img src="$1" alt="" loading="lazy" decoding="async">');
+    columns.push(`<div class="cine-col" style="--col:${c}"><div class="cine-col-track">${tiles.join('')}${copy}</div></div>`);
   }
   wall.innerHTML = columns.join('');
 }
