@@ -6996,3 +6996,14 @@ header.app-header.is-scrolled .nav-cta {
   font: 700 15px/1 'IBM Plex Sans', sans-serif;
   flex: none;
 }
+
+/* Link from the agents section to the 3D command center (/lab). */
+.agents-lab-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  margin-top: 18px;
+  color: var(--text-muted, #6b7280);
+  font-size: 14px;
+}

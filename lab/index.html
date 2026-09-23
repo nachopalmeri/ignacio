@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Centro de mando · Ignacio Palmeri</title>
+<meta name="description" content="El router real de mi sistema de agentes, en 3D y en tu navegador: escribí un pedido y mirá cómo lo clasifica, a quién se lo da y con qué límites.">
+<link rel="canonical" href="https://ignaciopalmeri.dev/lab">
+<meta property="og:title" content="Centro de mando · Ignacio Palmeri">
+<meta property="og:description" content="El router real de mi sistema de agentes, en 3D y en tu navegador.">
+<meta property="og:image" content="https://ignaciopalmeri.dev/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #04050a; --ink: #eef1f8; --dim: rgba(238, 241, 248, .62); --faint: rgba(238, 241, 248, .38);
+    --glass: rgba(14, 17, 28, .62); --line: rgba(160, 180, 255, .16);
+    --simple: #34d399; --specialized: #60a5fa; --parallel: #c084fc; --risk: #fb7185;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: var(--bg); color: var(--ink); overflow: hidden; }
+  body { font-family: Inter, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  button, input { font: inherit; color: inherit; }
+  #scene { position: fixed; inset: 0; display: block; }
+  #labels { position: fixed; inset: 0; pointer-events: none; }
+  .tag { font: 600 11px/1 Inter, sans-serif; letter-spacing: .02em; color: var(--dim); white-space: nowrap; padding: 4px 8px; border-radius: 999px; background: rgba(8, 10, 18, .55); border: 1px solid rgba(255, 255, 255, .06); transition: color .4s, border-color .4s, background .4s, transform .4s; }
+  .tag.on { color: #fff; background: rgba(20, 24, 40, .85); border-color: currentColor; transform: scale(1.12); }
+  .gate-tag { font: 600 12px/1 'JetBrains Mono', monospace; letter-spacing: .14em; padding: 6px 10px; }
+
+  .hud { position: fixed; z-index: 5; }
+  .panel { background: var(--glass); border: 1px solid var(--line); border-radius: 18px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 30px 80px -30px rgba(0, 0, 0, .8); }
+  .brand { top: 22px; left: 24px; max-width: 420px; }
+  .brand .kicker { font: 500 11px/1 'JetBrains Mono', monospace; letter-spacing: .18em; text-transform: uppercase; color: var(--simple); display: flex; gap: 8px; align-items: center; }
+  .brand .kicker i { width: 7px; height: 7px; border-radius: 50%; background: var(--simple); box-shadow: 0 0 12px var(--simple); animation: blink 1.6s infinite; }
+  @keyframes blink { 50% { opacity: .3; } }
+  .brand h1 { margin-top: 12px; font-weight: 600; font-size: 34px; letter-spacing: -.03em; line-height: 1.05; }
+  .brand h1 em { font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 1.12em; color: #a5b4fc; }
+  .brand p { margin-top: 10px; color: var(--dim); font-size: 14px; line-height: 1.5; }
+  .top-actions { top: 22px; right: 24px; display: flex; gap: 10px; }
+  .btn { color: var(--ink); display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--glass); backdrop-filter: blur(10px); cursor: pointer; font-size: 13px; font-weight: 600; text-decoration: none; transition: border-color .2s, background .2s, transform .2s; }
+  .btn:hover, .btn:focus-visible { border-color: rgba(165, 180, 252, .6); outline: none; transform: translateY(-1px); }
+  .btn.primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); border-color: transparent; }
+  .btn[disabled] { opacity: .5; cursor: default; transform: none; }
+
+  .console { left: 50%; bottom: 22px; transform: translateX(-50%); width: min(760px, calc(100vw - 32px)); padding: 14px; }
+  .chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip { flex: none; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255, 255, 255, .03); font-size: 12.5px; color: var(--dim); cursor: pointer; transition: color .2s, border-color .2s; }
+  .chip:hover, .chip:focus-visible { color: #fff; border-color: rgba(165, 180, 252, .55); outline: none; }
+  .chip.risk { border-color: rgba(251, 113, 133, .35); }
+  form { display: flex; gap: 10px; }
+  form input { flex: 1; min-width: 0; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--line); background: rgba(0, 0, 0, .35); font-size: 15px; outline: none; }
+  form input:focus { border-color: rgba(165, 180, 252, .7); box-shadow: 0 0 0 4px rgba(99, 102, 241, .18); }
+  form input::placeholder { color: var(--faint); }
+
+  .trace { top: 150px; right: 24px; width: 330px; padding: 18px; opacity: 0; transform: translateX(20px); transition: opacity .4s, transform .4s; }
+  .trace.show { opacity: 1; transform: none; }
+  .trace-close { position: absolute; top: 10px; right: 10px; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--dim); cursor: pointer; }
+  .trace-close:hover { color: #fff; }
+  .trace h2 { font: 600 11px/1 'JetBrains Mono', monospace; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); margin-bottom: 12px; }
+  .task-text { font-size: 14px; line-height: 1.45; color: #fff; margin-bottom: 14px; }
+  .steps { list-style: none; display: grid; gap: 8px; }
+  .steps li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; font-size: 13px; color: var(--faint); opacity: .35; transition: opacity .3s, color .3s; }
+  .steps li.done { opacity: 1; color: var(--dim); }
+  .steps li.hit { color: #fff; }
+  .steps li b { font-weight: 600; }
+  .steps li small { display: block; color: var(--faint); font: 500 11.5px/1.4 'JetBrains Mono', monospace; margin-top: 2px; word-break: break-word; }
+  .steps .mark { width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; border: 1px solid rgba(255, 255, 255, .2); }
+  .steps li.hit .mark { background: var(--c, #a5b4fc); border-color: transparent; color: #05060a; font-weight: 700; }
+  .receipt { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line); display: none; }
+  .receipt.show { display: block; animation: rise .5s ease both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+  .lane-pill { display: inline-block; padding: 5px 10px; border-radius: 999px; font: 600 12px/1 'JetBrains Mono', monospace; letter-spacing: .12em; color: #05060a; background: var(--c); }
+  .kv { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; margin-top: 12px; font-size: 12.5px; }
+  .kv dt { color: var(--faint); }
+  .kv dd { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #fff; word-break: break-word; }
+  .budget { display: flex; gap: 8px; margin-top: 12px; }
+  .budget span { flex: 1; text-align: center; padding: 8px 4px; border-radius: 10px; background: rgba(255, 255, 255, .04); border: 1px solid var(--line); font-size: 11px; color: var(--faint); }
+  .budget b { display: block; font-size: 18px; color: #fff; margin-bottom: 2px; }
+
+  .evals { top: 84px; right: 24px; padding: 10px 14px; font: 500 12px/1.3 'JetBrains Mono', monospace; color: var(--dim); display: none; }
+  .evals.show { display: block; }
+  .evals b { color: var(--simple); }
+
+  .gatekeeper { position: fixed; inset: 0; z-index: 20; display: none; place-items: center; background: rgba(4, 5, 10, .55); }
+  .gatekeeper.show { display: grid; animation: rise .3s ease both; }
+  .gatekeeper .panel { width: min(440px, calc(100vw - 32px)); padding: 26px; border-color: rgba(251, 113, 133, .45); box-shadow: 0 0 0 1px rgba(251, 113, 133, .15), 0 40px 120px -20px rgba(251, 113, 133, .35); }
+  .gatekeeper h3 { font-size: 22px; letter-spacing: -.02em; }
+  .gatekeeper h3 em { font-family: 'Instrument Serif', serif; font-weight: 400; color: var(--risk); font-size: 1.15em; }
+  .gatekeeper p { color: var(--dim); font-size: 14px; line-height: 1.5; margin-top: 10px; }
+  .gatekeeper .row { display: flex; gap: 10px; margin-top: 20px; }
+  .gatekeeper .approve { background: var(--risk); color: #1a0508; border-color: transparent; }
+
+  .foot { left: 24px; bottom: 26px; max-width: 300px; font-size: 11.5px; line-height: 1.5; color: var(--faint); }
+  .foot a { color: var(--dim); }
+  .intro { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; background: var(--bg); transition: opacity 1s ease; pointer-events: none; }
+  .intro.gone { opacity: 0; }
+  .intro span { font: 500 12px/1 'JetBrains Mono', monospace; letter-spacing: .3em; color: var(--faint); text-transform: uppercase; }
+  .fallback { position: fixed; inset: 0; display: none; place-items: center; text-align: center; color: var(--faint); font-size: 14px; }
+  .no-webgl .fallback { display: grid; }
+
+  @media (max-width: 900px) {
+    .brand { right: 16px; left: 16px; top: 16px; max-width: none; }
+    .brand h1 { font-size: 26px; }
+    .brand p, .foot { display: none; }
+    .brand { right: 16px; }
+    .brand .kicker { font-size: 10px; }
+    .top-actions { top: 104px; left: 16px; right: auto; }
+    .top-actions .btn { padding: 8px 12px; font-size: 12px; }
+    .trace { top: auto; bottom: 168px; right: 12px; left: 12px; width: auto; max-height: 40vh; overflow-y: auto; }
+    .evals { top: 150px; left: 16px; right: 16px; }
+    .tag:not(.gate-tag):not(.on) { opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .intro { display: none; } }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div id="labels"></div>
+  <div class="fallback">Tu navegador no tiene WebGL, pero el router funciona igual: escribí un pedido abajo.</div>
+
+  <header class="hud brand">
+    <div class="kicker"><i></i>Router en vivo · agents-system</div>
+    <h1>Centro de <em>mando</em></h1>
+    <p>Así decide mi sistema de agentes quién hace cada tarea. Escribí un pedido o elegí una misión: el router real lo clasifica en tu navegador.</p>
+  </header>
+
+  <div class="hud top-actions">
+    <button class="btn" id="run-evals" type="button">▶ Correr los 34 evals</button>
+    <a class="btn" href="/agents">← Portfolio</a>
+  </div>
+
+  <div class="hud panel evals" id="evals" aria-live="polite"></div>
+
+  <aside class="hud panel trace" id="trace" aria-live="polite">
+    <button class="trace-close" id="trace-close" type="button" aria-label="Cerrar">×</button>
+    <h2>Pedido</h2>
+    <p class="task-text" id="task-text"></p>
+    <h2>Precedencia</h2>
+    <ol class="steps" id="steps"></ol>
+    <div class="receipt" id="receipt"></div>
+  </aside>
+
+  <section class="hud panel console" aria-label="Consola">
+    <div class="chips" id="chips"></div>
+    <form id="ask">
+      <input id="ask-input" autocomplete="off" maxlength="160" placeholder="Pedile algo al sistema… ej: «Revisa el SEO técnico del sitio»" aria-label="Pedido para el sistema">
+      <button class="btn primary" type="submit">Enviar</button>
+    </form>
+  </section>
+
+  <p class="hud foot">Simulación visual. La decisión la toma una copia en JS de <code>orchestrator/router.ps1</code> con las reglas y los evals de <a href="https://github.com/nachopalmeri/agents-system" target="_blank" rel="noopener">nachopalmeri/agents-system</a>. No ejecuta agentes ni manda nada a ningún lado.</p>
+
+  <div class="gatekeeper" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+    <div class="panel">
+      <h3 id="gate-title">Esto necesita <em>tu OK.</em></h3>
+      <p id="gate-text"></p>
+      <div class="row">
+        <button class="btn approve" id="gate-yes" type="button">Aprobar</button>
+        <button class="btn" id="gate-no" type="button">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="intro" id="intro"><span>Cargando el centro de mando</span></div>
+
+  <script src="router.js"></script>
+  <script type="module" src="lab.js"></script>
+</body>
+</html>

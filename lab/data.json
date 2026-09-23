@@ -1,0 +1,1251 @@
+{
+ "source": {
+  "repo": "github.com/nachopalmeri/agents-system (público)",
+  "router": "orchestrator/router.ps1",
+  "rules": "config/routing-rules.json @ 3f21f5e^ (última versión con patrones)",
+  "evals": "evals/runtime-cases.json @ 5cfe298"
+ },
+ "lanes": {
+  "SIMPLE": "Fallback, explicación o cambio chico; un agente, sin reviewer/council automáticos.",
+  "SPECIALIZED": "El dominio cambia materialmente la ejecución; un primary especialista.",
+  "PARALLEL": "El usuario pide paralelismo/council o hay dos trabajos independientes con ownership separado.",
+  "HIGH_RISK": "Credenciales, pagos, mensajes externos, destrucción, producción o release consecuencial; aprobación explícita y validación proporcional."
+ },
+ "rules": {
+  "schemaVersion": 2,
+  "laneBudgets": {
+   "SIMPLE": {
+    "maxIterations": 3,
+    "maxReplans": 1,
+    "maxAgents": 1
+   },
+   "SPECIALIZED": {
+    "maxIterations": 6,
+    "maxReplans": 2,
+    "maxAgents": 1
+   },
+   "PARALLEL": {
+    "maxIterations": 8,
+    "maxReplans": 2,
+    "maxAgents": 4
+   },
+   "HIGH_RISK": {
+    "maxIterations": 5,
+    "maxReplans": 1,
+    "maxAgents": 2
+   }
+  },
+  "capabilityByAgent": {
+   "agente-principal": "general-implementation",
+   "agente-researcher": "current-research",
+   "agente-design": "frontend-design",
+   "agente-growth-seo-geo": "seo-geo-aeo",
+   "agente-academic-tutor": "academic-tutoring",
+   "agente-obsidian-brain": "obsidian-knowledge",
+   "agente-security-auditor": "security-review",
+   "agente-release-manager": "release-publication"
+  },
+  "highRisk": [
+   {
+    "reason": "risk-release",
+    "primary": "agente-release-manager",
+    "patterns": [
+     "\\bpublish(?: the)? production release\\b",
+     "\\bdeploy(?: it)? to production\\b",
+     "\\brelease to production\\b",
+     "\\bpublicar(?: el| la)? release\\b"
+    ]
+   },
+   {
+    "reason": "risk-credentials",
+    "primary": "agente-security-auditor",
+    "patterns": [
+     "\\b(?:rotate|update|replace|expose|share)\\b.{0,40}\\b(?:secret|token|credential|api key)\\b",
+     "\\b(?:rota|actualiza|reemplaza|expone|comparti)\\w*\\b.{0,40}\\b(?:secreto|token|credencial|api key)\\b"
+    ]
+   },
+   {
+    "reason": "risk-production-write",
+    "primary": "agente-security-auditor",
+    "patterns": [
+     "\\b(?:write|migrate|delete|deploy)\\w*\\b.{0,60}\\bproduction\\b",
+     "\\b(?:escrib|migr|borr|despleg)\\w*\\b.{0,60}\\b(?:produccion|productiva)\\b"
+    ]
+   },
+   {
+    "reason": "risk-payment",
+    "primary": "agente-security-auditor",
+    "patterns": [
+     "\\b(?:make|execute|send|charge)\\w*\\b.{0,40}\\b(?:payment|card|purchase)\\b",
+     "\\b(?:realiza|ejecuta|envia|cobra|compra)\\w*\\b.{0,40}\\b(?:pago|tarjeta|suscripcion)\\b"
+    ]
+   },
+   {
+    "reason": "risk-external-message",
+    "primary": "agente-security-auditor",
+    "patterns": [
+     "\\b(?:send|post)\\w*\\b.{0,40}\\b(?:external dm|customer message|email)\\b",
+     "\\b(?:envia|manda|publica)\\w*\\b.{0,40}\\b(?:dm|mensaje|email)\\b"
+    ]
+   },
+   {
+    "reason": "risk-destructive",
+    "primary": "agente-security-auditor",
+    "patterns": [
+     "\\b(?:delete|remove|drop|destroy)\\b.{0,50}\\b(?:all|recursively|customer data|database)\\b",
+     "\\b(?:borra|elimina|destrui)\\w*\\b.{0,50}\\b(?:todo|recursiv|datos|base de datos)\\b"
+    ]
+   }
+  ],
+  "parallel": {
+   "patterns": [
+    "\\bin parallel\\b",
+    "\\bparallel tracks?\\b",
+    "\\bindependent agents?\\b",
+    "\\bmultiple independent advisers?\\b",
+    "\\ben paralelo\\b",
+    "\\bagentes independientes\\b",
+    "\\basesores paralelos\\b"
+   ],
+   "councilPatterns": [
+    "\\bllm council\\b",
+    "\\bthe council\\b",
+    "\\bactiva(?: el)? council\\b",
+    "\\busa(?: el)? council\\b"
+   ]
+  },
+  "specialists": [
+   {
+    "priority": 10,
+    "reason": "specialist-academic",
+    "primary": "agente-academic-tutor",
+    "component": ".agents/workflows/academic_tutor.md",
+    "patterns": [
+     "\\bparcial(?:es)?\\b",
+     "\\bexam prep\\b",
+     "\\bstudy session\\b",
+     "\\bpracticar\\b.{0,30}\\b(?:economia|programacion|materia)\\b",
+     "\\btomame(?:\\sun)?\\b.{0,30}\\b(?:parcial|examen|quiz)\\b",
+     "\\brepasar\\b.{0,30}\\b(?:para el|materia|tema)\\b"
+    ],
+    "negativeTriggers": [
+     "\\bvista parcial\\b",
+     "\\bactualizacion parcial\\b",
+     "\\bparcial(?:mente)?\\b.{0,15}\\b(?:deploy|migration|update|fix|refactor|render|view|aplicacion|merge|rollback)\\b",
+     "\\bpartial\\b.{0,15}\\b(?:update|render|view|deploy|migration|merge|rollback)\\b"
+    ]
+   },
+   {
+    "priority": 20,
+    "reason": "specialist-obsidian",
+    "primary": "agente-obsidian-brain",
+    "component": ".agents/skills/obsidian-vault/SKILL.md",
+    "patterns": [
+     "\\bobsidian\\b",
+     "\\bvault\\b.{0,20}\\b(?:nota|note|captur|organiz|link|tag|folder)\\b",
+     "\\bzettelkasten\\b",
+     "\\bmoc\\b.{0,15}\\b(?:crear|organiz|update)\\b"
+    ],
+    "negativeTriggers": [
+     "\\bvault\\b.{0,15}\\b(?:secret|hashicorp|credential|token|aws|azure)\\b",
+     "\\bkey vault\\b"
+    ]
+   },
+   {
+    "priority": 30,
+    "reason": "specialist-growth-search",
+    "primary": "agente-growth-seo-geo",
+    "component": ".agents/skills/seo-geo-growth/SKILL.md",
+    "patterns": [
+     "\\bgeo strategy\\b",
+     "\\bestrategia geo\\b",
+     "\\baeo\\b",
+     "\\bai search visibility\\b",
+     "\\bvisibilidad en buscadores de ia\\b",
+     "\\bkeyword strategy\\b",
+     "\\bprogrammatic seo\\b",
+     "\\bbacklog 30.?60.?90\\b"
+    ],
+    "negativeTriggers": [
+     "\\bcanonical\\b.{0,20}\\b(?:tag|url|link)\\b",
+     "\\brobots\\.txt\\b",
+     "\\bsitemap\\.xml\\b",
+     "\\bschema markup\\b",
+     "\\bmeta description\\b"
+    ]
+   },
+   {
+    "priority": 40,
+    "reason": "specialist-technical-seo",
+    "primary": "agente-seo",
+    "component": null,
+    "patterns": [
+     "\\btechnical seo\\b",
+     "\\bseo tecnico\\b",
+     "\\bcanonical\\b",
+     "\\bsitemap\\b",
+     "\\brobots\\.txt\\b",
+     "\\bschema markup\\b",
+     "\\bmeta tags?\\b",
+     "\\bcore web vitals\\b",
+     "\\bstructured data\\b"
+    ],
+    "negativeTriggers": [
+     "\\bkeyword\\b.{0,20}\\b(?:strategy|research|backlog)\\b",
+     "\\bprogrammatic\\b",
+     "\\bgeo\\b",
+     "\\baeo\\b",
+     "\\bgrowth\\b.{0,15}\\bstrategy\\b"
+    ]
+   },
+   {
+    "priority": 50,
+    "reason": "specialist-product",
+    "primary": "agente-product-founder",
+    "component": ".agents/skills/product-foundry/SKILL.md",
+    "patterns": [
+     "\\bproduct mvp\\b",
+     "\\bmvp scope\\b",
+     "\\bidea de producto\\b",
+     "\\bproduct idea\\b",
+     "\\bdemand validation\\b",
+     "\\bkill or scale\\b",
+     "\\bvalidar(?:\\sla)?\\s(?:idea|demanda)\\b"
+    ],
+    "negativeTriggers": [
+     "\\bproduct(?:o)?\\b.{0,10}\\b(?:of|de|entre)\\b.{0,15}\\b(?:two|dos|number|numero)\\b",
+     "\\bcartesian product\\b",
+     "\\bdot product\\b",
+     "\\bproducto escalar\\b",
+     "\\bproducto cartesiano\\b"
+    ]
+   },
+   {
+    "priority": 60,
+    "reason": "specialist-ai-architecture",
+    "primary": "agente-ai-architect",
+    "component": ".agents/skills/ai-production-architecture/SKILL.md",
+    "patterns": [
+     "\\bproduction rag\\b",
+     "\\brag architecture\\b",
+     "\\bllm architecture\\b",
+     "\\bai architecture\\b",
+     "\\bsemantic cache\\b",
+     "\\bprompt registry\\b",
+     "\\bvector database\\b",
+     "\\bembedding pipeline\\b"
+    ],
+    "negativeTriggers": [
+     "\\bai\\b.{0,10}\\b(?:explain|que es|what is)\\b"
+    ]
+   },
+   {
+    "priority": 70,
+    "reason": "specialist-frontend-design",
+    "primary": "agente-design",
+    "component": ".agents/skills/frontend-design/SKILL.md",
+    "patterns": [
+     "\\bdesign a responsive\\b",
+     "\\bvisual system\\b",
+     "\\bfrontend design\\b",
+     "\\bdisena\\w*\\b.{0,30}\\blanding\\b",
+     "\\baccessible ui\\b",
+     "\\bdesign system\\b",
+     "\\bcomponent library\\b"
+    ],
+    "negativeTriggers": [
+     "\\bdesign pattern\\b",
+     "\\bsystem design\\b.{0,15}\\b(?:interview|entrevista)\\b"
+    ]
+   },
+   {
+    "priority": 80,
+    "reason": "specialist-current-research",
+    "primary": "agente-researcher",
+    "component": null,
+    "patterns": [
+     "\\bcurrent official documentation\\b",
+     "\\blatest supported\\b",
+     "\\bresearch the current\\b",
+     "\\binvestiga(?: la)? documentacion actual\\b",
+     "\\bprimary sources\\b",
+     "\\bcompara\\w*\\b.{0,20}\\b(?:guias|docs|versiones)\\b.{0,15}\\b(?:actual|oficial|hoy)\\b"
+    ],
+    "negativeTriggers": [
+     "\\bexplica\\b.{0,15}\\b(?:este|esta|el|la|un|una)\\b.{0,15}\\b(?:archivo|funcion|clase|variable)\\b"
+    ]
+   },
+   {
+    "priority": 90,
+    "reason": "specialist-code-review",
+    "primary": "agente-code-reviewer",
+    "component": null,
+    "patterns": [
+     "\\bcode review\\b",
+     "\\breview this pr\\b",
+     "\\brevisa(?: este| el)? diff\\b",
+     "\\brevision de codigo\\b",
+     "\\breview my changes\\b"
+    ],
+    "negativeTriggers": [
+     "\\breview\\b.{0,10}\\b(?:the docs|la documentacion|this article)\\b"
+    ]
+   }
+  ]
+ },
+ "agents": [
+  {
+   "id": "agente-principal",
+   "name": "Agente Principal",
+   "division": "engineering",
+   "description": "Implements application logic, integrations, auth, APIs, database work, routing, middleware, and general production code outside specialist scopes.",
+   "riskLevel": "medium",
+   "tools": [
+    "Read",
+    "Grep",
+    "Edit",
+    "Write",
+    "Bash"
+   ]
+  },
+  {
+   "id": "agente-design",
+   "name": "Agente Design",
+   "division": "design",
+   "description": "Handles CSS, responsive design, visual polish, accessibility details, dark mode, animations, and UI component presentation.",
+   "riskLevel": "medium",
+   "tools": [
+    "Read",
+    "Grep"
+   ]
+  },
+  {
+   "id": "agente-tests",
+   "name": "Agente Tests",
+   "division": "quality",
+   "description": "Designs and reviews unit tests, integration tests, E2E tests, coverage, fixtures, mocks, and regression evidence.",
+   "riskLevel": "medium",
+   "tools": [
+    "Read",
+    "Grep"
+   ]
+  },
+  {
+   "id": "agente-docs",
+   "name": "Agente Docs",
+   "division": "documentation",
+   "description": "Writes technical documentation, README sections, API docs, changelogs, docstrings, usage guides, and implementation handoffs.",
+   "riskLevel": "low",
+   "tools": [
+    "Read",
+    "Grep"
+   ]
+  },
+  {
+   "id": "agente-seo",
+   "name": "Agente SEO",
+   "division": "growth",
+   "description": "Handles technical and on-page SEO including metadata, Open Graph, headings, schema, canonical URLs, sitemap, robots, and alt text.",
+   "riskLevel": "medium",
+   "tools": [
+    "Read",
+    "Grep"
+   ]
+  },
+  {
+   "id": "agente-marketing-strategist",
+   "name": "Agente Marketing Strategist",
+   "division": "growth",
+   "description": "Plans positioning, go-to-market strategy, audience research, launch messaging, campaigns, and marketing systems without executing paid actions.",
+   "riskLevel": "medium",
+   "tools": [
+    "Read",
+    "Grep"
+   ]
+  },
+  {
+   "id": "agente-growth-seo-geo",
+   "name": "Agente Growth SEO GEO",
+   "division": "growth",
+   "description": "Builds organic acquisition plans across SEO, GEO, AEO, local SEO, programmatic SEO, backlinks, Search Console, and AI search visibility.",
+   "riskLevel": "medium",
+   "tools": [
+    "Read",
+    "Grep",
+    "Write"
+   ]
+  },
+  {
+   "id": "agente-product-founder",
+   "name": "Agente Product Founder",
+   "division": "product",
+   "description": "Shapes product ideas, MVP scope, indie hacking bets, validation criteria, launch sequencing, AI-first opportunities, and kill keep scale decisions.",
+   "riskLevel": "medium",
+   "tools": [
+    "Read",
+    "Grep",
+    "Write"
+   ]
+  },
+  {
+   "id": "agente-ai-architect",
+   "name": "Agente AI Architect",
+   "division": "architecture",
+   "description": "Designs production AI and RAG systems with separated services, agents, prompts, security, evaluation, observability, and cost controls.",
+   "riskLevel": "high",
+   "tools": [
+    "Read",
+    "Grep",
+    "Edit",
+    "Write",
+    "Bash"
+   ]
+  },
+  {
+   "id": "agente-security-auditor",
+   "name": "Agente Security Auditor",
+   "division": "security",
+   "description": "Reviews secrets, unsafe commands, dependency risk, MCP and plugin permissions, auth handling, publication safety, and automation blast radius.",
+   "riskLevel": "high",
+   "tools": [
+    "Read",
+    "Grep"
+   ]
+  },
+  {
+   "id": "agente-mcp-architect",
+   "name": "Agente MCP Architect",
+   "division": "architecture",
+   "description": "Designs, evaluates, and documents MCP integrations, MCP catalogs, OpenCode MCP configuration, and tool permission boundaries.",
+   "riskLevel": "high",
+   "tools": [
+    "Read",
+    "Grep",
+    "Write"
+   ]
+  },
+  {
+   "id": "agente-obsidian-brain",
+   "name": "Agente Obsidian Brain",
+   "division": "knowledge",
+   "description": "Maintains Obsidian vault workflows, class notes, flashcards, inbox triage, Zettelkasten links, MOCs, and dashboards.",
+   "riskLevel": "medium",
+   "tools": [
+    "Read",
+    "Grep",
+    "Edit",
+    "Write",
+    "Bash"
+   ]
+  },
+  {
+   "id": "agente-code-reviewer",
+   "name": "Agente Code Reviewer",
+   "division": "quality",
+   "description": "Reviews diffs, PRs, implementation plans, and completed changes for bugs, regressions, edge cases, maintainability, and validation gaps.",
+   "riskLevel": "medium",
+   "tools": [
+    "Read",
+    "Grep"
+   ]
+  },
+  {
+   "id": "agente-researcher",
+   "name": "Agente Researcher",
+   "division": "research",
+   "description": "Researches current documentation, libraries, MCPs, plugins, competitors, and implementation approaches before recommendations.",
+   "riskLevel": "low",
+   "tools": [
+    "Read",
+    "Grep"
+   ]
+  },
+  {
+   "id": "agente-release-manager",
+   "name": "Agente Release Manager",
+   "division": "release",
+   "description": "Prepares commits, changelogs, release checklists, repo publication, cross-machine installation validation, and release hygiene.",
+   "riskLevel": "high",
+   "tools": [
+    "Read",
+    "Grep",
+    "Write"
+   ]
+  },
+  {
+   "id": "agente-academic-tutor",
+   "name": "Agente Academic Tutor",
+   "division": "education",
+   "description": "Tutors university subjects with deep explanations, honest evaluation, exercises, exam preparation, and delegation to Obsidian for vault edits.",
+   "riskLevel": "low",
+   "tools": [
+    "Read",
+    "Grep"
+   ]
+  },
+  {
+   "id": "agente-x-content-strategist",
+   "name": "Agente X Content Strategist",
+   "division": "content",
+   "description": "Plans and drafts X/Twitter, LinkedIn, Substack, threads, replies, quote tweets, and personal branding content without ad spend or DMs.",
+   "riskLevel": "medium",
+   "tools": [
+    "Read",
+    "Grep",
+    "Edit"
+   ]
+  },
+  {
+   "id": "kickoff-architect",
+   "name": "Kickoff Architect",
+   "division": "planning",
+   "description": "Creates concise project or feature kickoff plans with first milestone, minimum viable structure, and appropriate process intensity.",
+   "riskLevel": "low",
+   "tools": [
+    "Read",
+    "Grep"
+   ]
+  },
+  {
+   "id": "workflow-pruner",
+   "name": "Workflow Pruner",
+   "division": "operations",
+   "description": "Simplifies bloated prompts, workflows, skills, agent setups, and operating models by reducing token cost and removing low-value process.",
+   "riskLevel": "low",
+   "tools": [
+    "Read",
+    "Grep"
+   ]
+  }
+ ],
+ "cases": [
+  {
+   "id": "simple-es-explicacion",
+   "task": {
+    "title": "Explicame que hace este comando",
+    "body": "Solo necesito una explicacion breve.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "SIMPLE",
+    "primary": "agente-principal",
+    "maxAgents": 1,
+    "approvalRequired": false,
+    "requiredComponents": [],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md",
+     "support:agente-code-reviewer"
+    ]
+   }
+  },
+  {
+   "id": "simple-es-typo",
+   "task": {
+    "title": "Corregi un typo",
+    "body": "Cambia una palabra en README.md.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "SIMPLE",
+    "primary": "agente-principal",
+    "maxAgents": 1,
+    "approvalRequired": false,
+    "requiredComponents": [],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md",
+     "support:agente-code-reviewer"
+    ]
+   }
+  },
+  {
+   "id": "simple-es-un-archivo",
+   "task": {
+    "title": "Arregla este archivo",
+    "body": "Es un cambio chico y localizado en una sola funcion.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "SIMPLE",
+    "primary": "agente-principal",
+    "maxAgents": 1,
+    "approvalRequired": false,
+    "requiredComponents": [],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md",
+     "support:agente-code-reviewer"
+    ]
+   }
+  },
+  {
+   "id": "simple-es-script",
+   "task": {
+    "title": "Ajusta el script local",
+    "body": "Agrega una validacion de argumento, sin tocar produccion.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "SIMPLE",
+    "primary": "agente-principal",
+    "maxAgents": 1,
+    "approvalRequired": false,
+    "requiredComponents": [],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md",
+     "support:agente-code-reviewer"
+    ]
+   }
+  },
+  {
+   "id": "simple-es-preparacion",
+   "task": {
+    "title": "Preparacion del ejemplo",
+    "body": "Ordena el texto de preparacion; no es una revision de PR.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "SIMPLE",
+    "primary": "agente-principal",
+    "maxAgents": 1,
+    "approvalRequired": false,
+    "requiredComponents": [],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md",
+     "support:agente-code-reviewer"
+    ]
+   }
+  },
+  {
+   "id": "simple-es-producto",
+   "task": {
+    "title": "Calcula el producto de dos numeros",
+    "body": "Explica la multiplicacion, no es una idea de negocio.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "SIMPLE",
+    "primary": "agente-principal",
+    "maxAgents": 1,
+    "approvalRequired": false,
+    "requiredComponents": [],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md",
+     "support:agente-code-reviewer"
+    ]
+   }
+  },
+  {
+   "id": "simple-en-explain",
+   "task": {
+    "title": "Explain this function",
+    "body": "Give me a short explanation only.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "SIMPLE",
+    "primary": "agente-principal",
+    "maxAgents": 1,
+    "approvalRequired": false,
+    "requiredComponents": [],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md",
+     "support:agente-code-reviewer"
+    ]
+   }
+  },
+  {
+   "id": "simple-en-typo",
+   "task": {
+    "title": "Fix one typo",
+    "body": "Change a misspelled word in the README.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "SIMPLE",
+    "primary": "agente-principal",
+    "maxAgents": 1,
+    "approvalRequired": false,
+    "requiredComponents": [],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md",
+     "support:agente-code-reviewer"
+    ]
+   }
+  },
+  {
+   "id": "simple-en-one-file",
+   "task": {
+    "title": "Small one-file fix",
+    "body": "Rename a local variable and run the focused test.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "SIMPLE",
+    "primary": "agente-principal",
+    "maxAgents": 1,
+    "approvalRequired": false,
+    "requiredComponents": [],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md",
+     "support:agente-code-reviewer"
+    ]
+   }
+  },
+  {
+   "id": "simple-en-script",
+   "task": {
+    "title": "Update the local script",
+    "body": "Add one input check to a developer-only command.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "SIMPLE",
+    "primary": "agente-principal",
+    "maxAgents": 1,
+    "approvalRequired": false,
+    "requiredComponents": [],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md",
+     "support:agente-code-reviewer"
+    ]
+   }
+  },
+  {
+   "id": "simple-en-docs",
+   "task": {
+    "title": "Clarify one documentation sentence",
+    "body": "Keep the meaning and update only this paragraph.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "SIMPLE",
+    "primary": "agente-principal",
+    "maxAgents": 1,
+    "approvalRequired": false,
+    "requiredComponents": [],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md",
+     "support:agente-code-reviewer"
+    ]
+   }
+  },
+  {
+   "id": "simple-en-production-word",
+   "task": {
+    "title": "Define production",
+    "body": "Explain the word in a glossary; do not write to any environment.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "SIMPLE",
+    "primary": "agente-principal",
+    "maxAgents": 1,
+    "approvalRequired": false,
+    "requiredComponents": [],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md",
+     "support:agente-code-reviewer"
+    ]
+   }
+  },
+  {
+   "id": "specialized-es-academic",
+   "task": {
+    "title": "Preparame para el parcial",
+    "body": "Quiero practicar microeconomia con ejercicios y feedback.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "SPECIALIZED",
+    "primary": "agente-academic-tutor",
+    "maxAgents": 1,
+    "approvalRequired": false,
+    "requiredComponents": [
+     ".agents/workflows/academic_tutor.md"
+    ],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ]
+   }
+  },
+  {
+   "id": "specialized-es-obsidian",
+   "task": {
+    "title": "Organiza mi vault de Obsidian",
+    "body": "Conecta estas notas al MOC de la materia.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "SPECIALIZED",
+    "primary": "agente-obsidian-brain",
+    "maxAgents": 1,
+    "approvalRequired": false,
+    "requiredComponents": [
+     ".agents/skills/obsidian-vault/SKILL.md"
+    ],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ]
+   }
+  },
+  {
+   "id": "specialized-es-seo-tecnico",
+   "task": {
+    "title": "Revisa el SEO tecnico",
+    "body": "Corrige canonical, sitemap y robots.txt.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "SPECIALIZED",
+    "primary": "agente-seo",
+    "maxAgents": 1,
+    "approvalRequired": false,
+    "requiredComponents": [],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ]
+   }
+  },
+  {
+   "id": "specialized-es-growth",
+   "task": {
+    "title": "Arma una estrategia GEO",
+    "body": "Necesito keywords y visibilidad en buscadores de IA.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "SPECIALIZED",
+    "primary": "agente-growth-seo-geo",
+    "maxAgents": 1,
+    "approvalRequired": false,
+    "requiredComponents": [
+     ".agents/skills/seo-geo-growth/SKILL.md"
+    ],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ]
+   }
+  },
+  {
+   "id": "specialized-en-product",
+   "task": {
+    "title": "Scope a product MVP",
+    "body": "Define demand validation and kill or scale criteria.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "SPECIALIZED",
+    "primary": "agente-product-founder",
+    "maxAgents": 1,
+    "approvalRequired": false,
+    "requiredComponents": [
+     ".agents/skills/product-foundry/SKILL.md"
+    ],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ]
+   }
+  },
+  {
+   "id": "specialized-en-ai",
+   "task": {
+    "title": "Design a production RAG architecture",
+    "body": "Include evaluation, observability and cost controls.",
+    "labels": [],
+    "riskLevel": "medium",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "SPECIALIZED",
+    "primary": "agente-ai-architect",
+    "maxAgents": 1,
+    "approvalRequired": false,
+    "requiredComponents": [
+     ".agents/skills/ai-production-architecture/SKILL.md"
+    ],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ]
+   }
+  },
+  {
+   "id": "specialized-en-frontend",
+   "task": {
+    "title": "Design a responsive landing page",
+    "body": "Create the visual system and accessible UI for a new product page.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "SPECIALIZED",
+    "primary": "agente-design",
+    "maxAgents": 1,
+    "approvalRequired": false,
+    "requiredComponents": [
+     ".agents/skills/frontend-design/SKILL.md"
+    ],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ]
+   }
+  },
+  {
+   "id": "specialized-en-research",
+   "task": {
+    "title": "Research the current official documentation",
+    "body": "Find the latest supported API behavior and cite primary sources.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "SPECIALIZED",
+    "primary": "agente-researcher",
+    "maxAgents": 1,
+    "approvalRequired": false,
+    "requiredComponents": [],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ]
+   }
+  },
+  {
+   "id": "parallel-es-research",
+   "task": {
+    "title": "Investiga en paralelo dos opciones",
+    "body": "Usa dos agentes independientes: uno compara costos y otro documentacion, luego sintetiza.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "PARALLEL",
+    "primary": "agente-researcher",
+    "maxAgents": 4,
+    "approvalRequired": false,
+    "requiredComponents": [
+     ".agents/workflows/parallel_agents.md"
+    ],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ]
+   }
+  },
+  {
+   "id": "parallel-es-council",
+   "task": {
+    "title": "Activa el council explicitamente",
+    "body": "Quiero asesores paralelos para comparar estas alternativas independientes.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "PARALLEL",
+    "primary": "agente-principal",
+    "maxAgents": 4,
+    "approvalRequired": false,
+    "requiredComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ],
+    "forbiddenComponents": []
+   }
+  },
+  {
+   "id": "parallel-en-research",
+   "task": {
+    "title": "Run two independent research tracks in parallel",
+    "body": "One agent checks libraries and another checks deployment options.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "PARALLEL",
+    "primary": "agente-researcher",
+    "maxAgents": 4,
+    "approvalRequired": false,
+    "requiredComponents": [
+     ".agents/workflows/parallel_agents.md"
+    ],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ]
+   }
+  },
+  {
+   "id": "parallel-en-council",
+   "task": {
+    "title": "Use the LLM council",
+    "body": "Explicitly ask multiple independent advisers to evaluate the options.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "PARALLEL",
+    "primary": "agente-principal",
+    "maxAgents": 4,
+    "approvalRequired": false,
+    "requiredComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ],
+    "forbiddenComponents": []
+   }
+  },
+  {
+   "id": "risk-es-secreto",
+   "task": {
+    "title": "Rota una credencial real",
+    "body": "Actualiza el token secreto usado por el servicio.",
+    "labels": [],
+    "riskLevel": "high",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "HIGH_RISK",
+    "primary": "agente-security-auditor",
+    "maxAgents": 2,
+    "approvalRequired": true,
+    "requiredComponents": [
+     ".agents/workflows/validation.md"
+    ],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ]
+   }
+  },
+  {
+   "id": "risk-es-produccion",
+   "task": {
+    "title": "Escribe en produccion",
+    "body": "Ejecuta la migracion contra la base de datos productiva.",
+    "labels": [],
+    "riskLevel": "high",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "HIGH_RISK",
+    "primary": "agente-security-auditor",
+    "maxAgents": 2,
+    "approvalRequired": true,
+    "requiredComponents": [
+     ".agents/workflows/validation.md"
+    ],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ]
+   }
+  },
+  {
+   "id": "risk-es-pago",
+   "task": {
+    "title": "Realiza el pago",
+    "body": "Compra la suscripcion con la tarjeta guardada.",
+    "labels": [],
+    "riskLevel": "high",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "HIGH_RISK",
+    "primary": "agente-security-auditor",
+    "maxAgents": 2,
+    "approvalRequired": true,
+    "requiredComponents": [
+     ".agents/workflows/validation.md"
+    ],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ]
+   }
+  },
+  {
+   "id": "risk-en-message",
+   "task": {
+    "title": "Send an external DM",
+    "body": "Message the customer from my account now.",
+    "labels": [],
+    "riskLevel": "high",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "HIGH_RISK",
+    "primary": "agente-security-auditor",
+    "maxAgents": 2,
+    "approvalRequired": true,
+    "requiredComponents": [
+     ".agents/workflows/validation.md"
+    ],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ]
+   }
+  },
+  {
+   "id": "risk-en-destructive",
+   "task": {
+    "title": "Delete all stored files",
+    "body": "Recursively remove the customer data directory.",
+    "labels": [],
+    "riskLevel": "high",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "HIGH_RISK",
+    "primary": "agente-security-auditor",
+    "maxAgents": 2,
+    "approvalRequired": true,
+    "requiredComponents": [
+     ".agents/workflows/validation.md"
+    ],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ]
+   }
+  },
+  {
+   "id": "risk-en-release",
+   "task": {
+    "title": "Publish the production release",
+    "body": "Push the release and deploy it to production.",
+    "labels": [],
+    "riskLevel": "high",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "HIGH_RISK",
+    "primary": "agente-release-manager",
+    "maxAgents": 2,
+    "approvalRequired": true,
+    "requiredComponents": [
+     ".agents/workflows/validation.md"
+    ],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ]
+   }
+  },
+  {
+   "id": "safety-es-produccion-diacritics",
+   "task": {
+    "title": "Escribí en producción",
+    "body": "Aplicá este cambio real ahora.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "HIGH_RISK",
+    "primary": "agente-security-auditor",
+    "maxAgents": 2,
+    "approvalRequired": true,
+    "requiredComponents": [
+     ".agents/workflows/validation.md"
+    ],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ]
+   }
+  },
+  {
+   "id": "safety-es-pago-diacritics",
+   "task": {
+    "title": "Realizá un pago",
+    "body": "Usá la tarjeta guardada.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "HIGH_RISK",
+    "primary": "agente-security-auditor",
+    "maxAgents": 2,
+    "approvalRequired": true,
+    "requiredComponents": [
+     ".agents/workflows/validation.md"
+    ],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ]
+   }
+  },
+  {
+   "id": "safety-es-delete-diacritics",
+   "task": {
+    "title": "Borrá todo",
+    "body": "Eliminá los archivos del cliente recursivamente.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "HIGH_RISK",
+    "primary": "agente-security-auditor",
+    "maxAgents": 2,
+    "approvalRequired": true,
+    "requiredComponents": [
+     ".agents/workflows/validation.md"
+    ],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ]
+   }
+  },
+  {
+   "id": "safety-es-dm-diacritics",
+   "task": {
+    "title": "Enviá un DM externo",
+    "body": "Mandalo desde mi cuenta ahora.",
+    "labels": [],
+    "riskLevel": "low",
+    "requiresApproval": false
+   },
+   "expected": {
+    "lane": "HIGH_RISK",
+    "primary": "agente-security-auditor",
+    "maxAgents": 2,
+    "approvalRequired": true,
+    "requiredComponents": [
+     ".agents/workflows/validation.md"
+    ],
+    "forbiddenComponents": [
+     ".agents/workflows/multiagent_review_loop.md"
+    ]
+   }
+  }
+ ]
+}
