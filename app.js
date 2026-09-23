@@ -65,7 +65,7 @@ const UI_COPY = {
       skills: 'Python, FastAPI, TypeScript, SQL, Linux, Git, Playwright, automatización de procesos y desarrollo asistido por IA.',
       projects: 'Proyectos principales: JobBot, Agents System, Motor Estadístico Predictivo y Pisculichi Labs. El archivo completo tiene {total} proyectos, {deployed} con demo pública.',
       agents: 'Uso asistentes de IA como parte de un flujo ordenado: plan, construcción, revisión, pruebas, documentación y publicación.',
-      contact: 'GitHub: @nachopalmeri | LinkedIn: ignacio | Email: ignaciopalmeri1@gmail.com',
+      contact: 'GitHub: @nachopalmeri | LinkedIn: in/ignaciopalmeri | Email: ignaciopalmeri1@gmail.com',
       whoami: 'Ignacio Palmeri. Gestión de IT en UADE, Analista de Operaciones en Grido desde oct-2024. Construyo con Python, FastAPI e IA. Ni senior ni sorprendido de estar acá.',
       log: 'oct-2024  grido      → caja, inventario y auditorías, la fricción real que me hizo automatizar\n2025      uade       → arranco Gestión de IT\nongoing   jobbot     → SaaS full-stack para búsqueda laboral, auth+webhooks+pagos\nongoing   portfolio  → este sitio, iterado en público con IA'
     },
@@ -276,7 +276,7 @@ const UI_COPY = {
       skills: 'Python, FastAPI, TypeScript, SQL, Linux, Git, Playwright, process automation and applied AI.',
       projects: 'Main projects: JobBot, Agents System, Sports Predictive Analytics Engine and Pisculichi Labs. The full archive has {total} projects, {deployed} with a public demo.',
       agents: 'I use AI assistants inside an ordered workflow: planning, building, review, tests, documentation and shipping.',
-      contact: 'GitHub: @nachopalmeri | LinkedIn: ignacio | Email: ignaciopalmeri1@gmail.com',
+      contact: 'GitHub: @nachopalmeri | LinkedIn: in/ignaciopalmeri | Email: ignaciopalmeri1@gmail.com',
       whoami: "Ignacio Palmeri. IT Management at UADE, Operations Analyst at Grido since oct-2024. I build with Python, FastAPI and AI. Not senior, not surprised to be here.",
       log: 'oct-2024  grido      -> cash, inventory and audits, the real friction that got me automating\n2025      uade       -> started IT Management\nongoing   jobbot     -> full-stack job-search SaaS, auth+webhooks+payments\nongoing   portfolio  -> this site, iterated in public with AI'
     },
@@ -2774,7 +2774,7 @@ function setupRecruiterSummary() {
         <footer class="rs-actions">
           <a class="btn btn-primary" href="mailto:ignaciopalmeri1@gmail.com?subject=${encodeURIComponent(en ? 'Internship / trainee role' : 'Pasantía / rol trainee')}">${esc(t.email)}</a>
           <a class="btn btn-secondary" href="${en ? '/cv-en.pdf' : '/cv.pdf'}" download="${en ? 'Ignacio-Palmeri-CV-EN.pdf' : 'Ignacio-Palmeri-CV.pdf'}">${esc(t.cv)}</a>
-          <a class="rs-social" href="https://www.linkedin.com/in/ignacio-palmeri-64035b378/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a class="rs-social" href="https://www.linkedin.com/in/ignaciopalmeri/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           <a class="rs-social" href="https://github.com/nachopalmeri" target="_blank" rel="noopener noreferrer">GitHub</a>
           <button type="button" class="rs-full" data-recruiter-close>${esc(t.full)} ↓</button>
         </footer>
