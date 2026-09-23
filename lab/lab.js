@@ -31,7 +31,7 @@ const HOME = {
 };
 const shortName = (id) => id.replace(/^agente-/, '').replace(/-/g, ' ');
 
-const data = await (await fetch('data.json')).json();
+const data = await (await fetch('/lab/data.json')).json();
 const Router = window.AgentRouter;
 
 // ------------------------------------------------------------------ stage
@@ -513,4 +513,5 @@ $('#trace-close').addEventListener('click', () => trace.classList.remove('show')
 renderChips();
 
 if (stage) await stage.ready();
+window.__labReady = true;
 setTimeout(() => $('#intro').classList.add('gone'), reduceMotion ? 0 : 400);

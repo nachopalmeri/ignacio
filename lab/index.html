@@ -171,7 +171,21 @@
 
   <div class="intro" id="intro"><span>Cargando el centro de mando</span></div>
 
-  <script src="router.js"></script>
-  <script type="module" src="lab.js"></script>
+  <script>
+    // Never leave the visitor on the loading screen: if the 3D module fails
+    // (blocked CDN, old browser), drop the intro and say so.
+    setTimeout(function () {
+      var intro = document.getElementById('intro');
+      if (intro && !intro.classList.contains('gone')) {
+        intro.classList.add('gone');
+        if (!window.__labReady) {
+          document.body.classList.add('no-webgl');
+          document.querySelector('.fallback').textContent = 'No se pudo cargar la escena 3D (¿algún bloqueador de scripts?). Probá recargar o desactivarlo para este sitio.';
+        }
+      }
+    }, 9000);
+  </script>
+  <script src="/lab/router.js"></script>
+  <script type="module" src="/lab/lab.js"></script>
 </body>
 </html>
