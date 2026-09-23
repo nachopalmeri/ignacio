@@ -38,7 +38,7 @@ const UI_COPY = {
       sticker: 'Ahora lo automatizo.',
       body: 'Trabajo en una franquicia de Grido desde octubre de 2024: caja, conciliaciones, inventario y auditorías de facturación. Ahí aprendí qué tareas se repiten todos los días, y empecé a construir herramientas para dejar de hacerlas a mano.',
       film: 'Ver JobBot en acción',
-      filmMeta: 'Demo real · con sonido'
+      filmMeta: 'Demo real · 1 minuto'
     },
     exploded: {
       kicker: 'Por dentro',
@@ -249,7 +249,7 @@ const UI_COPY = {
       sticker: 'Now I automate it.',
       body: 'I have worked at a Grido franchise since October 2024: cash, reconciliations, inventory and billing audits. That is where I learned which tasks repeat every single day, and started building tools so nobody has to do them by hand.',
       film: 'Watch JobBot in action',
-      filmMeta: 'Real demo · with sound'
+      filmMeta: 'Real demo · 1 minute'
     },
     exploded: {
       kicker: 'Inside',
