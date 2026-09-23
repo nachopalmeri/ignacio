@@ -43,11 +43,15 @@ try {
   {
     const { context, page, errors } = await open(browser);
     const h1 = await page.locator('.cine-hero h1').textContent();
-    check('spanish headline', h1.includes('trabajo aburrido'), h1);
-    check('accent word marked', await page.locator('.cine-hero h1 .hero-word--accent').count() === 1);
+    check('name as headline', h1.trim() === 'Ignacio Palmeri', h1);
+    check('spanish kicker', (await page.locator('.cine-kicker').textContent()).startsWith('Estudiante de Gestión IT'));
+    const word = await page.locator('#hero-role-word').textContent();
+    await page.waitForTimeout(2800);
+    check('role word rotates', (await page.locator('#hero-role-word').textContent()) !== word);
     const live = await page.locator('[data-i18n="hero.trustLive"]').textContent();
     const deployed = await page.evaluate(() => projectStats().deployed);
     check('trust row uses real deployed count', live.startsWith(String(deployed)), live);
+    check('wall shows every project', await page.evaluate(() => new Set([...document.querySelectorAll('.cine-tile')].map((t) => t.dataset.cineId)).size === FEATURED_PROJECTS.filter((p) => p.media).length));
     check('wall only shows project screenshots', await page.evaluate(() => [...document.querySelectorAll('.cine-tile')].every((t) => FEATURED_PROJECTS.some((p) => p.id === t.dataset.cineId))));
     check('spotlight lights a project', await page.locator('.cine-tile.is-lit').count() > 0);
     const first = await page.locator('[data-cine-now] strong').textContent();
@@ -55,7 +59,8 @@ try {
     check('spotlight cycles', (await page.locator('[data-cine-now] strong').textContent()) !== first);
 
     await page.getByRole('button', { name: 'EN', exact: true }).click();
-    check('english headline', (await page.locator('.cine-hero h1').textContent()).includes('boring work'));
+    check('english description', (await page.locator('.cine-hero .hero-description').textContent()).includes('trainee role'));
+    check('english role word', ['automations', 'dashboards', 'bots', 'AI agents', 'APIs'].includes(await page.locator('#hero-role-word').textContent()));
     check('english caption', (await page.locator('.cine-now-label').textContent()) === 'Now showing');
 
     const explode = () => page.evaluate(() => parseFloat(getComputedStyle(document.querySelector('[data-exploded]')).getPropertyValue('--explode')));

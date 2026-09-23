@@ -6188,6 +6188,7 @@ header.app-header.is-scrolled .nav-cta {
 
 .cine-copy {
   position: relative;
+  width: 100%;
   transform: translateY(calc(var(--out) * -60px));
   opacity: calc(1 - var(--out) * 1.4);
 }
@@ -6227,24 +6228,47 @@ header.app-header.is-scrolled .nav-cta {
   font-variation-settings: 'wdth' 78, 'opsz' 96;
   font-stretch: 78%;
   font-weight: 800;
-  font-size: clamp(50px, 9.2vw, 136px);
-  line-height: 0.88;
+  font-size: clamp(56px, 10.5vw, 156px);
+  line-height: 0.86;
   letter-spacing: -0.035em;
   max-width: 11.5em;
-  margin: 0 0 26px;
+  margin: 0 0 18px;
   color: var(--cine-ink);
   text-wrap: balance;
   text-shadow: 0 6px 40px rgba(0, 0, 0, 0.45);
 }
 
-.cine-hero .cine-title .hero-word--accent {
+/* "Construyo ___": the rotating word takes the serif-italic accent. */
+.cine-hero .cine-role {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.28em;
+  margin: 0 0 22px;
+  font-family: 'Bricolage Grotesque', 'IBM Plex Sans', system-ui, sans-serif;
+  font-variation-settings: 'wdth' 78, 'opsz' 96;
+  font-stretch: 78%;
+  font-weight: 800;
+  font-size: clamp(30px, 4.4vw, 62px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  color: var(--cine-ink);
+}
+
+.cine-hero .cine-role .hero-role-word {
   font-family: 'Fraunces', Georgia, serif;
   font-style: italic;
   font-weight: 500;
   font-variation-settings: normal;
-  letter-spacing: -0.02em;
   color: var(--cine-accent);
-  padding-right: 0.06em;
+}
+
+.cine-kicker {
+  max-width: 680px;
+  margin: 0 0 14px;
+  font: 500 clamp(19px, 1.9vw, 25px)/1.35 'IBM Plex Sans', system-ui, sans-serif;
+  color: var(--cine-ink);
 }
 
 .cine-sub {

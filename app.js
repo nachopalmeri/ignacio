@@ -10,9 +10,6 @@ const UI_COPY = {
       tagline: 'Junior AI Automation & Product Engineer',
       title: 'Ignacio Palmeri',
       nowShowing: 'En pantalla',
-      headline: 'Hago que la compu haga el trabajo aburrido.',
-      accent: 'aburrido.',
-      sub: 'Soy Ignacio, estudiante de Gestión IT en Buenos Aires. Convierto tareas repetitivas en software con Python, FastAPI e IA, y lo dejo funcionando online.',
       watchCta: 'Mirá lo que construí',
       trustLive: '{deployed} proyectos online',
       trustRole: 'Busco pasantía o trainee',
@@ -224,9 +221,6 @@ const UI_COPY = {
       tagline: 'Junior AI Automation & Product Engineer',
       title: 'Ignacio Palmeri',
       nowShowing: 'Now showing',
-      headline: 'I make computers do the boring work.',
-      accent: 'boring',
-      sub: "I'm Ignacio, an IT Management student in Buenos Aires. I turn repetitive tasks into software with Python, FastAPI and AI, and ship it live.",
       watchCta: "See what I've built",
       trustLive: '{deployed} live projects',
       trustRole: 'Open to internship or trainee roles',
@@ -512,6 +506,7 @@ function applyStaticCopy() {
   secureExternalLinks(document);
   resetTerminal();
   splitHeroTitle();
+  renderHeroRoleWord();
   renderCineSpotlight();
   if (document.getElementById('project-carousel')) renderProjectCarousel();
   if (githubContributionData) renderGithubCalendar(githubContributionData);
@@ -530,9 +525,8 @@ function splitHeroTitle() {
 
   // Words keep their inline-block box from the first paint, so the entrance
   // animates opacity/transform only and never shifts layout.
-  const accent = String(getCopy('hero.accent')).toLowerCase();
   title.innerHTML = words
-    .map((word, i) => `<span class="hero-word${word.toLowerCase() === accent ? ' hero-word--accent' : ''}" style="--word-index:${i}">${escapeHtml(word)}</span>`)
+    .map((word, i) => `<span class="hero-word" style="--word-index:${i}">${escapeHtml(word)}</span>`)
     .join(' ');
 
   if (prefersReducedMotion()) {
@@ -1218,6 +1212,32 @@ function setupSideQuests() {
   }
 
   buildChips(); buildStrip(); render();
+}
+
+// The "Construyo ___" word under the name. It only ticks while the hero is
+// actually running (see setupCineHero), so it never animates off-screen.
+const HERO_ROLE_WORDS = {
+  es: ['automatizaciones', 'dashboards', 'bots', 'agentes de IA', 'APIs'],
+  en: ['automations', 'dashboards', 'bots', 'AI agents', 'APIs']
+};
+let heroRoleIndex = 0;
+
+function renderHeroRoleWord() {
+  const el = document.getElementById('hero-role-word');
+  if (!el) return;
+  const words = HERO_ROLE_WORDS[currentLang] || HERO_ROLE_WORDS.es;
+  el.textContent = words[heroRoleIndex % words.length];
+}
+
+function tickHeroRoleWord() {
+  const el = document.getElementById('hero-role-word');
+  if (!el) return;
+  heroRoleIndex++;
+  el.classList.add('is-swapping');
+  setTimeout(() => {
+    renderHeroRoleWord();
+    el.classList.remove('is-swapping');
+  }, 220);
 }
 
 function initNavbarScroll() {
@@ -2464,13 +2484,13 @@ function buildCineWall(wall) {
   const reduceMotion = prefersReducedMotion();
   const bigScreen = window.matchMedia('(min-width: 900px) and (hover: hover)').matches;
   let videos = 0;
-  let cursor = 0;
   const columns = [];
   for (let c = 0; c < CINE_COLUMNS; c++) {
     const tiles = [];
     for (let t = 0; t < CINE_TILES_PER_COLUMN; t++) {
-      const project = projects[cursor % projects.length];
-      cursor += 3; // step by 3 so neighbouring columns don't line up the same project
+      // Row-major walk so every project appears; offset per column keeps a
+      // row from repeating the same screen side by side.
+      const project = projects[(c * CINE_TILES_PER_COLUMN + t + c) % projects.length];
       const useVideo = !reduceMotion && bigScreen && project.preview && videos < CINE_MAX_VIDEOS && t === 1;
       if (useVideo) videos++;
       const media = useVideo
@@ -2507,6 +2527,7 @@ function setupCineHero() {
   const reduceMotion = prefersReducedMotion();
   let visible = true;
   let spotlightTimer = null;
+  let roleTimer = null;
 
   const running = () => visible && !reduceMotion && document.visibilityState === 'visible'
     && document.getElementById('overview-section')?.classList.contains('active') && !sideQuestsOpen();
@@ -2519,9 +2540,12 @@ function setupCineHero() {
     hero.querySelectorAll('video').forEach((v) => { if (on) v.play().catch(() => {}); else v.pause(); });
     if (on && !spotlightTimer) {
       spotlightTimer = setInterval(() => { cineSpotlightIndex++; renderCineSpotlight(); }, 3200);
+      roleTimer = setInterval(tickHeroRoleWord, 2400);
     } else if (!on && spotlightTimer) {
       clearInterval(spotlightTimer);
+      clearInterval(roleTimer);
       spotlightTimer = null;
+      roleTimer = null;
     }
   }
 
