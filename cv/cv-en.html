@@ -3,108 +3,125 @@
 <head>
 <meta charset="utf-8">
 <title>Ignacio Palmeri - CV</title>
-<!-- English translation of cv.pdf (the Spanish CV). Source for cv-en.pdf:
-     rebuild with `node scripts/build-cv.mjs`. Keep both versions in sync. -->
+<!-- English version of cv.pdf (Ignacio's Spanish CV, Sept 2026 QA edition).
+     Source for cv-en.pdf: rebuild with `node scripts/build-cv.mjs`.
+     Keep the facts identical to the Spanish CV. -->
 <style>
-  @page { size: A4; margin: 16mm 15mm 14mm; }
+  @page { size: A4; margin: 11mm 12mm 10mm; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: Helvetica, Arial, sans-serif; color: #1f2937; font-size: 10.4pt; line-height: 1.42; }
-  h1 { font-size: 25pt; color: #111827; letter-spacing: -0.3px; line-height: 1.1; }
-  .role { margin-top: 5px; color: #2563eb; font-weight: 700; font-size: 12pt; letter-spacing: 0.2px; }
-  .contact { margin-top: 7px; color: #4b5563; font-size: 9.6pt; display: flex; flex-wrap: wrap; gap: 4px 16px; }
-  .contact a { color: #4b5563; text-decoration: none; }
-  .rule { border: 0; border-top: 2px solid #111827; margin: 10px 0 12px; }
-  h2 { font-size: 12.5pt; color: #111827; text-transform: uppercase; letter-spacing: 0.3px;
-       border-left: 4px solid #2563eb; padding-left: 8px; margin: 14px 0 6px; }
-  p { text-align: justify; }
-  .row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 4px; }
-  .row b { color: #111827; }
-  .when { color: #4b5563; font-size: 9.6pt; white-space: nowrap; }
-  .sub { font-style: italic; color: #4b5563; margin-top: 1px; }
-  ul { margin: 3px 0 0 16px; }
-  li { margin: 2px 0; }
-  .proj { margin-top: 8px; font-weight: 700; color: #111827; }
-  table { width: 100%; border-collapse: collapse; margin-top: 4px; }
-  td { vertical-align: top; padding: 3px 0; }
-  td:first-child { width: 150px; font-weight: 700; color: #111827; padding-right: 10px; }
-  td:last-child { color: #374151; }
+  body { font-family: 'DejaVu Sans', Helvetica, Arial, sans-serif; color: #1f2937; font-size: 8.4pt; line-height: 1.45; }
+  a { color: inherit; text-decoration: none; }
+  header { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-bottom: 8px; border-bottom: 2px solid #1d4ed8; }
+  .id { display: flex; align-items: center; gap: 12px; }
+  .id img { width: 64px; height: 64px; border-radius: 50%; border: 2px solid #1d4ed8; object-fit: cover; }
+  h1 { font-size: 20pt; color: #111827; line-height: 1.05; letter-spacing: -0.3px; }
+  .role { margin-top: 4px; color: #1d4ed8; font-weight: 700; font-size: 8.6pt; letter-spacing: 0.6px; text-transform: uppercase; }
+  .contact { text-align: right; color: #333; font-size: 7.4pt; line-height: 1.6; }
+  .contact .mail { color: #1d4ed8; }
+  .summary { margin: 10px 0 4px; padding: 8px 12px; background: #eef4ff; border-left: 4px solid #1d4ed8; border-radius: 3px; }
+  h2 { margin: 11px 0 5px; color: #1d4ed8; font-size: 7.4pt; letter-spacing: 1.6px; text-transform: uppercase; }
+  .row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-top: 5px; }
+  .row b { color: #111827; font-size: 9pt; }
+  .when { color: #4b5563; font-size: 7.6pt; white-space: nowrap; }
+  .sub { color: #4b5563; font-size: 7.6pt; }
+  .stack { color: #1d4ed8; font-weight: 700; font-size: 7.6pt; }
+  ul { margin: 3px 0 0 14px; }
+  li { margin: 1px 0; }
+  .links { color: #1d4ed8; font-size: 7pt; margin-top: 2px; }
+  .label { margin-top: 6px; font-weight: 700; font-size: 7.2pt; letter-spacing: 0.6px; text-transform: uppercase; color: #374151; }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px; }
+  .chips span { padding: 1.5px 8px; border-radius: 99px; font-size: 7.2pt; font-weight: 700; background: #eef4ff; color: #1d4ed8; }
+  .chips.qa span { background: #e7f7ee; color: #047857; }
+  .chips.learn span { background: #f3ecff; color: #6d28d9; }
+  .chips.soft span { background: #f1f2f4; color: #374151; }
   section { break-inside: avoid-page; }
 </style>
 </head>
 <body>
-  <h1>Ignacio Palmeri</h1>
-  <div class="role">IT MANAGEMENT STUDENT | AI-FIRST AUTOMATION BUILDER</div>
-  <div class="contact">
-    <span>Temperley, Buenos Aires, Argentina</span>
-    <a href="mailto:ignaciopalmeri1@gmail.com">ignaciopalmeri1@gmail.com</a>
-    <a href="https://linkedin.com/in/nachopalmeri">linkedin.com/in/nachopalmeri</a>
-    <a href="https://github.com/nachopalmeri">github.com/nachopalmeri</a>
-    <a href="https://ignaciop.vercel.app">ignaciop.vercel.app</a>
-  </div>
-  <hr class="rule">
+  <header>
+    <div class="id">
+      <img src="photo.jpeg" alt="">
+      <div>
+        <h1>Ignacio Palmeri</h1>
+        <div class="role">IT Management student · Aspiring QA</div>
+      </div>
+    </div>
+    <div class="contact">
+      Temperley, Buenos Aires, Argentina<br>
+      <a class="mail" href="mailto:ignaciopalmeri1@gmail.com">ignaciopalmeri1@gmail.com</a><br>
+      <a href="https://linkedin.com/in/ignaciopalmeri">linkedin.com/in/ignaciopalmeri</a><br>
+      <a href="https://github.com/nachopalmeri">github.com/nachopalmeri</a> &nbsp;·&nbsp; <a href="https://ignaciopalmeri.dev">ignaciopalmeri.dev</a>
+    </div>
+  </header>
 
-  <section>
-    <h2>Professional profile</h2>
-    <p>Second-year student in the Bachelor's in Information Technology Management at UADE. Passionate about the
-    convergence of Artificial Intelligence, finance and systems architecture. I learn continuously and respond fast:
-    I constantly research, test and integrate cutting-edge tools into my workflows. As an <b>AI-First Builder</b>, I
-    specialize in using advanced assistants (Claude Code, Cursor, Aider) for rapid prototyping (vibe coding), data
-    analysis and process automation. I complement this technical focus with real experience in the operational and
-    financial management of a retail business, connecting technology solutions with business impact.</p>
-  </section>
+  <p class="summary">Second-year student in the Bachelor's in Information Technology Management (UADE). I build and test my own
+  projects using AI as a learning tool — from automated tests (Playwright, pytest) to backend architecture. I am looking
+  to take my first steps in QA, bringing attention to detail, critical thinking and a real drive to learn within a team.</p>
 
   <section>
     <h2>Education</h2>
-    <div class="row"><b>Universidad Argentina de la Empresa (UADE)</b><span class="when">2025 - Present (in progress)</span></div>
-    <div class="sub">Bachelor's in Information Technology Management</div>
+    <div class="row"><b>Bachelor's in Information Technology Management</b><span class="when">Mar 2025 – Present</span></div>
+    <div class="sub">UADE, Buenos Aires · Regular student, fourth term (Q4) · 15 of 40 courses passed · GPA: 8.2/10</div>
+  </section>
+
+  <section>
+    <h2>Personal projects built with AI</h2>
+    <div class="row"><b>JobBot — job-search bot and dashboard (MVP)</b><span class="when">2026</span></div>
+    <div class="stack">Python · FastAPI · Next.js · Supabase (PostgreSQL) · Telegram Bot API · Groq</div>
     <ul>
-      <li>Coursework: Business Process Modeling, Data Analysis, Corporate Finance and IT Governance.</li>
-      <li><b>Expected graduation:</b> December 2028 (broad availability for long-term internship programs).</li>
+      <li>Telegram bot and web dashboard that aggregates job postings, filters results and sends alerts with AI-generated summaries (Groq) — I used it in my own job search.</li>
+      <li><b>Built an AI agent that writes and maintains the project's E2E (Playwright) and unit (pytest) tests:</b> I define which cases to cover, review every result and adjust coverage.</li>
     </ul>
+    <div class="links"><a href="https://jobbot-lime.vercel.app">jobbot-lime.vercel.app</a> · <a href="https://github.com/nachopalmeri/jobbot">github.com/nachopalmeri/jobbot</a></div>
+
+    <div class="row"><b>FranquiYA — dashboard prototype for franchises</b><span class="when">2025 – 2026</span></div>
+    <div class="stack">Next.js · FastAPI · SQLAlchemy · Pydantic · SQLite · Groq</div>
+    <ul>
+      <li>Born from a real problem I spotted working at Grido: stock control and goods receiving were handled on paper, disconnected from orders, causing errors.</li>
+      <li>I built a prototype to digitize it — my first project with AI: frontend prototyped in Stitch AI and backend with models via OpenCode, reviewing and adjusting every part by hand.</li>
+    </ul>
+    <div class="links"><a href="https://franqui-ya.vercel.app">franqui-ya.vercel.app</a> · <a href="https://github.com/nachopalmeri/FranquiYA">github.com/nachopalmeri/FranquiYA</a></div>
+
+    <div class="row"><b>Darter — financial terminal and personal system</b><span class="when">2026</span></div>
+    <div class="stack">TypeScript · Supabase (PostgreSQL) · Ports &amp; Adapters architecture · Telegram bot · Private</div>
+    <ul>
+      <li>Centralizes personal finance tracking, habits, academic progress and job search, with its own Telegram bot.</li>
+      <li>Integrates external market and news APIs on a ports-and-adapters architecture, with AI assistance and my own review of each module.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Skills</h2>
+    <div class="label">Testing / QA</div>
+    <div class="chips qa"><span>Playwright</span><span>pytest</span><span>E2E testing</span><span>Attention to detail</span></div>
+    <div class="label">Languages and tools</div>
+    <div class="chips"><span>Python</span><span>Git / GitHub</span><span>Bash</span></div>
+    <div class="label">Currently learning</div>
+    <div class="chips learn"><span>SQL</span><span>Java</span><span>Networking</span><span>HTML</span></div>
+    <div class="label">Soft skills</div>
+    <div class="chips soft"><span>Self-taught</span><span>Proactive</span><span>Curious</span><span>Critical thinking</span><span>Organized</span><span>Works under pressure</span><span>Communication</span></div>
   </section>
 
   <section>
     <h2>Work experience</h2>
-    <div class="row"><span><b>Operations &amp; Customer Service Analyst</b> | Retail franchise (Grido)</span><span class="when">October 2024 - Present</span></div>
+    <div class="row"><b>Customer service and operations — Grido</b><span class="when">2023 – Present</span></div>
+    <div class="sub">Buenos Aires · Part-time</div>
     <ul>
-      <li>Mapping and control of commercial processes: daily cash flow, account reconciliation and billing audits.</li>
-      <li>Logistics control and inventory optimization in high-demand, constant-pressure environments.</li>
-      <li>Ongoing analysis of the sales floor to detect administrative inefficiencies and apply data-backed improvements.</li>
+      <li>Customer service and daily cash reconciliation with <b>0% discrepancies</b>, under high operational pressure.</li>
+      <li>Stock and inventory control with my own spreadsheets, goods receiving and sales management with the internal system.</li>
     </ul>
   </section>
 
   <section>
-    <h2>Projects &amp; software architecture (AI-driven)</h2>
-    <div class="proj">JobBot — Automation &amp; Web Scraping SaaS</div>
-    <ul>
-      <li>Built a full-stack platform with a Next.js (App Router) dashboard and a robust FastAPI backend on PostgreSQL.</li>
-      <li>Implemented secure authentication (JWT), payment gateways (Stripe/MercadoPago) and a Telegram bot for notifications.</li>
-      <li>AI-guided development methodology to accelerate delivery, with continuous integration (CI/CD), security reviews
-          (httpOnly cookies) and native deployment on Vercel.</li>
-    </ul>
-    <div class="proj">Predictive AI &amp; Data Analytics Engine (Sports)</div>
-    <ul>
-      <li>Designed and implemented a predictive statistical system consolidating 10 data sources and APIs (including Polymarket).</li>
-      <li>Modeling with a 7x7 Poisson probability matrix and Monte Carlo simulations to project results and expected value.</li>
-      <li>Fully automated data pipeline and weight recalibration using stateless Python scripts run on GitHub Actions,
-          connected to a dashboard on Vercel.</li>
-    </ul>
-    <div class="proj">Agents System — Local Orchestration &amp; Workflow Infrastructure</div>
-    <ul>
-      <li>Built a global dotfiles and local scaffolding system to standardize and optimize multi-tool workflows.</li>
-      <li>Context management, task routing and automation of AI development environments with PowerShell and Bash scripts.</li>
-    </ul>
+    <h2>Certifications</h2>
+    <div class="row"><b>CCNA: Introduction to Networks</b><span class="when">Cisco · Issued Jul 2026</span></div>
+    <div class="row"><b>Red Hat System Administration I (RH124)</b><span class="when">Red Hat · Issued Oct 2025</span></div>
+    <div class="row"><b>Claude Code in Action</b><span class="when">Anthropic · 2026</span></div>
   </section>
 
   <section>
-    <h2>Technical skills</h2>
-    <table>
-      <tr><td>Certifications</td><td>Red Hat System Administration I (RH124) | CCNA (core concepts) | AI-Workflows.</td></tr>
-      <tr><td>AI &amp; Automation</td><td>AI prototyping (Claude, Cursor, Aider), Model Context Protocol (MCP), LLM API integration, prompt engineering, RAG, AI agents, vibe coding.</td></tr>
-      <tr><td>Development &amp; Infra</td><td>Python, JavaScript (Next.js), PostgreSQL, REST APIs, Git, GitHub Actions (CI/CD), Vercel, Linux (Ubuntu/WSL2).</td></tr>
-      <tr><td>Business &amp; IT Mgmt</td><td>Business process modeling, corporate finance, stock auditing, Jira, Agile methodologies, advanced spreadsheets (Excel).</td></tr>
-      <tr><td>Languages</td><td>Spanish (native) | English (technical intermediate, B1+; fluent reading of technical documentation and systems papers).</td></tr>
-    </table>
+    <h2>Languages</h2>
+    <div class="chips soft"><span>Spanish (native)</span><span>English B1+</span></div>
   </section>
 </body>
 </html>

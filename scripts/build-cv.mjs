@@ -7,7 +7,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-const browser = await chromium.launch();
+const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 const page = await browser.newPage();
 await page.goto(pathToFileURL(path.join(rootDir, 'cv', 'cv-en.html')).href, { waitUntil: 'load' });
 await page.pdf({ path: path.join(rootDir, 'cv-en.pdf'), format: 'A4', printBackground: true, preferCSSPageSize: true });
