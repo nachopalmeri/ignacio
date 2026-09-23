@@ -135,6 +135,8 @@ const UI_COPY = {
       valueAgents: 'Bots, alertas y experimentos web.',
       proof: 'Ver prueba',
       caseStudy: 'Leer el caso de estudio',
+      share: 'Compartir',
+      shareCopied: 'Link copiado',
       open: 'Abrir proyecto',
       repo: 'Ver repo',
       exploreAgents: 'Explorar ecosistema'
@@ -314,6 +316,8 @@ const UI_COPY = {
       valueAgents: 'Bots, alerts and web experiments with explicit prototype scope.',
       proof: 'View proof',
       caseStudy: 'Read the case study',
+      share: 'Share',
+      shareCopied: 'Link copied',
       open: 'Open project',
       repo: 'View repo',
       exploreAgents: 'Explore ecosystem'
@@ -2162,12 +2166,40 @@ function renderProjectPreview(project, index, mode = 'active') {
           ${project.caseStudy ? `<a class="carousel-proof case-study-link" href="${project.caseStudy}">${escapeHtml(getCopy('projects.caseStudy'))}</a>` : ''}
           ${project.href ? `<a class="carousel-proof" href="${project.href}" ${isInternalHref(project.href) ? `data-route="${project.href.replace(/^\//, '')}"` : 'target="_blank" rel="noopener noreferrer"'}>${escapeHtml(getCopy('projects.open'))}</a>` : ''}
           ${project.repo ? `<a class="carousel-proof subtle" href="${project.repo}" target="_blank" rel="noopener noreferrer">${escapeHtml(getCopy('projects.repo'))}</a>` : ''}
+          <button type="button" class="carousel-proof subtle share-trigger" data-share-project="${project.id}">${escapeHtml(getCopy('projects.share'))}</button>
           ${project.video ? `<button type="button" class="carousel-proof subtle video-trigger" data-video-trigger="${project.video}">${escapeHtml(getCopy('projects.watchVideo'))}</button>` : ''}
         </div>
       </div>
     </article>
   `;
 }
+
+// One delegated listener for every card's Share button. On phones this opens
+// the native share sheet; elsewhere it copies the project's share link, whose
+// page carries a per-project preview image for LinkedIn/WhatsApp/X.
+document.addEventListener('click', async (event) => {
+  const btn = event.target.closest('[data-share-project]');
+  if (!btn) return;
+  event.preventDefault();
+  event.stopPropagation();
+  const project = FEATURED_PROJECTS.find((proj) => proj.id === btn.dataset.shareProject);
+  if (!project) return;
+  const url = `${window.location.origin}/p/${project.id}`;
+  if (navigator.share && window.matchMedia('(pointer: coarse)').matches) {
+    try { await navigator.share({ title: `${project.title} - Ignacio Palmeri`, url }); } catch (_e) {}
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(url);
+  } catch (_e) {
+    window.prompt('Link', url);
+    return;
+  }
+  const original = btn.textContent;
+  btn.textContent = getCopy('projects.shareCopied');
+  btn.classList.add('is-done');
+  setTimeout(() => { btn.textContent = original; btn.classList.remove('is-done'); }, 1800);
+});
 
 function renderProjectCarousel() {
   const carousel = document.getElementById('project-carousel');
@@ -2923,8 +2955,23 @@ document.addEventListener('DOMContentLoaded', () => {
     navigate('overview', { replace });
   }
 
+  // Read before routing: handleRouting may rewrite the URL and drop the query.
+  // Shared project links (/p/<id> -> /projects?p=<id>) land on that project.
+  const sharedProject = new URLSearchParams(window.location.search).get('p');
+
   window.addEventListener('popstate', () => handleRouting());
   handleRouting({ replace: true }); // Initial call
+
+  if (sharedProject && FEATURED_PROJECTS.some((proj) => proj.id === sharedProject)) {
+    if (!document.getElementById('projects-section')?.classList.contains('active')) navigate('projects', { replace: true });
+    setTimeout(() => {
+      const row = document.querySelector(`#project-archive [data-project-id="${CSS.escape(sharedProject)}"]`);
+      if (!row) return;
+      row.scrollIntoView({ block: 'center', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+      row.classList.add('is-highlighted');
+      setTimeout(() => row.classList.remove('is-highlighted'), 2400);
+    }, 350);
+  }
 });
 
 

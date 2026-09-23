@@ -5913,3 +5913,14 @@ header.app-header.is-scrolled .nav-cta {
   color: var(--accent-green-text);
   font-weight: 700;
 }
+
+/* Shared links (/p/<id>) land on the project's archive row and flash it. */
+.archive-row.is-highlighted {
+  animation: projectHighlightPulse 1.2s var(--ease) 2;
+  background: color-mix(in srgb, var(--accent-green) 8%, transparent);
+}
+
+.carousel-proof.share-trigger.is-done {
+  color: var(--accent-green-text);
+  border-color: color-mix(in srgb, var(--accent-green) 50%, var(--border));
+}
