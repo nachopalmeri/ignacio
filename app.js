@@ -74,6 +74,7 @@ const UI_COPY = {
       p2: 'Trabajo con Python, FastAPI, SQL, Linux, Git y asistentes de IA para construir dashboards, bots, automatizaciones y prototipos desplegados. Me importa más entregar trabajo revisable que parecer senior.',
       p3: 'Desde octubre de 2024 trabajo como Analista de Operaciones en Grido, con caja, inventario y auditorías — presión real que me enseñó cómo se rompen los procesos en la práctica. Quiero llevar esa base a soporte IT, QA trainee, automatización o startups.'
     },
+    recruiter: { trigger: '¿Poco tiempo? Resumen en 30 segundos' },
     counters: { deployed: 'Proyectos con demo pública', certs: 'Certificaciones', stack: 'Tecnologías core', own: 'Código propio' },
     flow: {
       eyebrow: 'Cómo trabajo',
@@ -255,6 +256,7 @@ const UI_COPY = {
       p2: 'I work with Python, FastAPI, SQL, Linux, Git and AI assistants to build dashboards, bots, automations and deployed prototypes. I care more about shipping reviewable work than looking senior.',
       p3: "Since October 2024 I have worked as an Operations Analyst at Grido, handling cash, inventory and audits — real pressure that taught me how processes actually break. I want to bring that base into IT support, QA trainee, automation or startups."
     },
+    recruiter: { trigger: 'Short on time? 30-second summary' },
     counters: { deployed: 'Projects with a public demo', certs: 'Certifications', stack: 'Core technologies', own: 'Own code' },
     flow: {
       eyebrow: 'How I work',
@@ -2839,6 +2841,110 @@ function setupAiOpsHero() {
   window.addEventListener('side-quests-visibility', start);
 }
 
+// ═══════════════════ RECRUITER 30-SECOND SUMMARY ═══════════════════
+// Everything a recruiter needs on one screen, for the ones who won't scroll.
+// Facts only from the CV and the site.
+const RECRUITER_SUMMARY = {
+  es: {
+    title: 'Ignacio Palmeri en 30 segundos',
+    close: 'Cerrar',
+    seeks: 'Busca', seeksBody: 'Pasantía o rol trainee en desarrollo, automatización, QA o soporte IT. Buenos Aires o remoto.',
+    availability: 'Disponibilidad', availabilityBody: 'Amplia, para programas de largo plazo. Estudia hasta diciembre de 2028 (egreso estimado).',
+    education: 'Estudios', educationBody: 'Lic. en Gestión de Tecnología de la Información, UADE (2.º año, desde 2025).',
+    experience: 'Experiencia', experienceBody: 'Analista de Operaciones y Atención al Cliente en una franquicia Grido, desde octubre de 2024: caja, conciliaciones, inventario y auditoría de facturación.',
+    projects: 'Tres proyectos para mirar',
+    stack: 'Stack', certs: 'Certificaciones', languages: 'Idiomas', languagesBody: 'Español nativo · Inglés B1+ técnico',
+    email: 'Enviar un email', cv: 'Descargar CV', full: 'Ver el portfolio completo',
+    caseStudy: 'Caso de estudio', demo: 'Demo', code: 'Código'
+  },
+  en: {
+    title: 'Ignacio Palmeri in 30 seconds',
+    close: 'Close',
+    seeks: 'Looking for', seeksBody: 'An internship or trainee role in development, automation, QA or IT support. Buenos Aires or remote.',
+    availability: 'Availability', availabilityBody: 'Broad, suited to long-term programs. Studying until December 2028 (expected graduation).',
+    education: 'Education', educationBody: "Bachelor's in IT Management, UADE (2nd year, since 2025).",
+    experience: 'Experience', experienceBody: 'Operations & Customer Service Analyst at a Grido franchise since October 2024: cash, reconciliations, inventory and billing audits.',
+    projects: 'Three projects to look at',
+    stack: 'Stack', certs: 'Certifications', languages: 'Languages', languagesBody: 'Spanish (native) · English B1+ (technical)',
+    email: 'Send an email', cv: 'Download CV', full: 'See the full portfolio',
+    caseStudy: 'Case study', demo: 'Demo', code: 'Code'
+  },
+  stack: ['Python', 'FastAPI', 'Next.js', 'PostgreSQL', 'Linux', 'GitHub Actions', 'Playwright'],
+  certs: ['Red Hat RH124', 'Cisco CCNA 1', 'Anthropic · Claude Code in Action'],
+  projects: ['jobbot', 'franquiya', 'motor-estadistico']
+};
+
+function setupRecruiterSummary() {
+  const dialog = document.getElementById('recruiter-dialog');
+  if (!dialog || typeof dialog.showModal !== 'function') return;
+  let opener = null;
+
+  function render() {
+    const t = RECRUITER_SUMMARY[currentLang] || RECRUITER_SUMMARY.es;
+    const en = currentLang === 'en';
+    const projects = RECRUITER_SUMMARY.projects
+      .map((id) => FEATURED_PROJECTS.find((proj) => proj.id === id))
+      .filter(Boolean)
+      .map((proj) => {
+        const links = [
+          proj.caseStudy ? `<a href="${proj.caseStudy}">${esc(t.caseStudy)}</a>` : '',
+          proj.href ? `<a href="${proj.href}" target="_blank" rel="noopener noreferrer">${esc(t.demo)}</a>` : '',
+          proj.repo ? `<a href="${proj.repo}" target="_blank" rel="noopener noreferrer">${esc(t.code)}</a>` : ''
+        ].filter(Boolean).join('');
+        return `<li><div><strong>${esc(proj.title)}</strong><span>${esc(projectField(proj, 'description'))}</span></div><div class="rs-links">${links}</div></li>`;
+      }).join('');
+    dialog.innerHTML = `
+      <div class="rs">
+        <header class="rs-head">
+          <div>
+            <p class="rs-eyebrow">Junior AI Automation &amp; Product Engineer</p>
+            <h2 id="recruiter-title">${esc(t.title)}</h2>
+          </div>
+          <button type="button" class="rs-close" data-recruiter-close aria-label="${esc(t.close)}">✕</button>
+        </header>
+        <dl class="rs-grid">
+          <div><dt>${esc(t.seeks)}</dt><dd>${esc(t.seeksBody)}</dd></div>
+          <div><dt>${esc(t.availability)}</dt><dd>${esc(t.availabilityBody)}</dd></div>
+          <div><dt>${esc(t.education)}</dt><dd>${esc(t.educationBody)}</dd></div>
+          <div><dt>${esc(t.experience)}</dt><dd>${esc(t.experienceBody)}</dd></div>
+        </dl>
+        <h3 class="rs-sub">${esc(t.projects)}</h3>
+        <ul class="rs-projects">${projects}</ul>
+        <div class="rs-meta">
+          <div><h3 class="rs-sub">${esc(t.stack)}</h3><p class="rs-chips">${RECRUITER_SUMMARY.stack.map((x) => `<span>${esc(x)}</span>`).join('')}</p></div>
+          <div><h3 class="rs-sub">${esc(t.certs)}</h3><p class="rs-chips">${RECRUITER_SUMMARY.certs.map((x) => `<span>${esc(x)}</span>`).join('')}</p></div>
+          <div><h3 class="rs-sub">${esc(t.languages)}</h3><p>${esc(t.languagesBody)}</p></div>
+        </div>
+        <footer class="rs-actions">
+          <a class="btn btn-primary" href="mailto:ignaciopalmeri1@gmail.com?subject=${encodeURIComponent(en ? 'Internship / trainee role' : 'Pasantía / rol trainee')}">${esc(t.email)}</a>
+          <a class="btn btn-secondary" href="${en ? '/cv-en.pdf' : '/cv.pdf'}" download="${en ? 'Ignacio-Palmeri-CV-EN.pdf' : 'Ignacio-Palmeri-CV.pdf'}">${esc(t.cv)}</a>
+          <a class="rs-social" href="https://www.linkedin.com/in/ignacio-palmeri-64035b378/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a class="rs-social" href="https://github.com/nachopalmeri" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <button type="button" class="rs-full" data-recruiter-close>${esc(t.full)} ↓</button>
+        </footer>
+      </div>`;
+  }
+
+  function open(trigger) {
+    opener = trigger || document.activeElement;
+    render();
+    dialog.showModal();
+    document.body.style.overflow = 'hidden';
+  }
+
+  dialog.addEventListener('close', () => {
+    document.body.style.overflow = '';
+    if (opener && typeof opener.focus === 'function') opener.focus();
+  });
+  dialog.addEventListener('click', (event) => {
+    if (event.target === dialog || event.target.closest('[data-recruiter-close]')) dialog.close();
+  });
+  document.addEventListener('click', (event) => {
+    const trigger = event.target.closest('[data-recruiter-open]');
+    if (trigger) open(trigger);
+  });
+}
+
 function setupMobileNav() {
   const header = document.querySelector('header.app-header');
   const toggle = document.getElementById('mobile-nav-toggle');
@@ -2881,6 +2987,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initProjectRoadmap();
   initFlowSection();
   setupMobileNav();
+  setupRecruiterSummary();
   // Navigation tabs
   const navTabs = document.querySelectorAll('.nav-tab');
   const viewSections = document.querySelectorAll('.view-section');
