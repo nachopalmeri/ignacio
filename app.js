@@ -35,7 +35,7 @@ const UI_COPY = {
       help: 'Comandos: about, skills, projects, agents, contact, whoami, log, clear',
       about: 'Ignacio Palmeri - estudiante de Gestión IT que combina experiencia operativa, producto y automatización para construir software útil.',
       skills: 'Python, FastAPI, TypeScript, SQL, Linux, Git, Playwright, automatización de procesos y desarrollo asistido por IA.',
-      projects: 'Proyectos principales: JobBot, Agents System, Motor Estadístico Predictivo y Pisculichi Labs. El archivo completo muestra 9 piezas desplegadas o revisables.',
+      projects: 'Proyectos principales: JobBot, Agents System, Motor Estadístico Predictivo y Pisculichi Labs. El archivo completo tiene {total} proyectos, {deployed} con demo pública.',
       agents: 'Uso asistentes de IA como parte de un flujo ordenado: plan, construcción, revisión, pruebas, documentación y publicación.',
       contact: 'GitHub: @nachopalmeri | LinkedIn: ignacio | Email: ignaciopalmeri1@gmail.com',
       whoami: 'Ignacio Palmeri. Gestión de IT en UADE, Analista de Operaciones en Grido desde oct-2024. Construyo con Python, FastAPI e IA. Ni senior ni sorprendido de estar acá.',
@@ -74,6 +74,7 @@ const UI_COPY = {
       p2: 'Trabajo con Python, FastAPI, SQL, Linux, Git y asistentes de IA para construir dashboards, bots, automatizaciones y prototipos desplegados. Me importa más entregar trabajo revisable que parecer senior.',
       p3: 'Desde octubre de 2024 trabajo como Analista de Operaciones en Grido, con caja, inventario y auditorías — presión real que me enseñó cómo se rompen los procesos en la práctica. Quiero llevar esa base a soporte IT, QA trainee, automatización o startups.'
     },
+    counters: { deployed: 'Proyectos con demo pública', certs: 'Certificaciones', stack: 'Tecnologías core', own: 'Código propio' },
     flow: {
       eyebrow: 'Cómo trabajo',
       title: 'Un flujo, cinco pasos',
@@ -84,7 +85,7 @@ const UI_COPY = {
       test: { title: 'Test', body: 'Pruebo el camino real en el browser, no solo que compile.' },
       ship: { title: 'Ship', body: 'Despliego y dejo documentado qué cambió y qué quedó pendiente.' },
       commits: 'Contribuciones públicas en el último año',
-      projects: 'Proyectos desplegados',
+      projects: 'Proyectos con demo pública',
       certs: 'Certificaciones'
     },
     ops: {
@@ -212,7 +213,7 @@ const UI_COPY = {
       help: 'Commands: about, skills, projects, agents, contact, whoami, log, clear',
       about: 'Ignacio Palmeri - IT Management student combining operations, product and automation to build useful software.',
       skills: 'Python, FastAPI, TypeScript, SQL, Linux, Git, Playwright, process automation and applied AI.',
-      projects: 'Main projects: JobBot, Agents System, Sports Predictive Analytics Engine and Pisculichi Labs. The full archive shows 9 deployed or reviewable pieces.',
+      projects: 'Main projects: JobBot, Agents System, Sports Predictive Analytics Engine and Pisculichi Labs. The full archive has {total} projects, {deployed} with a public demo.',
       agents: 'I use AI assistants inside an ordered workflow: planning, building, review, tests, documentation and shipping.',
       contact: 'GitHub: @nachopalmeri | LinkedIn: ignacio | Email: ignaciopalmeri1@gmail.com',
       whoami: "Ignacio Palmeri. IT Management at UADE, Operations Analyst at Grido since oct-2024. I build with Python, FastAPI and AI. Not senior, not surprised to be here.",
@@ -251,6 +252,7 @@ const UI_COPY = {
       p2: 'I work with Python, FastAPI, SQL, Linux, Git and AI assistants to build dashboards, bots, automations and deployed prototypes. I care more about shipping reviewable work than looking senior.',
       p3: "Since October 2024 I have worked as an Operations Analyst at Grido, handling cash, inventory and audits — real pressure that taught me how processes actually break. I want to bring that base into IT support, QA trainee, automation or startups."
     },
+    counters: { deployed: 'Projects with a public demo', certs: 'Certifications', stack: 'Core technologies', own: 'Own code' },
     flow: {
       eyebrow: 'How I work',
       title: 'One flow, five steps',
@@ -261,7 +263,7 @@ const UI_COPY = {
       test: { title: 'Test', body: 'I walk the real path in the browser, not just check that it compiles.' },
       ship: { title: 'Ship', body: 'I deploy and document what changed and what is still pending.' },
       commits: 'Public contributions in the last year',
-      projects: 'Deployed projects',
+      projects: 'Projects with a public demo',
       certs: 'Certifications'
     },
     ops: {
@@ -294,7 +296,7 @@ const UI_COPY = {
       archiveTitle: 'Project archive',
       featuredBody: 'One path through every project: product, workflow systems, analytics, commerce and lab.',
       roadmapHint: 'Keep scrolling to travel the path',
-      archiveBody: 'The first four are the core. The rest shows range: CLI, sports, local commerce and deployed landing pages.',
+      archiveBody: 'The archive completes the range: CLI, sports, local commerce and landing pages.',
       github: 'View GitHub',
       watchVideo: 'Watch video',
       status: { active: 'Active', public: 'Public', demo: 'Demo', local: 'Local' },
@@ -397,7 +399,26 @@ let currentLang = safeStorageGet('portfolio-lang', 'es');
 let currentTheme = safeStorageGet('portfolio-theme', 'light');
 
 function getCopy(path, lang = currentLang) {
-  return path.split('.').reduce((value, key) => value && value[key], UI_COPY[lang]) || path;
+  const value = path.split('.').reduce((v, key) => v && v[key], UI_COPY[lang]) || path;
+  return typeof value === 'string' ? value.replace(/\{(total|deployed)\}/g, (_, k) => projectStats()[k]) : value;
+}
+
+// Single source of truth for every project count on the page. "Deployed"
+// means it has a public demo URL (Darter is private, Agents System is local).
+function projectStats() {
+  return {
+    total: FEATURED_PROJECTS.length,
+    deployed: FEATURED_PROJECTS.filter((p) => /^https?:\/\//.test(p.href || '')).length
+  };
+}
+
+function applyProjectStats() {
+  const stats = projectStats();
+  document.querySelectorAll('[data-project-stat]').forEach((el) => {
+    const n = String(stats[el.dataset.projectStat]);
+    if ('counterTarget' in el.dataset) el.dataset.counterTarget = n;
+    else el.dataset.counter = n;
+  });
 }
 
 function applyStaticCopy() {
@@ -2806,6 +2827,7 @@ function setupMobileNav() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  applyProjectStats();
   setupPreferenceControls();
   setupProjectCarousel();
   setupAiOpsHero();
