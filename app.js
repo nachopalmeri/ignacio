@@ -9,6 +9,15 @@ const UI_COPY = {
     hero: {
       tagline: 'Junior AI Automation & Product Engineer',
       title: 'Ignacio Palmeri',
+      nowShowing: 'En pantalla',
+      headline: 'Hago que la compu haga el trabajo aburrido.',
+      accent: 'aburrido.',
+      sub: 'Soy Ignacio, estudiante de Gestión IT en Buenos Aires. Convierto tareas repetitivas en software con Python, FastAPI e IA, y lo dejo funcionando online.',
+      watchCta: 'Mirá lo que construí',
+      trustLive: '{deployed} proyectos online',
+      trustRole: 'Busco pasantía o trainee',
+      trustPlace: 'Buenos Aires o remoto',
+      scrollCue: 'Deslizá',
       rolePrefix: 'Construyo',
       availability: 'Disponible para pasantías y roles trainee',
       kicker: 'Estudiante de Gestión IT. Construyo herramientas desplegadas con Python, FastAPI, automatización de procesos y asistentes de IA.',
@@ -25,6 +34,28 @@ const UI_COPY = {
       focus: 'Python - Bots - Dashboards - Product/Fintech',
       oldPortfolio: 'Portfolio anterior',
       email: 'Email'
+    },
+    story: {
+      kicker: 'Hecho para personas',
+      title: 'Antes hacía caja e inventario.',
+      sticker: 'Ahora lo automatizo.',
+      body: 'Trabajo en una franquicia de Grido desde octubre de 2024: caja, conciliaciones, inventario y auditorías de facturación. Ahí aprendí qué tareas se repiten todos los días, y empecé a construir herramientas para dejar de hacerlas a mano.',
+      film: 'Ver JobBot en acción',
+      filmMeta: 'Demo real · con sonido'
+    },
+    exploded: {
+      kicker: 'Por dentro',
+      title: 'Un proyecto, desarmado.',
+      body: 'Así está hecho JobBot. Cada capa explicada dos veces: una para tu abuela y otra para tu tech lead.',
+      l1: 'La pantalla que usás', l1t: 'Dashboard en Next.js',
+      l2: 'La puerta con llave', l2t: 'Auth con JWT y refresh tokens',
+      l3: 'El cerebro que decide', l3t: 'API en Python + FastAPI',
+      l4: 'La memoria', l4t: 'Base de datos PostgreSQL',
+      l5: 'El mensajero', l5t: 'Webhooks, pagos y Telegram',
+      l6: 'Siempre encendido', l6t: 'Deploy público en Vercel',
+      made: 'Diseñado y construido en Buenos Aires.',
+      caseCta: 'Leer el caso completo',
+      demoCta: 'Abrir la demo'
     },
     console: {
       title: 'ignacio@portfolio',
@@ -192,6 +223,15 @@ const UI_COPY = {
     hero: {
       tagline: 'Junior AI Automation & Product Engineer',
       title: 'Ignacio Palmeri',
+      nowShowing: 'Now showing',
+      headline: 'I make computers do the boring work.',
+      accent: 'boring',
+      sub: "I'm Ignacio, an IT Management student in Buenos Aires. I turn repetitive tasks into software with Python, FastAPI and AI, and ship it live.",
+      watchCta: "See what I've built",
+      trustLive: '{deployed} live projects',
+      trustRole: 'Open to internship or trainee roles',
+      trustPlace: 'Buenos Aires or remote',
+      scrollCue: 'Scroll',
       rolePrefix: 'Building',
       availability: 'Available for internships and trainee roles',
       kicker: 'IT Management student. I build deployed tools with Python, FastAPI, process automation and AI assistants.',
@@ -208,6 +248,28 @@ const UI_COPY = {
       focus: 'Python - Bots - Dashboards - Product/Fintech',
       oldPortfolio: 'Previous portfolio',
       email: 'Email'
+    },
+    story: {
+      kicker: 'Built for people',
+      title: 'I used to run the register and count stock.',
+      sticker: 'Now I automate it.',
+      body: 'I have worked at a Grido franchise since October 2024: cash, reconciliations, inventory and billing audits. That is where I learned which tasks repeat every single day, and started building tools so nobody has to do them by hand.',
+      film: 'Watch JobBot in action',
+      filmMeta: 'Real demo · with sound'
+    },
+    exploded: {
+      kicker: 'Inside',
+      title: 'One project, taken apart.',
+      body: 'This is how JobBot is built. Every layer explained twice: once for your grandma, once for your tech lead.',
+      l1: 'The screen you use', l1t: 'Next.js dashboard',
+      l2: 'The locked door', l2t: 'JWT auth with refresh tokens',
+      l3: 'The brain that decides', l3t: 'Python + FastAPI API',
+      l4: 'The memory', l4t: 'PostgreSQL database',
+      l5: 'The messenger', l5t: 'Webhooks, payments, Telegram',
+      l6: 'Always on', l6t: 'Public deploy on Vercel',
+      made: 'Designed and built in Buenos Aires.',
+      caseCta: 'Read the full case study',
+      demoCta: 'Open the demo'
     },
     console: {
       title: 'ignacio@portfolio',
@@ -450,6 +512,7 @@ function applyStaticCopy() {
   secureExternalLinks(document);
   resetTerminal();
   splitHeroTitle();
+  renderCineSpotlight();
   if (document.getElementById('project-carousel')) renderProjectCarousel();
   if (githubContributionData) renderGithubCalendar(githubContributionData);
   renderGithubRecent();
@@ -467,8 +530,9 @@ function splitHeroTitle() {
 
   // Words keep their inline-block box from the first paint, so the entrance
   // animates opacity/transform only and never shifts layout.
+  const accent = String(getCopy('hero.accent')).toLowerCase();
   title.innerHTML = words
-    .map((word, i) => `<span class="hero-word" style="--word-index:${i}">${escapeHtml(word)}</span>`)
+    .map((word, i) => `<span class="hero-word${word.toLowerCase() === accent ? ' hero-word--accent' : ''}" style="--word-index:${i}">${escapeHtml(word)}</span>`)
     .join(' ');
 
   if (prefersReducedMotion()) {
@@ -1156,35 +1220,6 @@ function setupSideQuests() {
   buildChips(); buildStrip(); render();
 }
 
-const HERO_ROLE_WORDS = {
-  es: ['automatizaciones', 'dashboards', 'bots', 'agentes de IA', 'APIs'],
-  en: ['automations', 'dashboards', 'bots', 'AI agents', 'APIs']
-};
-let heroRoleIndex = 0;
-let heroRoleTimer = null;
-
-function tickHeroRoleWord() {
-  const el = document.getElementById('hero-role-word');
-  if (!el) return;
-  const words = HERO_ROLE_WORDS[currentLang] || HERO_ROLE_WORDS.es;
-  heroRoleIndex = (heroRoleIndex + 1) % words.length;
-  el.classList.add('is-swapping');
-  setTimeout(() => {
-    el.textContent = words[heroRoleIndex];
-    el.classList.remove('is-swapping');
-  }, 220);
-}
-
-function initHeroRoleRotator() {
-  const el = document.getElementById('hero-role-word');
-  if (!el) return;
-  const words = HERO_ROLE_WORDS[currentLang] || HERO_ROLE_WORDS.es;
-  el.textContent = words[0];
-  if (heroRoleTimer) clearInterval(heroRoleTimer);
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  heroRoleTimer = setInterval(tickHeroRoleWord, 2400);
-}
-
 function initNavbarScroll() {
   const header = document.querySelector('header.app-header');
   if (!header) return;
@@ -1634,8 +1669,7 @@ function setupPreferenceControls() {
       safeStorageSet('portfolio-lang', currentLang);
       applyStaticCopy();
       rebuildLocalizedEcosystem();
-      initHeroRoleRotator();
-    });
+        });
   });
 
   const themeToggle = document.getElementById('theme-toggle');
@@ -2363,6 +2397,8 @@ function setupProjectVideoReveal() {
   }
 
   document.querySelectorAll('[data-video-trigger]').forEach((btn) => {
+    if (btn.dataset.videoBound) return;
+    btn.dataset.videoBound = '1';
     btn.addEventListener('click', (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -2396,281 +2432,6 @@ function setupProjectCarousel() {
   renderProjectCarousel();
 }
 
-function setupThreeAiOpsHero(canvas, hero, nodes, reduceMotion) {
-  const THREE = window.THREE;
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
-  renderer.setClearColor(0x000000, 0);
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-  camera.position.set(0, 0, 8.5);
-
-  const group = new THREE.Group();
-  scene.add(group);
-
-  const core = new THREE.Mesh(
-    new THREE.SphereGeometry(0.72, 48, 48),
-    new THREE.MeshBasicMaterial({ color: 0x0f172a, transparent: true, opacity: 0.82 })
-  );
-  group.add(core);
-
-  const halo = new THREE.Mesh(
-    new THREE.SphereGeometry(1.08, 48, 48),
-    new THREE.MeshBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0.08, wireframe: true })
-  );
-  group.add(halo);
-
-  const rings = [1.4, 2.0, 2.55].map((radius, index) => {
-    const ring = new THREE.Mesh(
-      new THREE.TorusGeometry(radius, 0.008, 8, 120),
-      new THREE.MeshBasicMaterial({ color: index === 1 ? 0x3b82f6 : 0x10b981, transparent: true, opacity: 0.34 })
-    );
-    ring.rotation.x = Math.PI / 2.8 + index * 0.18;
-    ring.rotation.y = index * 0.45;
-    group.add(ring);
-    return ring;
-  });
-
-  const particleCount = window.innerWidth < 760 ? 36 : 90;
-  const particlePositions = new Float32Array(particleCount * 3);
-  for (let i = 0; i < particleCount; i++) {
-    const radius = 1.5 + Math.random() * 3.8;
-    const angle = Math.random() * Math.PI * 2;
-    particlePositions[i * 3] = Math.cos(angle) * radius;
-    particlePositions[i * 3 + 1] = (Math.random() - 0.5) * 3.8;
-    particlePositions[i * 3 + 2] = Math.sin(angle) * radius * 0.72;
-  }
-  const particleGeometry = new THREE.BufferGeometry();
-  particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-  const particles = new THREE.Points(
-    particleGeometry,
-    new THREE.PointsMaterial({ color: 0xededed, size: 0.035, transparent: true, opacity: 0.62 })
-  );
-  group.add(particles);
-
-  const lineMaterial = new THREE.LineBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0.24 });
-  const nodeObjects = nodes.map((node, index) => {
-    const nodeGroup = new THREE.Group();
-    const angle = (index / nodes.length) * Math.PI * 2;
-    nodeGroup.position.set(Math.cos(angle) * 3.0, Math.sin(angle) * 1.55, Math.sin(angle) * 0.85);
-
-    const nodeMesh = new THREE.Mesh(
-      new THREE.SphereGeometry(0.16, 24, 24),
-      new THREE.MeshBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0.78 })
-    );
-    nodeGroup.add(nodeMesh);
-
-    const sprite = makeTextSprite(node.label);
-    sprite.position.set(0, -0.42, 0);
-    nodeGroup.add(sprite);
-
-    const lineGeometry = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), nodeGroup.position.clone()]);
-    const line = new THREE.Line(lineGeometry, lineMaterial.clone());
-    group.add(line);
-    group.add(nodeGroup);
-    return { group: nodeGroup, mesh: nodeMesh, line, angle, data: node, button: null };
-  });
-
-  // DOM buttons for each node, projected from world space to screen space
-  // every frame (see updateNodeButtons). Real <button> elements so nodes are
-  // keyboard-focusable and clickable without WebGL raycasting.
-  const nodeLayer = hero.querySelector('[data-hero-node-layer]');
-  if (nodeLayer) {
-    nodeLayer.innerHTML = '';
-    nodeObjects.forEach((node) => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'hero-node-btn';
-      const proofText = node.data.proof[currentLang] || node.data.proof.es;
-      btn.setAttribute('aria-label', `${node.data.label}: ${proofText}`);
-      btn.innerHTML = `<span class="hero-node-tooltip"><strong>${escapeHtml(node.data.label)}</strong><span>${escapeHtml(proofText)}</span></span>`;
-      btn.addEventListener('click', () => {
-        const target = document.querySelector(`#project-carousel [data-project-id="${node.data.projectId}"]`)
-          || document.getElementById('project-carousel-title');
-        if (!target) return;
-        target.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'center' });
-        target.classList.add('is-highlighted');
-        setTimeout(() => target.classList.remove('is-highlighted'), 1600);
-      });
-      nodeLayer.appendChild(btn);
-      node.button = btn;
-    });
-  }
-
-  const nodeWorldPos = new THREE.Vector3();
-  function updateNodeButtons() {
-    if (!nodeLayer) return;
-    nodeObjects.forEach((node) => {
-      if (!node.button) return;
-      const projected = node.group.getWorldPosition(nodeWorldPos).project(camera);
-      const inView = projected.z < 1 && Math.abs(projected.x) < 1.15 && Math.abs(projected.y) < 1.15;
-      node.button.classList.toggle('is-visible', inView);
-      if (!inView) return;
-      const x = (projected.x * 0.5 + 0.5) * width;
-      const y = (projected.y * -0.5 + 0.5) * height;
-      node.button.style.left = `${x}px`;
-      node.button.style.top = `${y}px`;
-    });
-  }
-
-  // Bounded mouse parallax: the group tilts toward the cursor within the
-  // hero, gently, and eases back to idle rotation when the mouse leaves or
-  // stays still. Disabled below the 900px breakpoint (same gate as resize())
-  // and for prefers-reduced-motion.
-  const parallax = { targetX: 0, targetY: 0, x: 0, y: 0 };
-  function onHeroMouseMove(event) {
-    if (reduceMotion.matches || width < 900) return;
-    const rect = hero.getBoundingClientRect();
-    const nx = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    const ny = ((event.clientY - rect.top) / rect.height) * 2 - 1;
-    parallax.targetX = -ny * 0.16;
-    parallax.targetY = nx * 0.16;
-  }
-  function onHeroMouseLeave() {
-    parallax.targetX = 0;
-    parallax.targetY = 0;
-  }
-  hero.addEventListener('mousemove', onHeroMouseMove);
-  hero.addEventListener('mouseleave', onHeroMouseLeave);
-
-  let width = 0;
-  let height = 0;
-  let frameId = null;
-  let running = false;
-
-  function makeTextSprite(text) {
-    const labelCanvas = document.createElement('canvas');
-    labelCanvas.width = 256;
-    labelCanvas.height = 74;
-    const labelCtx = labelCanvas.getContext('2d');
-    if (!labelCtx) {
-      const fallbackMaterial = new THREE.SpriteMaterial({ color: 0x10b981, transparent: true, opacity: 0.12 });
-      const fallbackSprite = new THREE.Sprite(fallbackMaterial);
-      fallbackSprite.scale.set(0.9, 0.24, 1);
-      return fallbackSprite;
-    }
-    labelCtx.fillStyle = 'rgba(9,9,11,0.82)';
-    roundedCanvasRect(labelCtx, 12, 12, 232, 46, 23);
-    labelCtx.fill();
-    labelCtx.strokeStyle = 'rgba(16,185,129,0.72)';
-    labelCtx.lineWidth = 2;
-    labelCtx.stroke();
-    labelCtx.fillStyle = '#ededed';
-    labelCtx.font = '700 24px Space Grotesk, Arial, sans-serif';
-    labelCtx.textAlign = 'center';
-    labelCtx.textBaseline = 'middle';
-    labelCtx.fillText(text, 128, 35);
-    const texture = new THREE.CanvasTexture(labelCanvas);
-    const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
-    const sprite = new THREE.Sprite(material);
-    sprite.scale.set(1.18, 0.34, 1);
-    return sprite;
-  }
-
-  function roundedCanvasRect(context, x, y, w, h, r) {
-    context.beginPath();
-    context.moveTo(x + r, y);
-    context.arcTo(x + w, y, x + w, y + h, r);
-    context.arcTo(x + w, y + h, x, y + h, r);
-    context.arcTo(x, y + h, x, y, r);
-    context.arcTo(x, y, x + w, y, r);
-    context.closePath();
-  }
-
-  function resize() {
-    const rect = hero.getBoundingClientRect();
-    width = Math.max(1, rect.width);
-    height = Math.max(420, rect.height);
-    renderer.setPixelRatio(Math.min(2, Math.max(1, window.devicePixelRatio || 1)));
-    renderer.setSize(width, height, false);
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-
-    // Convert the same "empty space right of the text column" pixel boundary
-    // the 2D canvas uses (measureHeroGraphicLeft) into Three.js world space,
-    // via the perspective camera's FOV: at distance z from the camera, a
-    // plane through the origin shows a visible half-height of z*tan(fov/2),
-    // and a visible half-width of that times the aspect ratio. Pixel->NDC
-    // (-1..1) then NDC->world just scales by those half-extents.
-    const halfHeightWorld = camera.position.z * Math.tan((camera.fov * Math.PI) / 360);
-    const halfWidthWorld = halfHeightWorld * camera.aspect;
-    const graphicLeftPx = width < 900 ? null : measureHeroGraphicLeft(hero);
-
-    if (graphicLeftPx == null) {
-      group.position.x = width < 900 ? 1.55 : 4.05;
-      group.position.y = width < 760 ? 0.65 : -0.05;
-      group.scale.setScalar(width < 760 ? 0.85 : 1.2);
-    } else {
-      const graphicWidthPx = Math.max(240, width - graphicLeftPx);
-      const graphicCenterPx = graphicLeftPx + graphicWidthPx * 0.5;
-      const ndcX = (graphicCenterPx / width) * 2 - 1;
-      group.position.x = ndcX * halfWidthWorld;
-      group.position.y = 0;
-
-      // Scale the whole scene up to fill the available circle: rings extend
-      // to radius 2.55 at scale 1, so ~2.6 world units is that footprint's
-      // half-extent. Fit it inside whichever is tighter, the graphic column's
-      // half-width or the hero's half-height, then go "gigante" (up to 1.8x)
-      // while leaving a safety margin so rings never clip the hero edges.
-      const graphicHalfWidthWorld = (graphicWidthPx / width) * halfWidthWorld;
-      const fitWorld = Math.min(graphicHalfWidthWorld, halfHeightWorld) * 0.92;
-      const baseFootprint = 2.6;
-      group.scale.setScalar(Math.min(1.8, Math.max(0.9, fitWorld / baseFootprint)));
-    }
-  }
-
-  function shouldRun() {
-    return !reduceMotion.matches && document.visibilityState === 'visible' && document.getElementById('overview-section')?.classList.contains('active') && !sideQuestsOpen();
-  }
-
-  function render(time = 0) {
-    const active = Math.floor(time / 1100) % nodeObjects.length;
-    parallax.x += (parallax.targetX - parallax.x) * 0.06;
-    parallax.y += (parallax.targetY - parallax.y) * 0.06;
-    group.rotation.y = time * 0.00012 + parallax.y;
-    group.rotation.x = parallax.x;
-    core.rotation.y = time * 0.0005;
-    halo.rotation.y = -time * 0.00035;
-    particles.rotation.y = time * 0.00008;
-    rings.forEach((ring, index) => {
-      ring.rotation.z = time * (0.00018 + index * 0.00006);
-    });
-    nodeObjects.forEach((node, index) => {
-      const angle = node.angle + time * 0.00022;
-      node.group.position.set(Math.cos(angle) * 3.0, Math.sin(angle) * 1.55, Math.sin(angle) * 0.85);
-      node.mesh.material.color.set(0x10b981);
-      node.mesh.scale.setScalar(index === active ? 1.28 + Math.sin(time * 0.008) * 0.12 : 1);
-      node.line.geometry.setFromPoints([new THREE.Vector3(0, 0, 0), node.group.position.clone()]);
-      node.line.material.opacity = index === active ? 0.72 : 0.2;
-    });
-    group.updateMatrixWorld(true);
-    updateNodeButtons();
-    renderer.render(scene, camera);
-    if (running) frameId = requestAnimationFrame(render);
-  }
-
-  function start() {
-    running = shouldRun();
-    if (frameId) cancelAnimationFrame(frameId);
-    if (running) frameId = requestAnimationFrame(render);
-    else render(0);
-  }
-
-  resize();
-  start();
-  window.addEventListener('resize', () => {
-    resize();
-    start();
-  });
-  document.addEventListener('visibilitychange', start);
-  reduceMotion.addEventListener('change', () => {
-    if (reduceMotion.matches) renderer.render(scene, camera);
-    start();
-  });
-  window.addEventListener('hashchange', start);
-  window.addEventListener('portfolio-tab-change', start);
-  window.addEventListener('side-quests-visibility', start);
-}
-
 // The Side Quests panel is a full-screen opaque overlay; anything animating
 // underneath it (the hero's canvas/WebGL loop) is invisible work, so the
 // hero pauses while it's open.
@@ -2678,206 +2439,175 @@ function sideQuestsOpen() {
   return !!document.getElementById('side-quests-reveal')?.classList.contains('is-visible');
 }
 
-// Shared by both the 3D and 2D hero: the graphic sits to the right of the
-// text column, not in the middle of the whole (mostly-text) hero. Returns the
-// pixel x, relative to the hero's left edge, where that empty space starts.
-function measureHeroGraphicLeft(hero) {
-  const heroCopy = hero.querySelector('.hero-copy');
-  if (!heroCopy) return null;
-  const heroRect = hero.getBoundingClientRect();
-  const copyRect = heroCopy.getBoundingClientRect();
-  return Math.max(0, copyRect.right - heroRect.left + 56);
+// ═══════════════════ CINEMATIC HERO ═══════════════════
+// A tilted wall of real project screens drifting behind the headline. Every
+// screen is a project from FEATURED_PROJECTS (never stock art), and the
+// "En pantalla" caption cycles through them, lighting up that project's
+// screens across the wall.
+const CINE_COLUMNS = 5;
+const CINE_TILES_PER_COLUMN = 4;
+const CINE_MAX_VIDEOS = 4;
+let cineSpotlightIndex = 0;
+
+function cineProjects() {
+  return FEATURED_PROJECTS.filter((p) => p.media);
 }
 
-function setupAiOpsHero() {
-  const canvas = document.getElementById('ai-ops-canvas');
-  const hero = document.querySelector('.ai-ops-hero');
-  if (!canvas || !hero) return;
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  // Real stack items tied to a real project, not generic labels — each node
-  // in the hero is a legitimate proof point, and clicking one jumps to it.
-  const nodes = [
-    { label: 'FastAPI', projectId: 'jobbot', proof: { es: 'Backend y pagos de JobBot', en: 'JobBot backend and payments' } },
-    { label: 'PostgreSQL', projectId: 'franquiya', proof: { es: 'Stock y facturas de FranquiYA', en: 'FranquiYA stock and invoices' } },
-    { label: 'Python', projectId: 'motor-estadistico', proof: { es: 'Motor de predicciones deportivas', en: 'Sports prediction engine' } },
-    { label: 'Next.js', projectId: 'piscubi', proof: { es: 'E-commerce de Piscubi Store', en: 'Piscubi Store e-commerce' } },
-    { label: 'Playwright', projectId: 'agents-system', proof: { es: 'Tests de este mismo portfolio', en: 'Tests for this very portfolio' } }
-  ];
-  if (window.THREE && !reduceMotion.matches) {
-    try {
-      setupThreeAiOpsHero(canvas, hero, nodes, reduceMotion);
-      return;
-    } catch (error) {
-      console.warn('Three.js hero failed, falling back to canvas 2D.', error);
+function cineHost(project) {
+  if (!project.href) return 'localhost';
+  try { return new URL(project.href).hostname.replace(/^www\./, ''); } catch (_e) { return 'localhost'; }
+}
+
+function buildCineWall(wall) {
+  const projects = cineProjects();
+  if (!projects.length) return;
+  const reduceMotion = prefersReducedMotion();
+  const bigScreen = window.matchMedia('(min-width: 900px) and (hover: hover)').matches;
+  let videos = 0;
+  let cursor = 0;
+  const columns = [];
+  for (let c = 0; c < CINE_COLUMNS; c++) {
+    const tiles = [];
+    for (let t = 0; t < CINE_TILES_PER_COLUMN; t++) {
+      const project = projects[cursor % projects.length];
+      cursor += 3; // step by 3 so neighbouring columns don't line up the same project
+      const useVideo = !reduceMotion && bigScreen && project.preview && videos < CINE_MAX_VIDEOS && t === 1;
+      if (useVideo) videos++;
+      const media = useVideo
+        ? `<video src="${escapeHtml(project.preview)}" poster="${escapeHtml(project.media)}" muted loop playsinline autoplay preload="none"></video>`
+        : `<img src="${escapeHtml(project.media)}" alt="" loading="${c < 3 ? 'eager' : 'lazy'}" decoding="async">`;
+      tiles.push(`<figure class="cine-tile" data-cine-id="${escapeHtml(project.id)}"><span class="cine-tile-bar"><i></i><i></i><i></i><b>${escapeHtml(cineHost(project))}</b></span>${media}</figure>`);
+    }
+    // Each column holds its tiles twice so the drift loops without a seam.
+    columns.push(`<div class="cine-col" style="--col:${c}"><div class="cine-col-track">${tiles.join('')}${tiles.join('')}</div></div>`);
+  }
+  wall.innerHTML = columns.join('');
+}
+
+function renderCineSpotlight() {
+  const hero = document.querySelector('[data-cine-hero]');
+  const caption = document.querySelector('[data-cine-now]');
+  if (!hero || !caption) return;
+  const projects = cineProjects();
+  const project = projects[cineSpotlightIndex % projects.length];
+  if (!project) return;
+  hero.querySelectorAll('.cine-tile').forEach((tile) => {
+    tile.classList.toggle('is-lit', tile.dataset.cineId === project.id);
+  });
+  caption.innerHTML = `<span class="cine-now-label">${escapeHtml(getCopy('hero.nowShowing'))}</span><strong>${escapeHtml(project.title)}</strong><span class="cine-now-desc">${escapeHtml(projectField(project, 'kind'))}</span>`;
+}
+
+function setupCineHero() {
+  const hero = document.querySelector('[data-cine-hero]');
+  const wall = hero?.querySelector('[data-cine-wall]');
+  if (!hero || !wall) return;
+  buildCineWall(wall);
+  renderCineSpotlight();
+
+  const reduceMotion = prefersReducedMotion();
+  let visible = true;
+  let spotlightTimer = null;
+
+  const running = () => visible && !reduceMotion && document.visibilityState === 'visible'
+    && document.getElementById('overview-section')?.classList.contains('active') && !sideQuestsOpen();
+
+  // One switch for everything that moves: CSS drift, the preview videos and
+  // the spotlight timer all stop when nobody can see them.
+  function sync() {
+    const on = running();
+    hero.classList.toggle('is-paused', !on);
+    hero.querySelectorAll('video').forEach((v) => { if (on) v.play().catch(() => {}); else v.pause(); });
+    if (on && !spotlightTimer) {
+      spotlightTimer = setInterval(() => { cineSpotlightIndex++; renderCineSpotlight(); }, 3200);
+    } else if (!on && spotlightTimer) {
+      clearInterval(spotlightTimer);
+      spotlightTimer = null;
     }
   }
-  const ctx = canvas.getContext('2d');
-  if (!ctx) {
-    hero.classList.add('no-canvas');
-    canvas.hidden = true;
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); }, { threshold: 0.01 }).observe(hero);
+  }
+  document.addEventListener('visibilitychange', sync);
+  window.addEventListener('portfolio-tab-change', sync);
+  window.addEventListener('side-quests-visibility', sync);
+  sync();
+
+  // In-page jump to the story act; plain anchors would collide with the
+  // path-based router.
+  hero.querySelectorAll('[data-cine-scroll]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      document.getElementById('story')?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    });
+  });
+
+  if (reduceMotion) return;
+
+  // Pointer parallax: the wall leans a few degrees toward the cursor.
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    let frame = 0;
+    hero.addEventListener('pointermove', (event) => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const rect = hero.getBoundingClientRect();
+        hero.style.setProperty('--mx', ((event.clientX - rect.left) / rect.width - 0.5).toFixed(3));
+        hero.style.setProperty('--my', ((event.clientY - rect.top) / rect.height - 0.5).toFixed(3));
+      });
+    });
+    hero.addEventListener('pointerleave', () => {
+      hero.style.setProperty('--mx', '0');
+      hero.style.setProperty('--my', '0');
+    });
+  }
+
+  // Scroll-out: the copy lifts and fades while the wall pushes in, so leaving
+  // the hero feels like a camera move instead of a page scroll.
+  let scrollFrame = 0;
+  const onScroll = () => {
+    if (scrollFrame) return;
+    scrollFrame = requestAnimationFrame(() => {
+      scrollFrame = 0;
+      const progress = Math.min(1, Math.max(0, window.scrollY / Math.max(1, hero.offsetHeight)));
+      hero.style.setProperty('--out', progress.toFixed(3));
+    });
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+}
+
+// ═══════════════════ EXPLODED STACK ═══════════════════
+// JobBot taken apart layer by layer as you scroll: each plate is a real piece
+// of the project, labelled once in plain words and once in stack terms.
+function setupExplodedStack() {
+  const section = document.querySelector('[data-exploded]');
+  if (!section) return;
+  if (prefersReducedMotion()) {
+    section.style.setProperty('--explode', '1');
+    section.classList.add('is-static');
     return;
   }
-  let width = 0;
-  let height = 0;
-  let graphicLeft = 0; // where the text column ends, in canvas-local px
-  let particles = [];
-  let frameId = null;
-  let running = false;
-  const heroCopy = hero.querySelector('.hero-copy');
-
-  function resize() {
-    const rect = hero.getBoundingClientRect();
-    width = Math.max(1, rect.width);
-    height = Math.max(420, rect.height);
-
-    // The canvas is a full-bleed background layer, but the core should sit
-    // centered in the empty space to the right of the text column, not in
-    // the middle of the whole hero (which is mostly text on desktop).
-    // Below the 900px breakpoint the grid drops to one column and this
-    // canvas is hidden entirely (see the max-width:900px rule in style.css),
-    // so a heroCopy-driven boundary only ever applies to the two-column case.
-    graphicLeft = measureHeroGraphicLeft(hero) ?? width * 0.5;
-
-    const ratio = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
-    canvas.width = Math.round(width * ratio);
-    canvas.height = Math.round(height * ratio);
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
-    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-    const count = width < 760 ? 36 : 90;
-    particles = Array.from({ length: count }, (_, i) => ({
-      seed: i,
-      radius: 80 + Math.random() * Math.min(width, height) * 0.42,
-      angle: Math.random() * Math.PI * 2,
-      speed: 0.001 + Math.random() * 0.0022,
-      size: 1 + Math.random() * 2.2,
-      alpha: 0.14 + Math.random() * 0.42
-    }));
+  let frame = 0;
+  let active = false;
+  const update = () => {
+    frame = 0;
+    const rect = section.getBoundingClientRect();
+    const travel = Math.max(1, rect.height - window.innerHeight);
+    const progress = Math.min(1, Math.max(0, -rect.top / travel));
+    // Ease out so the plates separate fast and settle gently.
+    const eased = 1 - Math.pow(1 - progress, 2.2);
+    section.style.setProperty('--explode', eased.toFixed(3));
+  };
+  const onScroll = () => { if (active && !frame) frame = requestAnimationFrame(update); };
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([entry]) => { active = entry.isIntersecting; if (active) update(); }, { rootMargin: '100px 0px' }).observe(section);
+  } else {
+    active = true;
   }
-
-  function getCore() {
-    const graphicWidth = Math.max(240, width - graphicLeft);
-    return {
-      x: width < 900 ? width * 0.54 : graphicLeft + graphicWidth * 0.5,
-      y: height * 0.5,
-      // Bigger presence on desktop: ~1.7x the old radius (r scales area, so
-      // ~2.9x more "mass" on screen), while staying inside min(graphicWidth,
-      // height) so the orbit rings (up to ~1.85x r) never clip the hero edges.
-      r: Math.min(graphicWidth, height) * (width < 760 ? 0.11 : 0.22)
-    };
-  }
-
-  function nodePosition(index, time) {
-    const core = getCore();
-    const angle = (index / nodes.length) * Math.PI * 2 - Math.PI / 2 + Math.sin(time * 0.0004) * 0.08;
-    const rx = core.r * 2.8;
-    const ry = core.r * 2.05;
-    return {
-      x: core.x + Math.cos(angle) * rx,
-      y: core.y + Math.sin(angle) * ry
-    };
-  }
-
-  function draw(time = 0) {
-    ctx.clearRect(0, 0, width, height);
-    const core = getCore();
-    const active = Math.floor(time / 1100) % nodes.length;
-
-    const gradient = ctx.createRadialGradient(core.x, core.y, 0, core.x, core.y, core.r * 3.6);
-    gradient.addColorStop(0, 'rgba(16,185,129,0.28)');
-    gradient.addColorStop(0.38, 'rgba(59,130,246,0.11)');
-    gradient.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = gradient;
-    ctx.beginPath();
-    ctx.arc(core.x, core.y, core.r * 3.6, 0, Math.PI * 2);
-    ctx.fill();
-
-    particles.forEach((particle) => {
-      if (!reduceMotion.matches) particle.angle += particle.speed;
-      const x = core.x + Math.cos(particle.angle) * particle.radius;
-      const y = core.y + Math.sin(particle.angle * 0.86) * particle.radius * 0.55;
-      ctx.fillStyle = `rgba(237,237,237,${particle.alpha})`;
-      ctx.beginPath();
-      ctx.arc(x, y, particle.size, 0, Math.PI * 2);
-      ctx.fill();
-    });
-
-    for (let ring = 0; ring < 3; ring++) {
-      ctx.strokeStyle = ring === 1 ? 'rgba(59,130,246,0.28)' : 'rgba(16,185,129,0.24)';
-      ctx.lineWidth = 1.2;
-      ctx.beginPath();
-      ctx.ellipse(core.x, core.y, core.r * (1.25 + ring * 0.62), core.r * (0.74 + ring * 0.34), time * 0.00025 + ring, 0, Math.PI * 2);
-      ctx.stroke();
-    }
-
-    ctx.fillStyle = 'rgba(9,9,11,0.72)';
-    ctx.strokeStyle = 'rgba(16,185,129,0.62)';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.arc(core.x, core.y, core.r, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.stroke();
-    ctx.fillStyle = '#ededed';
-    ctx.font = '700 13px Space Grotesk, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('AI CORE', core.x, core.y + 4);
-
-    nodes.forEach((node, index) => {
-      const pos = nodePosition(index, time);
-      const isActive = index === active;
-      ctx.strokeStyle = isActive ? 'rgba(16,185,129,0.82)' : 'rgba(255,255,255,0.12)';
-      ctx.lineWidth = isActive ? 2 : 1;
-      ctx.beginPath();
-      ctx.moveTo(core.x, core.y);
-      ctx.lineTo(pos.x, pos.y);
-      ctx.stroke();
-
-      const pulse = isActive && !reduceMotion.matches ? Math.sin(time * 0.008) * 4 : 0;
-      ctx.fillStyle = isActive ? 'rgba(16,185,129,0.22)' : 'rgba(18,18,21,0.78)';
-      ctx.strokeStyle = isActive ? 'rgba(16,185,129,0.86)' : 'rgba(255,255,255,0.15)';
-      roundRect(ctx, pos.x - 52 - pulse / 2, pos.y - 18 - pulse / 2, 104 + pulse, 36 + pulse, 18);
-      ctx.fill();
-      ctx.stroke();
-      ctx.fillStyle = isActive ? '#ededed' : 'rgba(237,237,237,0.72)';
-      ctx.font = '700 11px Space Grotesk, sans-serif';
-      ctx.fillText(node.label, pos.x, pos.y + 4);
-    });
-
-    if (!reduceMotion.matches && running) frameId = requestAnimationFrame(draw);
-  }
-
-  function roundRect(context, x, y, w, h, r) {
-    context.beginPath();
-    context.moveTo(x + r, y);
-    context.arcTo(x + w, y, x + w, y + h, r);
-    context.arcTo(x + w, y + h, x, y + h, r);
-    context.arcTo(x, y + h, x, y, r);
-    context.arcTo(x, y, x + w, y, r);
-    context.closePath();
-  }
-
-  function shouldRun() {
-    return !reduceMotion.matches && document.visibilityState === 'visible' && document.getElementById('overview-section')?.classList.contains('active') && !sideQuestsOpen();
-  }
-
-  function start() {
-    running = shouldRun();
-    if (frameId) cancelAnimationFrame(frameId);
-    if (running) frameId = requestAnimationFrame(draw);
-    else draw(0);
-  }
-
-  resize();
-  start();
-  window.addEventListener('resize', () => {
-    resize();
-    start();
-  });
-  document.addEventListener('visibilitychange', start);
-  reduceMotion.addEventListener('change', start);
-  window.addEventListener('hashchange', start);
-  window.addEventListener('portfolio-tab-change', start);
-  window.addEventListener('side-quests-visibility', start);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  update();
 }
 
 // ═══════════════════ RECRUITER 30-SECOND SUMMARY ═══════════════════
@@ -3017,10 +2747,10 @@ document.addEventListener('DOMContentLoaded', () => {
   applyProjectStats();
   setupPreferenceControls();
   setupProjectCarousel();
-  setupAiOpsHero();
+  setupCineHero();
+  setupExplodedStack();
   setupGithubContributions();
   setupGithubRecent();
-  initHeroRoleRotator();
   initNavbarScroll();
   initScrollReveal();
   initCounters();
