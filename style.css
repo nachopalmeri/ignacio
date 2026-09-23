@@ -3225,6 +3225,21 @@ button.carousel-proof {
   display: grid;
 }
 
+.project-video-reveal { align-content: center; gap: 14px; }
+
+.project-video-credit {
+  margin: 0;
+  min-height: 1.4em;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: rgba(245, 245, 245, 0.55);
+  visibility: hidden;
+}
+
+.project-video-reveal.is-pinned .project-video-credit { visibility: visible; }
+
+.project-video-credit a { color: rgba(245, 245, 245, 0.8); text-decoration: underline; text-underline-offset: 3px; }
+
 @media (max-width: 900px) {
   .project-video-frame {
     width: min(880px, 92vw);

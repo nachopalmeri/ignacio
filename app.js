@@ -2505,6 +2505,30 @@ function renderProjectCarousel() {
   initProjectRoadmap();
 }
 
+// Music under each demo (scripts/video/music.json). CC BY needs the credit
+// shown next to the video, so the lightbox prints it under the frame.
+const DEMO_MUSIC = {
+  'jobbot': ['Portrayal', 'Universal Libraries', 'CC BY 4.0', 'https://freemusicarchive.org/music/Portrayal/to-the-black-sea/universal-libraries/'],
+  'fulbotracker': ['Alex Morgan', 'Grunge Nostalgia With Distant Guitars', 'CC BY 4.0', 'https://freemusicarchive.org/music/alex-morgan/emotional-piano-vol-2/grunge-nostalgia-with-distant-guitars/'],
+  'prode': ['Portrayal', 'Slow Wait', 'CC BY 4.0', 'https://freemusicarchive.org/music/Portrayal/to-the-black-sea/slow-wait/'],
+  'comidadebarrio': ['Portrayal', 'Rooms', 'CC BY 4.0', 'https://freemusicarchive.org/music/Portrayal/to-the-black-sea/rooms/'],
+  'polytools': ['Portrayal', 'Never Adjusted', 'CC BY 4.0', 'https://freemusicarchive.org/music/Portrayal/to-the-black-sea/never-adjusted/'],
+  'agents-system': ['Portrayal', 'On Wire', 'CC BY 4.0', 'https://freemusicarchive.org/music/Portrayal/to-the-black-sea/on-wire/'],
+  'darter': ['Portrayal', 'Departures', 'CC BY 4.0', 'https://freemusicarchive.org/music/Portrayal/to-the-black-sea/departures/'],
+  'franqui': ['Portrayal', 'You and Everyone', 'CC BY 4.0', 'https://freemusicarchive.org/music/Portrayal/to-the-black-sea/you-and-everyone/'],
+  'dulces': ['oji', 'three sketchbooks ago', 'CC0', 'https://freemusicarchive.org/music/oji/fawm-2025/three-sketchbooks-ago/'],
+  'piscubi': ['Blank & Kytt', 'Jangle', 'CC BY 3.0', 'https://freemusicarchive.org/music/Blank__Kytt/Heavy_Crazy_Serious/Blank__Kytt_-_Heavy_Crazy_Serious_-_02_Jangle/'],
+  'pisculabs': ['Portrayal', 'Out of Light', 'CC BY 4.0', 'https://freemusicarchive.org/music/Portrayal/to-the-black-sea/out-of-light/']
+};
+
+function demoMusicCredit(src) {
+  const id = (String(src).match(/([\w-]+)-demo\.mp4/) || [])[1];
+  const track = id && DEMO_MUSIC[id];
+  if (!track) return '';
+  const [artist, title, license, url] = track;
+  return `♪ <a href="${url}" target="_blank" rel="noopener">${title}</a> — ${artist} · ${license}`;
+}
+
 const projectVideoRevealState = { canReveal: null };
 
 function setupProjectVideoReveal() {
@@ -2565,6 +2589,8 @@ function setupProjectVideoReveal() {
     video.muted = false;
     video.volume = 0.5; // Comfortable default volume
     video.controls = true;
+    const credit = document.getElementById('project-video-credit');
+    if (credit) credit.innerHTML = demoMusicCredit(src);
     overlay.classList.add('is-visible', 'is-pinned');
     video.play().catch(() => {
       video.muted = true;

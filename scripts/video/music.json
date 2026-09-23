@@ -1,0 +1,79 @@
+{
+  "jobbot": {
+    "artist": "Portrayal",
+    "title": "Universal Libraries",
+    "source": "https://freemusicarchive.org/music/Portrayal/to-the-black-sea/universal-libraries/",
+    "license": "https://creativecommons.org/licenses/by/4.0",
+    "start": 169.85
+  },
+  "fulbotracker": {
+    "artist": "Alex Morgan",
+    "title": "Grunge Nostalgia With Distant Guitars",
+    "source": "https://freemusicarchive.org/music/alex-morgan/emotional-piano-vol-2/grunge-nostalgia-with-distant-guitars/",
+    "license": "https://creativecommons.org/licenses/by/4.0",
+    "start": 67.64
+  },
+  "prode": {
+    "artist": "Portrayal",
+    "title": "Slow Wait",
+    "source": "https://freemusicarchive.org/music/Portrayal/to-the-black-sea/slow-wait/",
+    "license": "https://creativecommons.org/licenses/by/4.0",
+    "start": 68.27
+  },
+  "comidadebarrio": {
+    "artist": "Portrayal",
+    "title": "Rooms",
+    "source": "https://freemusicarchive.org/music/Portrayal/to-the-black-sea/rooms/",
+    "license": "https://creativecommons.org/licenses/by/4.0",
+    "start": 137.46
+  },
+  "polytools": {
+    "artist": "Portrayal",
+    "title": "Never Adjusted",
+    "source": "https://freemusicarchive.org/music/Portrayal/to-the-black-sea/never-adjusted/",
+    "license": "https://creativecommons.org/licenses/by/4.0",
+    "start": 158.36
+  },
+  "agents-system": {
+    "artist": "Portrayal",
+    "title": "On Wire",
+    "source": "https://freemusicarchive.org/music/Portrayal/to-the-black-sea/on-wire/",
+    "license": "https://creativecommons.org/licenses/by/4.0",
+    "start": 38.89
+  },
+  "darter": {
+    "artist": "Portrayal",
+    "title": "Departures",
+    "source": "https://freemusicarchive.org/music/Portrayal/to-the-black-sea/departures/",
+    "license": "https://creativecommons.org/licenses/by/4.0",
+    "start": 135.33
+  },
+  "franqui": {
+    "artist": "Portrayal",
+    "title": "You and Everyone",
+    "source": "https://freemusicarchive.org/music/Portrayal/to-the-black-sea/you-and-everyone/",
+    "license": "https://creativecommons.org/licenses/by/4.0",
+    "start": 207.7
+  },
+  "dulces": {
+    "artist": "oji",
+    "title": "three sketchbooks ago",
+    "source": "https://freemusicarchive.org/music/oji/fawm-2025/three-sketchbooks-ago/",
+    "license": "https://creativecommons.org/publicdomain/zero/1.0",
+    "start": 78.34
+  },
+  "piscubi": {
+    "artist": "Blank & Kytt",
+    "title": "Jangle",
+    "source": "https://freemusicarchive.org/music/Blank__Kytt/Heavy_Crazy_Serious/Blank__Kytt_-_Heavy_Crazy_Serious_-_02_Jangle/",
+    "license": "https://creativecommons.org/licenses/by/3.0",
+    "start": 39.4
+  },
+  "pisculabs": {
+    "artist": "Portrayal",
+    "title": "Out of Light",
+    "source": "https://freemusicarchive.org/music/Portrayal/to-the-black-sea/out-of-light/",
+    "license": "https://creativecommons.org/licenses/by/4.0",
+    "start": 73.0
+  }
+}
