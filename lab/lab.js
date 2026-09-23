@@ -9,6 +9,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+import { PROFILES, LANE_INFO, MISSIONS, readable } from '/lab/profiles.js';
 
 const $ = (s) => document.querySelector(s);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -29,7 +30,19 @@ const HOME = {
   HIGH_RISK: ['agente-security-auditor', 'agente-release-manager', 'agente-mcp-architect'],
   SPECIALIZED: ['agente-design', 'agente-seo', 'agente-growth-seo-geo', 'agente-marketing-strategist', 'agente-product-founder', 'agente-ai-architect', 'agente-obsidian-brain', 'agente-academic-tutor', 'agente-x-content-strategist', 'agente-code-reviewer']
 };
-const shortName = (id) => id.replace(/^agente-/, '').replace(/-/g, ' ');
+const shortName = (id) => (PROFILES[id] && PROFILES[id].name) || id.replace(/^agente-/, '').replace(/-/g, ' ');
+const embed = new URLSearchParams(location.search).has('embed');
+if (embed) document.body.classList.add('embed');
+
+// Round portrait (or initials) used on the stage, the profile and the receipt.
+function avatarHTML(id, lane, size = 26) {
+  const p = PROFILES[id] || {};
+  const color = LANES[lane] ? LANES[lane].color : '#a5b4fc';
+  if (p.photo) return `<img class="av" src="${p.photo}" alt="" width="${size}" height="${size}" style="--c:${color}">`;
+  const initials = shortName(id).split(/[\s/]+/).filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join('');
+  return `<span class="av mono" style="--c:${color};width:${size}px;height:${size}px;font-size:${Math.round(size * 0.38)}px">${initials}</span>`;
+}
+const laneOf = (id) => Object.keys(HOME).find((l) => HOME[l].includes(id)) || 'SPECIALIZED';
 
 const data = await (await fetch('/lab/data.json')).json();
 const Router = window.AgentRouter;
@@ -150,7 +163,7 @@ function buildStage() {
       cap.position.y = h + 0.04;
       const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.32, 9, 12, 1, true), new THREE.MeshBasicMaterial({ color: LANES[lane].color, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false }));
       beam.position.y = h + 4.5;
-      const label = tag(shortName(id));
+      const label = agentChip(id, lane);
       label.position.set(0, h + 0.7, 0);
       g.add(body, cap, beam, label);
       scene.add(g);
@@ -189,6 +202,17 @@ function buildStage() {
   const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth / (small ? 2 : 1), innerHeight / (small ? 2 : 1)), 1.05, 0.55, 0.18);
   composer.addPass(bloom);
   composer.addPass(new OutputPass());
+
+  function agentChip(id, lane) {
+    const el = document.createElement('button');
+    el.type = 'button';
+    el.className = 'agent-chip';
+    el.style.setProperty('--c', LANES[lane].color);
+    el.innerHTML = `${avatarHTML(id, lane)}<span>${shortName(id)}</span>`;
+    el.setAttribute('aria-label', `${shortName(id)}: ver qué hace`);
+    el.addEventListener('click', (e) => { e.stopPropagation(); dispatchEvent(new CustomEvent('agent-open', { detail: id })); });
+    return new CSS2DObject(el);
+  }
 
   function tag(text, cls = 'tag') {
     const el = document.createElement('div');
@@ -260,7 +284,6 @@ function buildStage() {
     const a = agents[id];
     if (!a) return;
     a.label.element.classList.toggle('on', on);
-    a.label.element.style.color = on ? LANES[a.lane].color : '';
     tween(700, (p) => {
       const k = on ? p : 1 - p;
       a.capMat.color.copy(a.base).multiplyScalar(0.28 + k * 1.5);
@@ -285,11 +308,14 @@ function buildStage() {
   let camGoal = null;
   function focus(point) {
     if (!point) { camGoal = { pos: home.clone(), target: new THREE.Vector3(0, 1.5, 0) }; return; }
-    const out = new THREE.Vector3(point.x, 0, point.z).normalize();
-    const back = small ? 12 : 8;
+    // From just past the router, high up, looking out at the point: the
+    // core stays below the frame instead of filling it.
+    const flat = new THREE.Vector3(point.x, 0, point.z);
+    const out = flat.lengthSq() > 0.01 ? flat.clone().normalize() : new THREE.Vector3(0, 0, 1);
+    const reach = Math.min(flat.length(), 14);
     camGoal = {
-      pos: out.clone().multiplyScalar(-back).setY(small ? 13 : 9.5),
-      target: new THREE.Vector3(point.x * 0.8, 1.2, point.z * 0.8)
+      pos: out.clone().multiplyScalar(reach * 0.3 - (small ? 9 : 5)).setY(small ? 15 : 11),
+      target: out.clone().multiplyScalar(reach * 0.85).setY(1.2)
     };
   }
 
@@ -345,6 +371,7 @@ function buildStage() {
   controls.addEventListener('start', () => { camGoal = null; });
 
   return {
+    gates, agents,
     orb, wave, focus, lightGate, lightAgent, resetAgents, agentTop, gatePoint,
     corePoint: () => new THREE.Vector3(0, 2.4, 0),
     kick: () => { pulse = 1; },
@@ -358,31 +385,79 @@ function buildStage() {
 const steps = $('#steps');
 const receipt = $('#receipt');
 const trace = $('#trace');
+const profile = $('#profile');
 let busy = false;
 
 const STEP_NAMES = {
-  riesgo: 'Riesgo', 'agente explícito': 'Agente explícito', paralelismo: 'Paralelismo explícito', especialista: 'Especialista', SIMPLE: 'SIMPLE (fallback)'
+  riesgo: '¿Es riesgoso?', 'agente explícito': '¿Nombra a un agente?', paralelismo: '¿Pide trabajo en paralelo?', especialista: '¿Es de un tema especial?', SIMPLE: 'Nada de lo anterior → SIMPLE'
 };
+
+// Lane legend: always on screen, lights up with the chosen lane.
+function renderLegend() {
+  $('#legend').innerHTML = Object.entries(LANE_INFO).map(([k, v]) => `
+    <li data-lane="${k}" style="--c:${LANES[k].color}"><i></i><span><b>${v.title}</b>${v.short}</span></li>`).join('');
+}
+function markLegend(lane) {
+  document.querySelectorAll('#legend li').forEach((li) => li.classList.toggle('on', li.dataset.lane === lane));
+}
+
+function plainSentence(r, cancelled) {
+  const who = (id) => `<b>${shortName(id)}</b>`;
+  if (cancelled) return `No se ejecuta: era ${r.lane} y no lo aprobaste. En el sistema real pasa lo mismo, sin tu OK no se toca nada.`;
+  const base = r.support.length
+    ? `Lo encara ${who(r.primary)} con ayuda de ${r.support.map(who).join(', ')}.`
+    : `Lo hace ${who(r.primary)}, solo.`;
+  const extra = r.lane === 'HIGH_RISK'
+    ? ' Recién arranca con tu aprobación y tiene que pasar por <b>validation.md</b>: evidencia antes de darlo por cerrado.'
+    : r.components.length ? ` Sigue el workflow <b>${r.components[0].split('/').pop()}</b>.` : '';
+  return `${base}${extra} Tiene hasta ${r.budgets.maxIterations} intentos y ${r.budgets.maxReplans} replanes; si falla igual, se frena en vez de girar en falso.`;
+}
 
 function renderReceipt(r, cancelled = false) {
   const c = LANES[r.lane].color;
-  const list = (xs) => (xs.length ? xs.join(', ') : '—');
   receipt.innerHTML = `
-    <span class="lane-pill" style="--c:${c}">${r.lane}</span>
-    <p style="margin-top:10px;font-size:13px;color:var(--dim)">${cancelled ? 'Cancelado: sin tu aprobación no se ejecuta nada.' : LANES[r.lane].text}</p>
-    <dl class="kv">
-      <dt>Primario</dt><dd>${r.primary}</dd>
-      <dt>Apoyo</dt><dd>${list(r.support)}</dd>
-      <dt>Workflow</dt><dd>${list(r.components.map((x) => x.split('/').pop()))}</dd>
-      <dt>Motivo</dt><dd>${r.reasons.join(', ')}</dd>
-    </dl>
+    <div class="who">${avatarHTML(r.primary, r.lane, 44)}<div><span class="lane-pill" style="--c:${c}">${r.lane}</span><strong>${shortName(r.primary)}</strong></div></div>
+    <p class="plain">${plainSentence(r, cancelled)}</p>
     <div class="budget">
-      <span><b>${r.budgets.maxIterations}</b>iteraciones</span>
-      <span><b>${r.budgets.maxReplans}</b>replans</span>
-      <span><b>${r.budgets.maxAgents}</b>agentes máx.</span>
-    </div>`;
+      <span title="Cuántas vueltas de trabajo puede dar"><b>${r.budgets.maxIterations}</b>intentos</span>
+      <span title="Cuántas veces puede rehacer el plan"><b>${r.budgets.maxReplans}</b>replanes</span>
+      <span title="Cuántos agentes pueden trabajar a la vez"><b>${r.budgets.maxAgents}</b>agentes máx.</span>
+    </div>
+    <details class="raw"><summary>Ver la ruta técnica</summary>
+      <dl class="kv">
+        <dt>primary</dt><dd>${r.primary}</dd>
+        <dt>support</dt><dd>${r.support.join(', ') || '—'}</dd>
+        <dt>components</dt><dd>${r.components.join(', ') || '—'}</dd>
+        <dt>reasons</dt><dd>${r.reasons.join(', ')}</dd>
+      </dl>
+    </details>`;
   receipt.classList.add('show');
 }
+
+// Agent profile card: who it is, what it does, what words make the router
+// pick it (read straight from the rules).
+function openProfile(id) {
+  const p = PROFILES[id] || {};
+  const lane = laneOf(id);
+  const rule = [...data.rules.specialists, ...data.rules.highRisk].find((r) => r.primary === id);
+  const words = rule ? [...new Set(rule.patterns.map(readable).filter(Boolean))].slice(0, 6) : [];
+  const example = data.cases.find((c) => c.expected.primary === id);
+  profile.innerHTML = `
+    <button class="trace-close" type="button" aria-label="Cerrar">×</button>
+    <div class="who">${avatarHTML(id, lane, 64)}<div><strong>${shortName(id)}</strong><code>${id}</code></div></div>
+    <p>${p.role || ''}</p>
+    <h2>¿Cuándo le toca?</h2>
+    <p>${p.when || ''}</p>
+    ${words.length ? `<div class="words">${words.map((w) => `<span>${w}</span>`).join('')}</div>` : ''}
+    ${example ? `<button class="btn primary try" type="button">Probar: «${example.task.title}»</button>` : ''}`;
+  profile.querySelector('.trace-close').onclick = () => profile.classList.remove('show');
+  const tryBtn = profile.querySelector('.try');
+  if (tryBtn) tryBtn.onclick = () => { profile.classList.remove('show'); play(example.task); };
+  trace.classList.remove('show');
+  profile.classList.add('show');
+  if (stage) { stage.resetAgents(); stage.lightAgent(id, true); stage.focus(stage.agentTop(id)); stage.autoRotate(false); }
+}
+addEventListener('agent-open', (e) => { if (!busy) openProfile(e.detail); });
 
 function askApproval(r, task) {
   return new Promise((resolve) => {
@@ -398,16 +473,21 @@ function askApproval(r, task) {
   });
 }
 
+const lock = (on) => document.querySelectorAll('.console button, #run-evals, #tour-open').forEach((b) => { b.disabled = on; });
+
 async function play(task) {
   if (busy) return;
   busy = true;
-  document.querySelectorAll('.console button, #run-evals').forEach((b) => { b.disabled = true; });
+  lock(true);
+  endTour();
+  profile.classList.remove('show');
   const r = Router.route(task, data);
   const color = LANES[r.lane].color;
   $('#task-text').textContent = task.body ? `${task.title}. ${task.body}` : task.title;
   steps.innerHTML = '';
   receipt.classList.remove('show');
   trace.classList.add('show');
+  markLegend(null);
 
   if (stage) { stage.autoRotate(false); stage.resetAgents(); stage.focus(null); }
   const o = stage && stage.orb('#c7d2fe');
@@ -417,15 +497,16 @@ async function play(task) {
   for (const s of r.trace) {
     const li = document.createElement('li');
     li.innerHTML = `<span class="mark">${s.hit ? '✓' : '·'}</span><span><b>${STEP_NAMES[s.step] || s.step}</b><small></small></span>`;
-    li.querySelector('small').textContent = s.detail;
+    li.querySelector('small').textContent = s.hit ? s.detail : `No: ${s.detail}`;
     li.style.setProperty('--c', color);
     steps.appendChild(li);
     await sleep(40);
     li.classList.add('done');
     if (s.hit) li.classList.add('hit');
     if (stage) stage.kick();
-    await sleep(380 * speed);
+    await sleep(420 * speed);
   }
+  markLegend(r.lane);
 
   let cancelled = false;
   if (stage) {
@@ -447,18 +528,20 @@ async function play(task) {
   }
   if (o) await o.fade();
   renderReceipt(r, cancelled);
-  if (stage) setTimeout(() => { stage.focus(null); stage.autoRotate(true); }, 2200);
+  if (stage) setTimeout(() => { if (!busy) { stage.focus(null); stage.autoRotate(true); } }, 3500);
   busy = false;
-  document.querySelectorAll('.console button, #run-evals').forEach((b) => { b.disabled = false; });
+  lock(false);
 }
 
 async function runEvals() {
   if (busy) return;
   busy = true;
+  endTour();
   trace.classList.remove('show');
+  profile.classList.remove('show');
   const box = $('#evals');
   box.classList.add('show');
-  $('#run-evals').disabled = true;
+  lock(true);
   if (stage) { stage.resetAgents(); stage.focus(null); }
   let ok = 0, n = 0;
   const flights = [];
@@ -466,7 +549,7 @@ async function runEvals() {
     const res = Router.checkCase(c, data);
     n++;
     if (res.ok) ok++;
-    box.innerHTML = `Evals del repo: <b>${ok}/${n}</b> ✓ · ${c.id}`;
+    box.innerHTML = `Pruebas del repo: <b>${ok}/${n}</b> ✓<br><span>${c.task.title}</span>`;
     if (stage) {
       const r = res.route;
       const o = stage.orb(LANES[r.lane].color);
@@ -477,30 +560,54 @@ async function runEvals() {
     await sleep(170 * speed);
   }
   await Promise.all(flights);
-  box.innerHTML = `Evals del repo: <b>${ok}/${data.cases.length}</b> casos rutean igual que lo esperado.`;
+  box.innerHTML = `<b>${ok}/${data.cases.length}</b> pruebas del repo pasan: para cada pedido de prueba, el router elige el carril y el agente que el caso espera.`;
   setTimeout(() => stage && stage.resetAgents(), 2500);
-  $('#run-evals').disabled = false;
+  lock(false);
   busy = false;
 }
 
-// Mission chips: one per lane first, then a few more, from the real evals.
 function renderChips() {
-  const byLane = {};
-  for (const c of data.cases) (byLane[c.expected.lane] ||= []).push(c);
-  const pick = (xs) => xs[Math.floor(Math.random() * xs.length)];
-  const chosen = new Set(Object.values(byLane).map(pick));
-  while (chosen.size < 7) chosen.add(pick(data.cases));
   const box = $('#chips');
   box.innerHTML = '';
-  for (const c of chosen) {
+  for (const text of MISSIONS) {
     const b = document.createElement('button');
     b.type = 'button';
-    b.className = `chip${c.expected.lane === 'HIGH_RISK' ? ' risk' : ''}`;
-    b.textContent = c.task.title;
-    b.addEventListener('click', () => play(c.task));
+    b.className = 'chip';
+    b.textContent = text;
+    b.addEventListener('click', () => play({ title: text, body: '', labels: [] }));
     box.appendChild(b);
   }
 }
+
+// ---------------------------------------------------------------- the tour
+const TOUR = [
+  { title: 'Mi sistema de agentes', text: 'Uso 19 asistentes de IA para construir mis proyectos (JobBot, este portfolio…). Cada uno tiene un rol: programar, testear, diseñar, cuidar la seguridad.', at: () => stage && stage.focus(null) },
+  { title: 'El router, en el centro', text: 'Cuando le pido algo en lenguaje normal, el router decide quién lo hace. No adivina: sigue reglas que escribí, en un orden fijo.', at: () => stage && stage.focus(stage.corePoint().setY(0.5)) },
+  { title: '4 carriles', text: 'SIMPLE, SPECIALIZED, PARALLEL y HIGH_RISK. Cada uno tiene su portal y sus límites. Lo riesgoso (producción, pagos, credenciales) siempre pide mi aprobación.', at: () => { if (stage) { stage.focus(stage.gatePoint('HIGH_RISK')); stage.lightGate('HIGH_RISK', true); } markLegend('HIGH_RISK'); } },
+  { title: 'Probalo', text: 'Tocá un agente para ver qué hace, elegí una misión de abajo o escribí tu propio pedido.', at: () => { if (stage) { stage.lightGate(null, false); stage.focus(null); } markLegend(null); } }
+];
+let tourStep = -1;
+function showTour(i) {
+  tourStep = i;
+  const t = TOUR[i];
+  $('#tour-title').textContent = t.title;
+  $('#tour-text').textContent = t.text;
+  $('#tour-count').textContent = `${i + 1}/${TOUR.length}`;
+  $('#tour-next').textContent = i === TOUR.length - 1 ? 'Empezar' : 'Siguiente';
+  $('#tour').classList.add('show');
+  if (stage) stage.autoRotate(false);
+  t.at();
+}
+function endTour() {
+  if (tourStep < 0) return;
+  tourStep = -1;
+  $('#tour').classList.remove('show');
+  if (stage && !busy) stage.autoRotate(true);
+  try { localStorage.setItem('lab-tour-done', '1'); } catch (_e) {}
+}
+$('#tour-next').addEventListener('click', () => (tourStep < TOUR.length - 1 ? showTour(tourStep + 1) : endTour()));
+$('#tour-skip').addEventListener('click', endTour);
+$('#tour-open').addEventListener('click', () => { trace.classList.remove('show'); profile.classList.remove('show'); showTour(0); });
 
 $('#ask').addEventListener('submit', (e) => {
   e.preventDefault();
@@ -511,7 +618,11 @@ $('#ask').addEventListener('submit', (e) => {
 $('#run-evals').addEventListener('click', runEvals);
 $('#trace-close').addEventListener('click', () => trace.classList.remove('show'));
 renderChips();
+renderLegend();
 
 if (stage) await stage.ready();
 window.__labReady = true;
 setTimeout(() => $('#intro').classList.add('gone'), reduceMotion ? 0 : 400);
+let seen = false;
+try { seen = localStorage.getItem('lab-tour-done') === '1'; } catch (_e) {}
+if (!seen) setTimeout(() => showTour(0), reduceMotion ? 0 : 1600);

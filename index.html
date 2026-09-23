@@ -655,8 +655,8 @@
           <span data-i18n="agents.guideHint">Clickeá cualquier agente del grafo para ver su rol y simular un flujo documentado</span>
         </p>
         <p class="agents-lab-cta">
-          <a class="btn btn-primary" href="/lab" data-i18n="agents.labCta">Entrar al centro de mando 3D</a>
-          <span data-i18n="agents.labNote">El router real, en tu navegador: escribís un pedido y ves a quién se lo da.</span>
+          <a class="btn btn-primary" href="/lab" data-i18n="agents.labCta">Abrir en pantalla completa</a>
+          <span data-i18n="agents.labNote">Abajo lo tenés en vivo: escribile un pedido al sistema y mirá a quién se lo da y por qué.</span>
         </p>
       </div>
 
@@ -687,7 +687,14 @@
         </div>
       </section>
 
-      <div id="eco-viewport">
+      <!-- The immersive view: the 3D command center (/lab) runs here, inside
+           the agents tab. The classic graph stays one click away. -->
+      <div class="agents-3d" id="agents-3d">
+        <iframe src="/lab?embed=1" title="Centro de mando 3D del sistema de agentes" loading="lazy" allow="fullscreen"></iframe>
+      </div>
+      <button type="button" class="agents-classic-toggle" id="agents-classic-toggle" aria-expanded="false" aria-controls="eco-viewport" data-i18n="agents.classicToggle">Ver el grafo clásico</button>
+
+      <div id="eco-viewport" hidden>
         <div class="eco-grid-bg"></div>
         <!-- Decorative: the links between agents are drawn here, but every agent
              is a real DOM node with its own accessible name below. -->

@@ -177,8 +177,10 @@ const UI_COPY = {
       description: 'Sistema local que uso para construir, revisar y documentar con IA. Prioriza contexto, pruebas y decisiones claras.',
       guide: 'Cada nodo del grafo es un rol con instrucciones propias (planear, construir, revisar, testear, documentar). Resuelve el problema de perder contexto entre tareas: cada rol sabe qué hizo el anterior.',
       guideHint: 'Clickeá cualquier agente del grafo para ver su rol y simular un flujo documentado',
-      labCta: 'Entrar al centro de mando 3D',
-      labNote: 'El router real, en tu navegador: escribís un pedido y ves a quién se lo da.',
+      labCta: 'Abrir en pantalla completa',
+      classicToggle: 'Ver el grafo clásico',
+      classicHide: 'Ocultar el grafo clásico',
+      labNote: 'Abajo lo tenés en vivo: escribile un pedido al sistema y mirá a quién se lo da y por qué.',
       workflowsTitle: 'Flujos de trabajo',
       workflowsBody: 'Basado en archivos reales de ~/.agents.',
       proofTitle: 'Flujo real',
@@ -390,8 +392,10 @@ const UI_COPY = {
       description: 'A local system I use to build, review and document with AI.',
       guide: 'Each node in the graph is a role with its own instructions (plan, build, review, test, document). It solves context loss between tasks: every role knows what the previous one did.',
       guideHint: 'Click any agent in the graph to see its role and simulate a documented flow',
-      labCta: 'Enter the 3D command center',
-      labNote: 'The real router, in your browser: type a request and see who gets it.',
+      labCta: 'Open full screen',
+      classicToggle: 'Show the classic graph',
+      classicHide: 'Hide the classic graph',
+      labNote: 'It runs live below: send the system a request and see who gets it and why.',
       workflowsTitle: 'Workflows',
       workflowsBody: 'Based on real ~/.agents files.',
       proofTitle: 'Real flow',
@@ -4036,6 +4040,8 @@ function executeWorkflowStep(stepIndex) {
 
 function renderEcosystem(timestamp) {
   if (!ecoGraphicsReady || !ctxUnder || !ctxOver) return;
+  // The classic graph is hidden behind a toggle: don't draw what nobody sees.
+  if (ecoVp && ecoVp.hidden) { animationFrameId = null; return; }
   // Clear buffers
   ctxUnder.clearRect(0, 0, width, height);
   ctxOver.clearRect(0, 0, width, height);
@@ -4437,3 +4443,23 @@ function setupSideQuestAgents() {
   syncModes();
 }
 setupSideQuestAgents();
+
+
+// Agents tab: the 3D command center is the main view; the classic graph
+// opens on demand (and gets a resize so its canvases size themselves).
+(function setupAgentsClassicToggle() {
+  const btn = document.getElementById('agents-classic-toggle');
+  const vp = document.getElementById('eco-viewport');
+  if (!btn || !vp) return;
+  btn.addEventListener('click', () => {
+    const open = vp.hidden;
+    vp.hidden = !open;
+    btn.setAttribute('aria-expanded', String(open));
+    btn.textContent = getCopy(open ? 'agents.classicHide' : 'agents.classicToggle');
+    if (open) {
+      window.dispatchEvent(new Event('resize'));
+      initEcosystem();
+      vp.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+})();
