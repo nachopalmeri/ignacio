@@ -469,7 +469,17 @@ function secureExternalLinks(root = document) {
   });
 }
 
-let currentLang = safeStorageGet('portfolio-lang', 'es');
+// Language: ?lang=es|en wins (shareable links), then the visitor's saved
+// choice; first-time visitors whose browser has no Spanish at all (recruiters
+// abroad) get English.
+let currentLang = (() => {
+  const fromUrl = new URLSearchParams(location.search).get('lang');
+  if (fromUrl === 'es' || fromUrl === 'en') { safeStorageSet('portfolio-lang', fromUrl); return fromUrl; }
+  const saved = safeStorageGet('portfolio-lang', null);
+  if (saved === 'es' || saved === 'en') return saved;
+  const langs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'es'];
+  return langs.some((l) => /^es\b/i.test(l)) ? 'es' : 'en';
+})();
 let currentTheme = safeStorageGet('portfolio-theme', 'light');
 
 function getCopy(path, lang = currentLang) {
@@ -2912,15 +2922,101 @@ const RECRUITER_SUMMARY = {
   projects: ['jobbot', 'franquiya', 'motor-estadistico']
 };
 
+// Same 30 seconds, three readers. Every line is checkable on the site, the
+// CV or GitHub; nothing here is a claim without a link or a document behind it.
+const RECRUITER_AUDIENCES = {
+  order: ['hr', 'tech', 'startup'],
+  es: {
+    ask: '¿Quién lo lee?',
+    share: 'Copiar link de este resumen', shared: '¡Link copiado!',
+    shareHint: { hr: 'Para pasárselo al equipo técnico, elegí “Líder técnico” y copiá el link.', tech: 'Link directo a esta vista, para compartir internamente.', startup: 'Link directo a esta vista, para compartir con el equipo.' },
+    hr: {
+      tab: 'RR.HH.', pitch: 'Busca su primera experiencia en tecnología. Trae trabajo de cara al cliente, responsabilidad con la caja y proyectos propios online.',
+      points: [
+        ['Estudia Gestión de TI en UADE (2.º año) con promedio 8,2.', '/cv.pdf', 'Ver CV'],
+        ['Trabaja en atención al cliente y operaciones en una franquicia Grido: caja, conciliaciones e inventario.'],
+        ['Certificado en Red Hat RH124, Cisco CCNA 1 y Claude Code in Action (Anthropic).'],
+        ['Todo lo que muestra se puede comprobar: demos online, código en GitHub y CV descargable.', 'https://github.com/nachopalmeri', 'GitHub']
+      ],
+      projects: ['jobbot', 'franquiya', 'motor-estadistico']
+    },
+    tech: {
+      tab: 'Líder técnico', pitch: 'Construye con IA, pero lo que entrega tiene tests y se puede revisar.',
+      points: [
+        ['Testea lo que construye: Playwright y pytest en sus proyectos. Este portfolio corre tests unitarios, e2e y de performance en GitHub Actions en cada push.', 'https://github.com/nachopalmeri/ignacio/actions', 'Ver CI'],
+        ['Su sistema de agentes tiene 34 casos de prueba; el router, portado a JavaScript, los pasa 34/34 en el navegador.', '/agents', 'Probarlo'],
+        ['Python y FastAPI con PostgreSQL (Supabase) en el backend, Next.js en el front, deploy en Vercel.'],
+        ['Mide antes de optimizar: bajó el CLS mobile de este sitio de 0,21 a 0,01 y dejó un test que lo vigila.', 'https://github.com/nachopalmeri/ignacio/blob/main/tests/perf.e2e.mjs', 'Ver test']
+      ],
+      projects: ['jobbot', 'agents-system', 'motor-estadistico']
+    },
+    startup: {
+      tab: 'Startup', pitch: 'Le gusta llevar una idea a algo online y usable, rápido, y medir si sirve.',
+      points: [
+        ['{deployed} proyectos online, cada uno con demo pública y un video del producto funcionando.', '/projects', 'Ver proyectos'],
+        ['Parte de problemas reales: FranquiYA nació de ver el stock y la recepción de mercadería en papel en el local donde trabaja.'],
+        ['Usa la IA como multiplicador: un sistema propio de 19 agentes para planear, construir, testear y revisar.', '/agents', 'Verlo en 3D'],
+        ['Honesto con los números: ninguna métrica ni usuario inventado en todo el portfolio.']
+      ],
+      projects: ['jobbot', 'pisculichi', 'franquiya']
+    }
+  },
+  en: {
+    ask: 'Who is reading?',
+    share: 'Copy a link to this summary', shared: 'Link copied!',
+    shareHint: { hr: 'To forward it to the tech team, pick “Tech lead” and copy the link.', tech: 'A direct link to this view, to share internally.', startup: 'A direct link to this view, to share with the team.' },
+    hr: {
+      tab: 'HR / Talent', pitch: 'Looking for a first role in tech. Brings customer-facing work, responsibility for cash handling and his own projects online.',
+      points: [
+        ["Studies IT Management at UADE (2nd year), GPA 8.2/10.", '/cv-en.pdf', 'See CV'],
+        ['Works in customer service and operations at a Grido franchise: cash, reconciliations and inventory.'],
+        ['Certified in Red Hat RH124, Cisco CCNA 1 and Claude Code in Action (Anthropic).'],
+        ['Everything shown can be checked: live demos, code on GitHub and a downloadable CV.', 'https://github.com/nachopalmeri', 'GitHub']
+      ],
+      projects: ['jobbot', 'franquiya', 'motor-estadistico']
+    },
+    tech: {
+      tab: 'Tech lead', pitch: 'Builds with AI, but what he ships has tests and can be reviewed.',
+      points: [
+        ['Tests what he builds: Playwright and pytest in his projects. This portfolio runs unit, e2e and performance tests on GitHub Actions on every push.', 'https://github.com/nachopalmeri/ignacio/actions', 'See CI'],
+        ['His agent system has 34 test cases; the router, ported to JavaScript, passes 34/34 in the browser.', '/agents', 'Try it'],
+        ['Python and FastAPI with PostgreSQL (Supabase) on the backend, Next.js on the front, deployed on Vercel.'],
+        ["Measures before optimizing: cut this site's mobile CLS from 0.21 to 0.01 and left a test guarding it.", 'https://github.com/nachopalmeri/ignacio/blob/main/tests/perf.e2e.mjs', 'See test']
+      ],
+      projects: ['jobbot', 'agents-system', 'motor-estadistico']
+    },
+    startup: {
+      tab: 'Startup', pitch: 'Likes taking an idea to something live and usable, fast, and measuring whether it works.',
+      points: [
+        ['{deployed} projects online, each with a public demo and a video of the product working.', '/projects', 'See projects'],
+        ['Starts from real problems: FranquiYA came from seeing stock and deliveries tracked on paper at the store where he works.'],
+        ['Uses AI as a multiplier: his own 19-agent system to plan, build, test and review.', '/agents', 'See it in 3D'],
+        ['Honest with numbers: no invented metrics or users anywhere in the portfolio.']
+      ],
+      projects: ['jobbot', 'pisculichi', 'franquiya']
+    }
+  }
+};
+
 function setupRecruiterSummary() {
   const dialog = document.getElementById('recruiter-dialog');
   if (!dialog || typeof dialog.showModal !== 'function') return;
   let opener = null;
 
+  let audience = 'hr';
+
   function render() {
     const t = RECRUITER_SUMMARY[currentLang] || RECRUITER_SUMMARY.es;
+    const A = RECRUITER_AUDIENCES[currentLang] || RECRUITER_AUDIENCES.es;
+    const a = A[audience];
     const en = currentLang === 'en';
-    const projects = RECRUITER_SUMMARY.projects
+    const deployed = typeof projectStats === 'function' ? projectStats().deployed : 10;
+    const tabs = RECRUITER_AUDIENCES.order.map((id) => `<button type="button" role="tab" aria-selected="${id === audience}" data-audience="${id}">${esc(A[id].tab)}</button>`).join('');
+    const points = a.points.map(([text, href, label]) => {
+      const link = href ? ` <a href="${href}"${/^https?:/.test(href) ? ' target="_blank" rel="noopener noreferrer"' : ''}>${esc(label)} →</a>` : '';
+      return `<li>${esc(text.replace('{deployed}', deployed))}${link}</li>`;
+    }).join('');
+    const projects = a.projects
       .map((id) => FEATURED_PROJECTS.find((proj) => proj.id === id))
       .filter(Boolean)
       .map((proj) => {
@@ -2940,11 +3036,15 @@ function setupRecruiterSummary() {
           </div>
           <button type="button" class="rs-close" data-recruiter-close aria-label="${esc(t.close)}">✕</button>
         </header>
+        <div class="rs-aud">
+          <span class="rs-aud-ask">${esc(A.ask)}</span>
+          <div class="rs-aud-tabs" role="tablist" aria-label="${esc(A.ask)}">${tabs}</div>
+        </div>
+        <p class="rs-pitch">${esc(a.pitch)}</p>
+        <ul class="rs-points">${points}</ul>
         <dl class="rs-grid">
           <div><dt>${esc(t.seeks)}</dt><dd>${esc(t.seeksBody)}</dd></div>
           <div><dt>${esc(t.availability)}</dt><dd>${esc(t.availabilityBody)}</dd></div>
-          <div><dt>${esc(t.education)}</dt><dd>${esc(t.educationBody)}</dd></div>
-          <div><dt>${esc(t.experience)}</dt><dd>${esc(t.experienceBody)}</dd></div>
         </dl>
         <h3 class="rs-sub">${esc(t.projects)}</h3>
         <ul class="rs-projects">${projects}</ul>
@@ -2961,11 +3061,13 @@ function setupRecruiterSummary() {
           <a class="rs-social" href="https://github.com/nachopalmeri" target="_blank" rel="noopener noreferrer">GitHub</a>
           <button type="button" class="rs-full" data-recruiter-close>${esc(t.full)} ↓</button>
         </footer>
+        <p class="rs-share"><button type="button" data-recruiter-share>${esc(A.share)}</button> <span>${esc(A.shareHint[audience])}</span></p>
       </div>`;
   }
 
-  function open(trigger) {
+  function open(trigger, aud) {
     opener = trigger || document.activeElement;
+    if (aud && RECRUITER_AUDIENCES.order.includes(aud)) audience = aud;
     render();
     dialog.showModal();
     document.body.style.overflow = 'hidden';
@@ -2975,9 +3077,26 @@ function setupRecruiterSummary() {
     document.body.style.overflow = '';
     if (opener && typeof opener.focus === 'function') opener.focus();
   });
-  dialog.addEventListener('click', (event) => {
-    if (event.target === dialog || event.target.closest('[data-recruiter-close]')) dialog.close();
+  dialog.addEventListener('click', async (event) => {
+    if (event.target === dialog || event.target.closest('[data-recruiter-close]')) { dialog.close(); return; }
+    const tab = event.target.closest('[data-audience]');
+    if (tab) {
+      audience = tab.dataset.audience;
+      render();
+      dialog.querySelector(`[data-audience="${audience}"]`)?.focus();
+      return;
+    }
+    const share = event.target.closest('[data-recruiter-share]');
+    if (share) {
+      const A = RECRUITER_AUDIENCES[currentLang] || RECRUITER_AUDIENCES.es;
+      const url = `${location.origin}/?r=${audience}${currentLang === 'en' ? '&lang=en' : ''}`;
+      try { await navigator.clipboard.writeText(url); share.textContent = A.shared; } catch (_e) { share.textContent = url; }
+    }
   });
+  // Deep link: /?r=hr|tech|startup opens the summary on that reader's view,
+  // so it can be pasted into a LinkedIn message or forwarded internally.
+  const deep = new URLSearchParams(location.search).get('r');
+  if (deep && RECRUITER_AUDIENCES.order.includes(deep)) setTimeout(() => open(null, deep), 300);
   document.addEventListener('click', (event) => {
     const trigger = event.target.closest('[data-recruiter-open]');
     if (trigger) open(trigger);

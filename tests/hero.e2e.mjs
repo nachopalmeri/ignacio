@@ -25,7 +25,7 @@ function check(name, ok, detail = '') {
 }
 
 async function open(browser, options = {}) {
-  const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, ...options });
+  const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, locale: 'es-AR', ...options });
   // External requests (fonts, GitHub API) are irrelevant here and flaky offline.
   await context.route(/^https?:\/\/(?!127\.0\.0\.1)/, (route) => route.abort());
   await context.route(/\/api\//, (route) => route.fulfill({ status: 503, body: '{}' }));

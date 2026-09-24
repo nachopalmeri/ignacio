@@ -3400,13 +3400,15 @@ button.carousel-proof {
 
 .grid-2col {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
+  /* minmax(0, …): plain fr tracks grow to their widest child, which pushed
+     "Sobre mí" past the screen on phones. */
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
   gap: 48px;
   margin-bottom: 80px;
 }
 
 .about-section {
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0;
 }
 
@@ -7100,3 +7102,25 @@ header.app-header.is-scrolled .nav-cta {
 }
 .copy-email:hover, .copy-email:focus-visible { opacity: 1; }
 .copy-email.is-copied, [data-copy-email].is-copied { color: #10b981; border-color: #10b981; opacity: 1; }
+
+@media (max-width: 900px) {
+  .grid-2col { grid-template-columns: minmax(0, 1fr); }
+  .grid-2col > * { min-width: 0; }
+}
+
+/* 30-second summary: who is reading? */
+.rs-aud { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: 18px; }
+.rs-aud-ask { font: 700 11px var(--font-display); letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); }
+.rs-aud-tabs { display: inline-flex; gap: 4px; padding: 4px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg); }
+.rs-aud-tabs button { padding: 7px 14px; border: 0; border-radius: 999px; background: transparent; color: var(--text-secondary); font: 600 13.5px var(--font-body, inherit); cursor: pointer; }
+.rs-aud-tabs button[aria-selected="true"] { background: #111; color: #fff; }
+.rs-pitch { margin: 14px 0 8px; font-size: 17px; line-height: 1.45; color: var(--text-primary, inherit); font-weight: 600; letter-spacing: -.01em; }
+.rs-points { margin: 0 0 6px; padding-left: 18px; display: grid; gap: 7px; font-size: 14.5px; line-height: 1.5; color: var(--text-secondary); }
+.rs-points a { font-weight: 600; white-space: nowrap; color: var(--accent-green-text, #047857); text-decoration: none; }
+.rs-points a:hover { text-decoration: underline; }
+.rs-share { margin: 14px 0 0; font-size: 12.5px; color: var(--text-muted); }
+.rs-share button { padding: 5px 10px; border-radius: 999px; border: 1px solid var(--border); background: transparent; color: inherit; font: inherit; font-weight: 600; cursor: pointer; }
+@media (max-width: 600px) {
+  .rs-aud-tabs { width: 100%; }
+  .rs-aud-tabs button { flex: 1; padding: 7px 8px; }
+}

@@ -28,7 +28,7 @@ function check(name, ok, detail = '') {
 }
 
 async function context(browser, options = {}, init) {
-  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, ...options });
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, locale: 'es-AR', ...options });
   await ctx.route(/^https?:\/\/(?!127\.0\.0\.1)/, (route) => route.abort());
   await ctx.route(/\/api\//, (route) => route.fulfill({ status: 503, body: '{}' }));
   if (init) await ctx.addInitScript(init);
@@ -118,7 +118,35 @@ try {
     await ctx.close();
   }
 
-  // 5. Lab without its CDN (blockers, offline): the router still answers.
+  // 5. Language: English for browsers without Spanish, ?lang= overrides.
+  {
+    const ctx = await context(browser, { locale: 'en-US' });
+    const page = await ctx.newPage();
+    await page.goto(`${base}/`, { waitUntil: 'load' });
+    await page.waitForTimeout(600);
+    check('English browser gets English', (await page.evaluate(() => document.documentElement.lang)) === 'en');
+    await page.goto(`${base}/?lang=es`, { waitUntil: 'load' });
+    await page.waitForTimeout(600);
+    check('?lang=es overrides and sticks', (await page.evaluate(() => document.documentElement.lang)) === 'es');
+    await ctx.close();
+  }
+
+  // 6. 30-second summary adapts to the reader and deep-links.
+  {
+    const ctx = await context(browser, { permissions: ['clipboard-read', 'clipboard-write'] });
+    const page = await ctx.newPage();
+    await page.goto(`${base}/?r=tech`, { waitUntil: 'load' });
+    await page.waitForSelector('#recruiter-dialog[open]', { timeout: 5000 }).catch(() => {});
+    check('?r=tech opens the summary on the tech view', await page.evaluate(() => document.querySelector('#recruiter-dialog')?.open && document.querySelector('[data-audience="tech"]')?.getAttribute('aria-selected') === 'true'));
+    await page.click('[data-audience="hr"]');
+    check('switching reader updates the evidence', (await page.textContent('.rs-points')).includes('UADE'));
+    await page.click('[data-recruiter-share]');
+    check('share copies a deep link', (await page.evaluate(() => navigator.clipboard.readText())).endsWith('/?r=hr'));
+    check('every evidence link resolves to a real target', await page.$$eval('.rs-points a', (as) => as.every((a) => a.getAttribute('href'))));
+    await ctx.close();
+  }
+
+  // 7. Lab without its CDN (blockers, offline): the router still answers.
   {
     const ctx = await context(browser);
     const page = await ctx.newPage();
