@@ -179,23 +179,23 @@
 <body>
   <canvas id="scene" aria-hidden="true"></canvas>
   <div id="labels"></div>
-  <div class="fallback">No se pudo cargar la escena 3D (sin WebGL, o algún bloqueador de scripts). El router funciona igual: escribile un pedido abajo.</div>
+  <div class="fallback" data-t="fallback">No se pudo cargar la escena 3D (sin WebGL, o algún bloqueador de scripts). El router funciona igual: escribile un pedido abajo.</div>
 
   <header class="hud brand">
-    <div class="kicker"><i></i>Router en vivo · agents-system</div>
-    <h1>Centro de <em>mando</em></h1>
-    <p>Así decide mi sistema de agentes quién hace cada tarea. Escribile un pedido y mirá a quién se lo da y por qué.</p>
+    <div class="kicker"><i></i><span data-t="kicker">Router en vivo · agents-system</span></div>
+    <h1 data-t-html="h1">Centro de <em>mando</em></h1>
+    <p data-t="intro">Así decide mi sistema de agentes quién hace cada tarea. Escribile un pedido y mirá a quién se lo da y por qué.</p>
   </header>
 
   <div class="hud top-actions">
-    <button class="btn" id="sound" type="button" aria-pressed="false">🔈 Sonido</button>
-    <button class="btn" id="tour-open" type="button">¿Qué es esto?</button>
-    <button class="btn" id="run-evals" type="button">▶ <span class="long">Correr las </span>34 pruebas</button>
-    <a class="btn full-link" href="/lab" target="_top">Pantalla completa ↗</a>
-    <a class="btn back-link" href="/agents">← Portfolio</a>
+    <button class="btn" id="sound" type="button" aria-pressed="false">🔈 <span data-t="sound">Sonido</span></button>
+    <button class="btn" id="tour-open" type="button" data-t="whatIsThis">¿Qué es esto?</button>
+    <button class="btn" id="run-evals" type="button">▶ <span class="long" data-t="runLong">Correr las </span><span data-t="runShort">34 pruebas</span></button>
+    <a class="btn full-link" href="/lab" target="_top" data-t="full">Pantalla completa ↗</a>
+    <a class="btn back-link" href="/agents" data-t="back">← Portfolio</a>
   </div>
 
-  <ul class="hud panel legend" id="legend" aria-label="Carriles del router"></ul>
+  <ul class="hud panel legend" id="legend" aria-label="Carriles del router" data-t-attr="aria-label:legendLabel"></ul>
 
   <aside class="hud panel profile" id="profile" aria-live="polite"></aside>
 
@@ -204,7 +204,7 @@
     <p id="tour-text"></p>
     <div class="row">
       <button class="btn primary" id="tour-next" type="button">Siguiente</button>
-      <button class="skip" id="tour-skip" type="button">Saltar</button>
+      <button class="skip" id="tour-skip" type="button" data-t="skip">Saltar</button>
       <span id="tour-count"></span>
     </div>
   </section>
@@ -212,10 +212,10 @@
   <div class="hud panel evals" id="evals" aria-live="polite"></div>
 
   <aside class="hud panel trace" id="trace" aria-live="polite">
-    <button class="trace-close" id="trace-close" type="button" aria-label="Cerrar">×</button>
-    <h2>Pedido</h2>
+    <button class="trace-close" id="trace-close" type="button" aria-label="Cerrar" data-t-attr="aria-label:close">×</button>
+    <h2 data-t="request">Pedido</h2>
     <p class="task-text" id="task-text"></p>
-    <h2>Qué revisa el router, en orden</h2>
+    <h2 data-t="checks">Qué revisa el router, en orden</h2>
     <ol class="steps" id="steps"></ol>
     <div class="receipt" id="receipt"></div>
   </aside>
@@ -223,25 +223,25 @@
   <section class="hud panel console" aria-label="Consola">
     <div class="chips" id="chips"></div>
     <form id="ask">
-      <input id="ask-input" autocomplete="off" maxlength="160" placeholder="Pedile algo, como a un equipo: «Revisá el SEO técnico del sitio»" aria-label="Pedido para el sistema">
-      <button class="btn primary" type="submit">Enviar</button>
+      <input id="ask-input" autocomplete="off" maxlength="160" placeholder="Pedile algo, como a un equipo: «Revisá el SEO técnico del sitio»" aria-label="Pedido para el sistema" data-t-attr="placeholder:placeholder;aria-label:inputLabel">
+      <button class="btn primary" type="submit" data-t="send">Enviar</button>
     </form>
   </section>
 
-  <p class="hud foot">Simulación visual. La decisión la toma una copia en JS de <code>orchestrator/router.ps1</code> con las reglas y los evals de <a href="https://github.com/nachopalmeri/agents-system" target="_blank" rel="noopener">nachopalmeri/agents-system</a>. No ejecuta agentes ni manda nada a ningún lado.</p>
+  <p class="hud foot" data-t-html="foot">Simulación visual. La decisión la toma una copia en JS de <code>orchestrator/router.ps1</code> con las reglas y los evals de <a href="https://github.com/nachopalmeri/agents-system" target="_blank" rel="noopener">nachopalmeri/agents-system</a>. No ejecuta agentes ni manda nada a ningún lado.</p>
 
   <div class="gatekeeper" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title">
     <div class="panel">
-      <h3 id="gate-title">Esto necesita <em>tu OK.</em></h3>
+      <h3 id="gate-title" data-t-html="gateTitle">Esto necesita <em>tu OK.</em></h3>
       <p id="gate-text"></p>
       <div class="row">
-        <button class="btn approve" id="gate-yes" type="button">Aprobar</button>
-        <button class="btn" id="gate-no" type="button">Cancelar</button>
+        <button class="btn approve" id="gate-yes" type="button" data-t="approve">Aprobar</button>
+        <button class="btn" id="gate-no" type="button" data-t="cancel">Cancelar</button>
       </div>
     </div>
   </div>
 
-  <div class="intro" id="intro"><span>Cargando el centro de mando</span></div>
+  <div class="intro" id="intro"><span data-t="loading">Cargando el centro de mando</span></div>
 
   <script>
     // Never leave the visitor on the loading screen: if the 3D module fails

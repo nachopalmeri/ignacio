@@ -74,6 +74,9 @@ const UI_COPY = {
       title: 'GitHub como bitácora de trabajo',
       body: 'Actividad pública del perfil nachopalmeri: demos, repositorios, decisiones técnicas y continuidad visible.',
       profileLink: 'Ver perfil de GitHub',
+      card1Title: 'Backend + producto', card1Body: 'Auth, webhooks, pagos, Telegram y despliegue full-stack.',
+      card2Title: 'Modelo + pipeline', card2Body: 'Fuentes, probabilidad, simulaciones y dashboard desplegado.',
+      card3Title: 'Workflow real', card3Body: 'Reglas, agentes, verificación visual y handoffs documentados.',
       fallback: 'La actividad pública se muestra cuando está disponible.',
       loading: 'Cargando actividad pública de GitHub…',
       unavailable: 'La actividad pública no está disponible ahora. Podés revisar el perfil.',
@@ -289,6 +292,9 @@ const UI_COPY = {
       title: 'Repos you can review',
       body: 'Public proof of work: demos, repos and visible continuity.',
       profileLink: 'View GitHub profile',
+      card1Title: 'Backend + product', card1Body: 'Auth, webhooks, payments, Telegram and full-stack deployment.',
+      card2Title: 'Model + pipeline', card2Body: 'Sources, probability, simulations and a deployed dashboard.',
+      card3Title: 'A real workflow', card3Body: 'Rules, agents, visual verification and documented handoffs.',
       fallback: 'Public activity appears when GitHub is available.',
       loading: 'Loading public GitHub activity…',
       unavailable: 'Public activity is temporarily unavailable.',
@@ -4637,6 +4643,16 @@ setupSideQuestAgents();
   try { saved = localStorage.getItem('agents-view') || '3d'; } catch (_e) {}
   // On load only set the view; the tab itself starts the graph when opened.
   if (saved === '2d') show('2d', false);
+  // The lab reads the same saved language; reload it when the visitor
+  // switches ES/EN so the embedded view follows.
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('[data-lang-btn]')) return;
+    setTimeout(() => {
+      const frame = lab.querySelector('iframe');
+      const want = `/lab?embed=1&lang=${currentLang}`;
+      if (frame && frame.getAttribute('src') !== want) frame.setAttribute('src', want);
+    }, 0);
+  });
 })();
 
 

@@ -3,6 +3,9 @@
 // file only stages it. The HUD works on its own, so without WebGL the lab
 // still routes and explains.
 import { PROFILES, LANE_INFO, MISSIONS, readable } from '/lab/profiles.js';
+import { T, LANG, trDetail, applyStatic } from '/lab/i18n.js';
+
+applyStatic();
 
 // three.js comes from a CDN and is loaded dynamically: if a blocker or a bad
 // network stops it, only the 3D stage is lost; the router, the HUD and the
@@ -222,7 +225,7 @@ function buildStage() {
     el.className = 'agent-chip';
     el.style.setProperty('--c', LANES[lane].color);
     el.innerHTML = `${avatarHTML(id, lane)}<span>${shortName(id)}</span>`;
-    el.setAttribute('aria-label', `${shortName(id)}: ver qué hace`);
+    el.setAttribute('aria-label', T.seeWhat(shortName(id)));
     el.addEventListener('click', (e) => { e.stopPropagation(); dispatchEvent(new CustomEvent('agent-open', { detail: id })); });
     return new CSS2DObject(el);
   }
@@ -473,9 +476,7 @@ const trace = $('#trace');
 const profile = $('#profile');
 let busy = false;
 
-const STEP_NAMES = {
-  riesgo: '¿Es riesgoso?', 'agente explícito': '¿Nombra a un agente?', paralelismo: '¿Pide trabajo en paralelo?', especialista: '¿Es de un tema especial?', SIMPLE: 'Nada de lo anterior → SIMPLE'
-};
+const STEP_NAMES = T.steps;
 
 // Lane legend: always on screen, lights up with the chosen lane.
 function renderLegend() {
@@ -488,14 +489,12 @@ function markLegend(lane) {
 
 function plainSentence(r, cancelled) {
   const who = (id) => `<b>${shortName(id)}</b>`;
-  if (cancelled) return `No se ejecuta: era ${r.lane} y no lo aprobaste. En el sistema real pasa lo mismo, sin tu OK no se toca nada.`;
-  const base = r.support.length
-    ? `Lo encara ${who(r.primary)} con ayuda de ${r.support.map(who).join(', ')}.`
-    : `Lo hace ${who(r.primary)}, solo.`;
+  if (cancelled) return T.cancelled(r.lane);
+  const base = r.support.length ? T.withHelp(who(r.primary), r.support.map(who).join(', ')) : T.alone(who(r.primary));
   const extra = r.lane === 'HIGH_RISK'
-    ? ' Recién arranca con tu aprobación y tiene que pasar por <b>validation.md</b>: evidencia antes de darlo por cerrado.'
-    : r.components.length ? ` Sigue el workflow <b>${r.components[0].split('/').pop()}</b>.` : '';
-  return `${base}${extra} Tiene hasta ${r.budgets.maxIterations} intentos y ${r.budgets.maxReplans} replanes; si falla igual, se frena en vez de girar en falso.`;
+    ? T.riskExtra
+    : r.components.length ? T.workflow(r.components[0].split('/').pop()) : '';
+  return `${base}${extra}${T.budgetLine(r.budgets.maxIterations, r.budgets.maxReplans)}`;
 }
 
 function renderReceipt(r, cancelled = false) {
@@ -504,11 +503,11 @@ function renderReceipt(r, cancelled = false) {
     <div class="who">${avatarHTML(r.primary, r.lane, 44)}<div><span class="lane-pill" style="--c:${c}">${r.lane}</span><strong>${shortName(r.primary)}</strong></div></div>
     <p class="plain">${plainSentence(r, cancelled)}</p>
     <div class="budget">
-      <span title="Cuántas vueltas de trabajo puede dar"><b>${r.budgets.maxIterations}</b>intentos</span>
-      <span title="Cuántas veces puede rehacer el plan"><b>${r.budgets.maxReplans}</b>replanes</span>
-      <span title="Cuántos agentes pueden trabajar a la vez"><b>${r.budgets.maxAgents}</b>agentes máx.</span>
+      <span title="${T.iterationsHint}"><b>${r.budgets.maxIterations}</b>${T.iterations}</span>
+      <span title="${T.replansHint}"><b>${r.budgets.maxReplans}</b>${T.replans}</span>
+      <span title="${T.agentsMaxHint}"><b>${r.budgets.maxAgents}</b>${T.agentsMax}</span>
     </div>
-    <details class="raw"><summary>Ver la ruta técnica</summary>
+    <details class="raw"><summary>${T.rawRoute}</summary>
       <dl class="kv">
         <dt>primary</dt><dd>${r.primary}</dd>
         <dt>support</dt><dd>${r.support.join(', ') || '—'}</dd>
@@ -526,15 +525,16 @@ function openProfile(id) {
   const lane = laneOf(id);
   const rule = [...data.rules.specialists, ...data.rules.highRisk].find((r) => r.primary === id);
   const words = rule ? [...new Set(rule.patterns.map(readable).filter(Boolean))].slice(0, 6) : [];
-  const example = data.cases.find((c) => c.expected.primary === id);
+  // Prefer a test case written in the visitor's language.
+  const example = data.cases.find((c) => c.expected.primary === id && c.id.includes(`-${LANG}-`)) || data.cases.find((c) => c.expected.primary === id);
   profile.innerHTML = `
-    <button class="trace-close" type="button" aria-label="Cerrar">×</button>
+    <button class="trace-close" type="button" aria-label="${T.close}">×</button>
     <div class="who">${avatarHTML(id, lane, 64)}<div><strong>${shortName(id)}</strong><code>${id}</code></div></div>
     <p>${p.role || ''}</p>
-    <h2>¿Cuándo le toca?</h2>
+    <h2>${T.whenTitle}</h2>
     <p>${p.when || ''}</p>
     ${words.length ? `<div class="words">${words.map((w) => `<span>${w}</span>`).join('')}</div>` : ''}
-    ${example ? `<button class="btn primary try" type="button">Probar: «${example.task.title}»</button>` : ''}`;
+    ${example ? `<button class="btn primary try" type="button">${T.tryIt(example.task.title)}</button>` : ''}`;
   profile.querySelector('.trace-close').onclick = () => profile.classList.remove('show');
   const tryBtn = profile.querySelector('.try');
   if (tryBtn) tryBtn.onclick = () => { profile.classList.remove('show'); play(example.task); };
@@ -546,7 +546,7 @@ addEventListener('agent-open', (e) => { if (!busy) openProfile(e.detail); });
 
 function askApproval(r, task) {
   return new Promise((resolve) => {
-    $('#gate-text').textContent = `«${task.title}» cae en HIGH_RISK (${r.reasons[0]}). En el sistema real ningún agente toca credenciales, pagos, producción, mensajes externos ni borra datos sin una aprobación explícita. Lo decidís vos.`;
+    $('#gate-text').textContent = T.gateText(task.title, r.reasons[0]);
     const gate = $('#gate');
     gate.classList.add('show');
     $('#gate-yes').focus();
@@ -582,7 +582,7 @@ async function play(task) {
   for (const s of r.trace) {
     const li = document.createElement('li');
     li.innerHTML = `<span class="mark">${s.hit ? '✓' : '·'}</span><span><b>${STEP_NAMES[s.step] || s.step}</b><small></small></span>`;
-    li.querySelector('small').textContent = s.hit ? s.detail : `No: ${s.detail}`;
+    li.querySelector('small').textContent = s.hit ? trDetail(s.detail) : `${T.no}: ${trDetail(s.detail)}`;
     li.style.setProperty('--c', color);
     steps.appendChild(li);
     await sleep(40);
@@ -639,7 +639,7 @@ async function runEvals() {
     const res = Router.checkCase(c, data);
     n++;
     if (res.ok) ok++;
-    box.innerHTML = `Pruebas del repo: <b>${ok}/${n}</b> ✓<br><span>${c.task.title}</span>`;
+    box.innerHTML = T.evalsProgress(ok, n, c.task.title);
     Sound.blip();
     if (stage) {
       const r = res.route;
@@ -651,7 +651,7 @@ async function runEvals() {
     await sleep(170 * speed);
   }
   await Promise.all(flights);
-  box.innerHTML = `<b>${ok}/${data.cases.length}</b> pruebas del repo pasan: para cada pedido de prueba, el router elige el carril y el agente que el caso espera.`;
+  box.innerHTML = T.evalsDone(ok, data.cases.length);
   setTimeout(() => stage && stage.resetAgents(), 2500);
   lock(false);
   busy = false;
@@ -671,12 +671,13 @@ function renderChips() {
 }
 
 // ---------------------------------------------------------------- the tour
-const TOUR = [
-  { title: 'Mi sistema de agentes', text: 'Uso 19 asistentes de IA para construir mis proyectos (JobBot, este portfolio…). Cada uno tiene un rol: programar, testear, diseñar, cuidar la seguridad.', at: () => stage && stage.focus(null) },
-  { title: 'El router, en el centro', text: 'Cuando le pido algo en lenguaje normal, el router decide quién lo hace. No adivina: sigue reglas que escribí, en un orden fijo.', at: () => stage && stage.focus(stage.corePoint().setY(0.5)) },
-  { title: '4 carriles', text: 'SIMPLE, SPECIALIZED, PARALLEL y HIGH_RISK. Cada uno tiene su portal y sus límites. Lo riesgoso (producción, pagos, credenciales) siempre pide mi aprobación.', at: () => { if (stage) { stage.focus(stage.gatePoint('HIGH_RISK')); stage.lightGate('HIGH_RISK', true); } markLegend('HIGH_RISK'); } },
-  { title: 'Probalo', text: 'Tocá un agente para ver qué hace, elegí una misión de abajo o escribí tu propio pedido.', at: () => { if (stage) { stage.lightGate(null, false); stage.focus(null); } markLegend(null); } }
+const TOUR_AT = [
+  () => stage && stage.focus(null),
+  () => stage && stage.focus(stage.corePoint().setY(0.5)),
+  () => { if (stage) { stage.focus(stage.gatePoint('HIGH_RISK')); stage.lightGate('HIGH_RISK', true); } markLegend('HIGH_RISK'); },
+  () => { if (stage) { stage.lightGate(null, false); stage.focus(null); } markLegend(null); }
 ];
+const TOUR = T.tour.map(([title, text], i) => ({ title, text, at: TOUR_AT[i] }));
 let tourStep = -1;
 function showTour(i) {
   tourStep = i;
@@ -684,7 +685,7 @@ function showTour(i) {
   $('#tour-title').textContent = t.title;
   $('#tour-text').textContent = t.text;
   $('#tour-count').textContent = `${i + 1}/${TOUR.length}`;
-  $('#tour-next').textContent = i === TOUR.length - 1 ? 'Empezar' : 'Siguiente';
+  $('#tour-next').textContent = i === TOUR.length - 1 ? T.start : T.next;
   $('#tour').classList.add('show');
   if (stage) stage.autoRotate(false);
   t.at();
@@ -710,7 +711,7 @@ $('#run-evals').addEventListener('click', runEvals);
 $('#sound').addEventListener('click', (e) => {
   const on = Sound.toggle();
   e.currentTarget.setAttribute('aria-pressed', String(on));
-  e.currentTarget.textContent = on ? '🔊 Sonido' : '🔈 Sonido';
+  e.currentTarget.textContent = `${on ? '🔊' : '🔈'} ${T.sound}`;
 });
 $('#trace-close').addEventListener('click', () => trace.classList.remove('show'));
 renderChips();
