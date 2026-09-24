@@ -38,6 +38,7 @@
   .brand h1 em { font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 1.12em; color: #a5b4fc; }
   .brand p { margin-top: 10px; color: var(--dim); font-size: 14px; line-height: 1.5; }
   .top-actions { top: 22px; right: 24px; display: flex; gap: 10px; }
+  .top-actions .long { display: inline; }
   .btn { color: var(--ink); display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--glass); backdrop-filter: blur(10px); cursor: pointer; font-size: 13px; font-weight: 600; text-decoration: none; transition: border-color .2s, background .2s, transform .2s; }
   .btn:hover, .btn:focus-visible { border-color: rgba(165, 180, 252, .6); outline: none; transform: translateY(-1px); }
   .btn.primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); border-color: transparent; }
@@ -152,8 +153,10 @@
     .brand p, .foot { display: none; }
     .brand { right: 16px; }
     .brand .kicker { font-size: 10px; }
-    .top-actions { top: 104px; left: 16px; right: auto; }
-    .top-actions .btn { padding: 8px 12px; font-size: 12px; }
+    .top-actions { top: 104px; left: 16px; right: 16px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .top-actions::-webkit-scrollbar { display: none; }
+    .top-actions .btn { padding: 8px 12px; font-size: 12px; white-space: nowrap; flex: none; }
+    .top-actions .long { display: none; }
     .trace { top: auto; bottom: 168px; right: 12px; left: 12px; width: auto; max-height: 40vh; overflow-y: auto; }
     .evals { top: 150px; left: 16px; right: 16px; }
     .agent-chip:not(.on) span { display: none; }
@@ -185,8 +188,9 @@
   </header>
 
   <div class="hud top-actions">
+    <button class="btn" id="sound" type="button" aria-pressed="false">🔈 Sonido</button>
     <button class="btn" id="tour-open" type="button">¿Qué es esto?</button>
-    <button class="btn" id="run-evals" type="button">▶ Correr las 34 pruebas</button>
+    <button class="btn" id="run-evals" type="button">▶ <span class="long">Correr las </span>34 pruebas</button>
     <a class="btn full-link" href="/lab" target="_top">Pantalla completa ↗</a>
     <a class="btn back-link" href="/agents">← Portfolio</a>
   </div>

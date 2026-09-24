@@ -412,6 +412,60 @@ function buildStage() {
   };
 }
 
+
+// ------------------------------------------------------------------ sound
+// Synthesized with Web Audio: no files to download. Off until the visitor
+// turns it on (browsers also require a click before any audio).
+const Sound = (() => {
+  let ctx = null, master = null, drone = null, on = false;
+  const ensure = () => {
+    if (ctx) return;
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    master = ctx.createGain(); master.gain.value = 0.0; master.connect(ctx.destination);
+    // Ambient: two detuned low oscillators through a slow filter.
+    const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 380; f.Q.value = 0.7;
+    const g = ctx.createGain(); g.gain.value = 0.05; f.connect(g); g.connect(master);
+    drone = [55, 55.4, 82.5].map((hz) => { const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = hz; o.connect(f); o.start(); return o; });
+    const lfo = ctx.createOscillator(); const lg = ctx.createGain(); lfo.frequency.value = 0.07; lg.gain.value = 140; lfo.connect(lg); lg.connect(f.frequency); lfo.start();
+  };
+  const tone = (hz, dur = 0.18, type = 'sine', vol = 0.14, slideTo) => {
+    if (!on) return;
+    const t = ctx.currentTime, o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type; o.frequency.setValueAtTime(hz, t);
+    if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t + dur);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(master); o.start(t); o.stop(t + dur + 0.02);
+  };
+  const noise = (dur = 0.6, from = 300, to = 2400, vol = 0.12) => {
+    if (!on) return;
+    const t = ctx.currentTime, len = Math.floor(ctx.sampleRate * dur);
+    const buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len);
+    const src = ctx.createBufferSource(); src.buffer = buf;
+    const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.Q.value = 1.2;
+    bp.frequency.setValueAtTime(from, t); bp.frequency.exponentialRampToValueAtTime(to, t + dur);
+    const g = ctx.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + dur * 0.4); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    src.connect(bp); bp.connect(g); g.connect(master); src.start(t);
+  };
+  return {
+    get on() { return on; },
+    toggle() {
+      ensure();
+      on = !on;
+      if (ctx.state === 'suspended') ctx.resume();
+      master.gain.cancelScheduledValues(ctx.currentTime);
+      master.gain.linearRampToValueAtTime(on ? 0.9 : 0, ctx.currentTime + 0.4);
+      return on;
+    },
+    whoosh: (ms = 900) => noise(ms / 1000, 250, 2600, 0.1),
+    tick: (hit) => tone(hit ? 880 : 520, hit ? 0.22 : 0.08, hit ? 'triangle' : 'sine', hit ? 0.12 : 0.05),
+    lane: () => { tone(392, 0.5, 'triangle', 0.08); setTimeout(() => tone(587, 0.6, 'triangle', 0.07), 90); },
+    chime: () => [659, 988, 1319].forEach((hz, i) => setTimeout(() => tone(hz, 0.7, 'sine', 0.09), i * 70)),
+    alarm: () => [0, 260].forEach((d) => setTimeout(() => tone(740, 0.2, 'square', 0.05, 520), d)),
+    blip: () => tone(1200 + Math.random() * 400, 0.06, 'sine', 0.04)
+  };
+})();
+
 // --------------------------------------------------------------- the HUD
 const steps = $('#steps');
 const receipt = $('#receipt');
@@ -522,7 +576,7 @@ async function play(task) {
 
   if (stage) { stage.autoRotate(false); stage.resetAgents(); stage.focus(null); }
   const o = stage && stage.orb('#c7d2fe');
-  if (o) { o.place(stage.spawnPoint()); await o.fly(stage.corePoint(), 1100, 4); stage.kick(); }
+  if (o) { o.place(stage.spawnPoint()); Sound.whoosh(1100); await o.fly(stage.corePoint(), 1100, 4); stage.kick(); }
 
   // Walk the precedence exactly as the router did.
   for (const s of r.trace) {
@@ -534,10 +588,12 @@ async function play(task) {
     await sleep(40);
     li.classList.add('done');
     if (s.hit) li.classList.add('hit');
+    Sound.tick(s.hit);
     if (stage) stage.kick();
     await sleep(420 * speed);
   }
   markLegend(r.lane);
+  Sound.lane();
 
   let cancelled = false;
   if (stage) {
@@ -545,8 +601,10 @@ async function play(task) {
     stage.wave(color);
     stage.lightGate(r.lane, true);
     stage.focus(stage.gatePoint(r.lane));
+    Sound.whoosh(900);
     await o.fly(stage.gatePoint(r.lane), 900, 1.5);
   }
+  if (r.lane === 'HIGH_RISK') Sound.alarm();
   if (r.lane === 'HIGH_RISK') cancelled = !(await askApproval(r, task));
 
   if (!cancelled && stage) {
@@ -555,6 +613,7 @@ async function play(task) {
     await Promise.all([o.fly(stage.agentTop(r.primary), 900, 2), ...helpers.map((h, i) => h.fly(stage.agentTop(r.support[i]), 1000, 2.5))]);
     stage.lightAgent(r.primary, true);
     r.support.forEach((id) => stage.lightAgent(id, true));
+    Sound.chime();
     await Promise.all(helpers.map((h) => h.fade()));
   }
   if (o) await o.fade();
@@ -581,6 +640,7 @@ async function runEvals() {
     n++;
     if (res.ok) ok++;
     box.innerHTML = `Pruebas del repo: <b>${ok}/${n}</b> ✓<br><span>${c.task.title}</span>`;
+    Sound.blip();
     if (stage) {
       const r = res.route;
       const o = stage.orb(LANES[r.lane].color);
@@ -647,6 +707,11 @@ $('#ask').addEventListener('submit', (e) => {
   play({ title: text, body: '', labels: [], riskLevel: 'low', requiresApproval: false });
 });
 $('#run-evals').addEventListener('click', runEvals);
+$('#sound').addEventListener('click', (e) => {
+  const on = Sound.toggle();
+  e.currentTarget.setAttribute('aria-pressed', String(on));
+  e.currentTarget.textContent = on ? '🔊 Sonido' : '🔈 Sonido';
+});
 $('#trace-close').addEventListener('click', () => trace.classList.remove('show'));
 renderChips();
 renderLegend();
