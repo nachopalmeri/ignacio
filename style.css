@@ -7086,3 +7086,17 @@ header.app-header.is-scrolled .nav-cta {
 @media (max-width: 900px) {
   .cine-hero.is-lite .cine-stage { background-image: url("project-assets/hero-wall-m.webp"); }
 }
+
+.copy-email {
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  opacity: 0.75;
+}
+.copy-email:hover, .copy-email:focus-visible { opacity: 1; }
+.copy-email.is-copied, [data-copy-email].is-copied { color: #10b981; border-color: #10b981; opacity: 1; }

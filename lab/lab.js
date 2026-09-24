@@ -2,14 +2,26 @@
 // router.js (a JS copy of orchestrator/router.ps1) makes every decision; this
 // file only stages it. The HUD works on its own, so without WebGL the lab
 // still routes and explains.
-import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
-import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 import { PROFILES, LANE_INFO, MISSIONS, readable } from '/lab/profiles.js';
+
+// three.js comes from a CDN and is loaded dynamically: if a blocker or a bad
+// network stops it, only the 3D stage is lost; the router, the HUD and the
+// explanations keep working.
+let THREE, OrbitControls, EffectComposer, RenderPass, UnrealBloomPass, OutputPass, CSS2DRenderer, CSS2DObject;
+async function load3D() {
+  const [three, oc, ec, rp, ub, op, css2d] = await Promise.all([
+    import('three'),
+    import('three/addons/controls/OrbitControls.js'),
+    import('three/addons/postprocessing/EffectComposer.js'),
+    import('three/addons/postprocessing/RenderPass.js'),
+    import('three/addons/postprocessing/UnrealBloomPass.js'),
+    import('three/addons/postprocessing/OutputPass.js'),
+    import('three/addons/renderers/CSS2DRenderer.js')
+  ]);
+  THREE = three;
+  ({ OrbitControls } = oc); ({ EffectComposer } = ec); ({ RenderPass } = rp);
+  ({ UnrealBloomPass } = ub); ({ OutputPass } = op); ({ CSS2DRenderer, CSS2DObject } = css2d);
+}
 
 const $ = (s) => document.querySelector(s);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -50,6 +62,7 @@ const Router = window.AgentRouter;
 // ------------------------------------------------------------------ stage
 let stage = null;
 try {
+  await load3D();
   stage = buildStage();
 } catch (e) {
   console.warn('WebGL unavailable:', e);

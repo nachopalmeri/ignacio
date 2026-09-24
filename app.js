@@ -205,7 +205,9 @@ const UI_COPY = {
       contact: {
         eyebrow: 'Contacto',
         title: '¿Buscás un trainee que ya entrega software?',
-        body: 'Estoy disponible para pasantía o rol trainee en Buenos Aires o remoto. Escribime y te respondo el mismo día.'
+        body: 'Estoy disponible para pasantía o rol trainee en Buenos Aires o remoto. Escribime y te respondo el mismo día.',
+        copy: 'Copiar email',
+        copied: '¡Copiado!'
       },
       footer: { text: '2026 Ignacio Palmeri.', contact: 'Contacto' },
       sideQuests: { toggle: 'Side Quests', eyebrow: 'Fuera del código', heading: 'Side Quests', routeSummary: 'ver ruta técnica' },
@@ -418,7 +420,9 @@ const UI_COPY = {
       contact: {
         eyebrow: 'Contact',
         title: 'Looking for a trainee who already ships?',
-        body: 'Available for an internship or trainee role in Buenos Aires or remote. Write me and I reply the same day.'
+        body: 'Available for an internship or trainee role in Buenos Aires or remote. Write me and I reply the same day.',
+        copy: 'Copy email',
+        copied: 'Copied!'
       },
       footer: { text: '2026 Ignacio Palmeri.', contact: 'Contact' },
       sideQuests: { toggle: 'Side Quests', eyebrow: 'Beyond the code', heading: 'Side Quests', routeSummary: 'view technical route' },
@@ -2951,6 +2955,7 @@ function setupRecruiterSummary() {
         </div>
         <footer class="rs-actions">
           <a class="btn btn-primary" href="mailto:ignaciopalmeri1@gmail.com?subject=${encodeURIComponent(en ? 'Internship / trainee role' : 'Pasantía / rol trainee')}">${esc(t.email)}</a>
+          <button type="button" class="btn btn-secondary" data-copy-email>${esc(getCopy('contact.copy'))}</button>
           <a class="btn btn-secondary" href="${en ? '/cv-en.pdf' : '/cv.pdf'}" download="${en ? 'Ignacio-Palmeri-CV-EN.pdf' : 'Ignacio-Palmeri-CV.pdf'}">${esc(t.cv)}</a>
           <a class="rs-social" href="https://www.linkedin.com/in/ignaciopalmeri/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           <a class="rs-social" href="https://github.com/nachopalmeri" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -4514,3 +4519,32 @@ setupSideQuestAgents();
   // On load only set the view; the tab itself starts the graph when opened.
   if (saved === '2d') show('2d', false);
 })();
+
+
+// "Copiar email": mailto links do nothing on machines without a mail app
+// (common on work PCs), so the address can always be copied. Works for any
+// [data-copy-email] button, including ones rendered later (recruiter mode).
+const CONTACT_EMAIL = 'ignaciopalmeri1@gmail.com';
+document.addEventListener('click', async (event) => {
+  const btn = event.target.closest('[data-copy-email]');
+  if (!btn) return;
+  let ok = false;
+  try {
+    await navigator.clipboard.writeText(CONTACT_EMAIL);
+    ok = true;
+  } catch (_e) {
+    // Older browsers / insecure contexts: select a hidden field and copy.
+    const field = document.createElement('textarea');
+    field.value = CONTACT_EMAIL;
+    field.setAttribute('readonly', '');
+    field.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+    document.body.appendChild(field);
+    field.select();
+    try { ok = document.execCommand('copy'); } catch (_err) { ok = false; }
+    field.remove();
+  }
+  const label = btn.textContent;
+  btn.textContent = ok ? getCopy('contact.copied') : CONTACT_EMAIL;
+  btn.classList.toggle('is-copied', ok);
+  if (ok) setTimeout(() => { btn.textContent = getCopy('contact.copy'); btn.classList.remove('is-copied'); }, 2000);
+}, true); // capture: the recruiter dialog stops click propagation
