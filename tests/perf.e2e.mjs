@@ -164,6 +164,22 @@ try {
     check('lab: no page errors', errors.length === 0, errors.join(' | '));
     await ctx.close();
   }
+
+  // 8. Case study: the film waits for a click; the language follows the browser.
+  {
+    const ctx = await context(browser, { locale: 'en-US' });
+    const page = await ctx.newPage();
+    const films = [];
+    page.on('request', (r) => { if (r.url().endsWith('.mp4')) films.push(r.url()); });
+    await page.goto(`${base}/jobbot.html`, { waitUntil: 'load' });
+    await page.waitForTimeout(1000);
+    check('case study: no video download before play', films.length === 0, `${films.length}`);
+    check('case study: English browser gets English', (await page.evaluate(() => document.documentElement.lang)) === 'en');
+    await page.click('.cs-film-play');
+    await page.waitForTimeout(800);
+    check('case study: play asks for the film', films.length > 0 && await page.evaluate(() => document.querySelector('.cs-film video').controls));
+    await ctx.close();
+  }
 } finally {
   await browser.close();
   server.close();

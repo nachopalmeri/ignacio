@@ -20,11 +20,19 @@
   <link rel="stylesheet" href="style.css">
   <script>
     // Same preferences the main site stores, applied before paint.
+    // Language like the main site: ?lang= first, then the saved choice, then
+    // the browser (no Spanish at all → English).
     (function () {
-      try {
-        var t = localStorage.getItem('portfolio-theme'); if (t) document.documentElement.dataset.theme = t;
-        var l = localStorage.getItem('portfolio-lang'); if (l === 'en') document.documentElement.lang = 'en';
-      } catch (e) {}
+      var root = document.documentElement, lang = null;
+      try { var t = localStorage.getItem('portfolio-theme'); if (t) root.dataset.theme = t; } catch (e) {}
+      var q = new URLSearchParams(location.search).get('lang');
+      if (q === 'es' || q === 'en') { lang = q; try { localStorage.setItem('portfolio-lang', q); } catch (e) {} }
+      if (!lang) { try { var l = localStorage.getItem('portfolio-lang'); if (l === 'es' || l === 'en') lang = l; } catch (e) {} }
+      if (!lang) {
+        var langs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'es'];
+        lang = langs.some(function (x) { return /^es\b/i.test(x); }) ? 'es' : 'en';
+      }
+      root.lang = lang;
     })();
   </script>
   <style>
@@ -42,6 +50,17 @@
     .cs-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0 8px; }
     .cs-links a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--border); color: var(--text-primary); text-decoration: none; font-weight: 600; font-size: 14px; }
     .cs-links a.primary { background: var(--button-primary-bg); color: var(--button-primary-text); border-color: var(--button-primary-bg); }
+    .cs-film { margin: 28px 0 0; }
+    .cs-film-frame { position: relative; aspect-ratio: 16 / 9; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); background: #efeae2; box-shadow: 0 22px 50px -30px rgba(20, 20, 40, .45); }
+    .cs-film video { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .cs-film-play { position: absolute; left: 50%; bottom: 7%; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 10px; border: 0; border-radius: 999px; padding: 8px 18px 8px 8px; background: rgba(17, 17, 24, .88); color: #fff; font: 600 14px var(--font-display); white-space: nowrap; cursor: pointer; box-shadow: 0 12px 30px -12px rgba(0, 0, 0, .55); transition: transform .2s ease, background .2s ease; }
+    .cs-film-play:hover { background: #111118; transform: translateX(-50%) scale(1.04); }
+    .cs-film-play:focus-visible { outline: 3px solid var(--accent-green); outline-offset: 3px; }
+    .cs-film-play i { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #fff; color: #111118; }
+    .cs-film.is-playing .cs-film-play { display: none; }
+    @media (max-width: 640px) { .cs-film-play { bottom: 5%; font-size: 13px; padding: 6px 14px 6px 6px; } .cs-film-play i { width: 26px; height: 26px; } }
+    .cs-film figcaption { margin-top: 8px; font-size: 13px; color: var(--text-muted); }
+    .cs-film figcaption a { color: inherit; }
     .cs-facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 36px 0; }
     .cs-fact { border: 1px solid var(--border); border-radius: 14px; padding: 14px; background: var(--bg-card); }
     .cs-fact strong { display: block; font-family: var(--font-heading); font-size: 26px; }
@@ -95,6 +114,14 @@
     <a href="https://app-jobbot.vercel.app" target="_blank" rel="noopener noreferrer"><span data-l="es">Abrir la app</span><span data-l="en">Open the app</span></a>
     <a href="https://github.com/nachopalmeri/jobbot" target="_blank" rel="noopener noreferrer"><span data-l="es">Ver el código</span><span data-l="en">Read the code</span></a>
   </div>
+
+  <figure class="cs-film">
+    <div class="cs-film-frame">
+      <video src="project-assets/video/jobbot-demo.mp4" poster="project-assets/video/jobbot-film-poster.webp" preload="none" playsinline width="1920" height="1080"></video>
+      <button type="button" class="cs-film-play"><i><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg></i><span data-l="es">Ver la demo · 40 s</span><span data-l="en">Watch the demo · 40 s</span></button>
+    </div>
+    <figcaption><span data-l="es">El producto real, 40 segundos con sonido.</span><span data-l="en">The real product, 40 seconds with sound (UI in Spanish).</span> ♪ <a href="https://freemusicarchive.org/music/Portrayal/to-the-black-sea/universal-libraries/" target="_blank" rel="noopener">Universal Libraries</a> — Portrayal · CC BY 4.0</figcaption>
+  </figure>
 
   <div class="cs-facts">
     <div class="cs-fact"><strong>5 sem.</strong><span data-l="es">del primer commit (8 mar) a beta (11 abr 2026)</span><span data-l="en">first commit (Mar 8) to beta (Apr 11, 2026)</span></div>
@@ -259,6 +286,17 @@
       });
     });
     apply(document.documentElement.lang === 'en' ? 'en' : 'es');
+
+    // The film only downloads when someone asks for it.
+    var film = document.querySelector('.cs-film');
+    film.querySelector('.cs-film-play').addEventListener('click', function () {
+      var video = film.querySelector('video');
+      film.classList.add('is-playing');
+      video.controls = true;
+      var playing = video.play();
+      if (playing && playing.catch) playing.catch(function () {});
+      video.focus();
+    });
   })();
 </script>
 </body>
