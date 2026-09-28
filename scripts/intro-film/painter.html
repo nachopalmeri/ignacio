@@ -1,0 +1,320 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>intro film painter</title>
+<!-- Draws the intro's shots as two layers each (background + foreground) so the
+     camera can move them at different speeds. The only "me" in here is the 2D
+     illustration generated from my photo (char.png, background removed); the
+     places are drawn with canvas. Run with scripts/intro-film/paint.mjs. -->
+<body style="margin:0;background:#222">
+<script>
+const W = 1600, H = 900;
+let seed = 7;
+const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+const R = (a, b) => a + rnd() * (b - a);
+const pick = (arr) => arr[Math.floor(rnd() * arr.length)];
+
+function canvas() { const c = document.createElement('canvas'); c.width = W; c.height = H; return [c, c.getContext('2d')]; }
+function grad(g, x0, y0, x1, y1, stops) { const gr = g.createLinearGradient(x0, y0, x1, y1); stops.forEach(([o, c]) => gr.addColorStop(o, c)); return gr; }
+function radial(g, x, y, r, stops) { const gr = g.createRadialGradient(x, y, 0, x, y, r); stops.forEach(([o, c]) => gr.addColorStop(o, c)); return gr; }
+function rect(g, x, y, w, h, fill, ink) { g.fillStyle = fill; g.fillRect(x, y, w, h); if (ink) { g.strokeStyle = ink; g.lineWidth = 2; g.strokeRect(x, y, w, h); } }
+function rrect(g, x, y, w, h, r, fill, ink, lw = 2) { g.beginPath(); g.roundRect(x, y, w, h, r); if (fill) { g.fillStyle = fill; g.fill(); } if (ink) { g.strokeStyle = ink; g.lineWidth = lw; g.stroke(); } }
+function glow(g, x, y, r, color, a = 1) { g.save(); g.globalCompositeOperation = 'lighter'; g.globalAlpha = a; g.fillStyle = radial(g, x, y, r, [[0, color], [1, 'rgba(0,0,0,0)']]); g.fillRect(x - r, y - r, r * 2, r * 2); g.restore(); }
+// paper grain + soft vignette: what makes flat shapes read as a painted frame
+function finish(g, vig = 0.45, grain = 0.06) {
+  const img = g.getImageData(0, 0, W, H), d = img.data;
+  for (let i = 0; i < d.length; i += 4) { const n = (rnd() - 0.5) * 255 * grain; d[i] += n; d[i + 1] += n; d[i + 2] += n; }
+  g.putImageData(img, 0, 0);
+  g.fillStyle = radial(g, W / 2, H / 2, W * 0.75, [[0.55, 'rgba(0,0,0,0)'], [1, `rgba(0,0,0,${vig})`]]);
+  g.fillRect(0, 0, W, H);
+}
+// brush-ish edge: a shape drawn twice, the second slightly offset and darker
+function ink(g, path, fill, line = 'rgba(15,15,25,.55)', lw = 2.2) { g.fillStyle = fill; g.fill(path); g.strokeStyle = line; g.lineWidth = lw; g.lineJoin = 'round'; g.stroke(path); }
+
+// me: the illustration, scaled by height, with a color grade
+function me(g, img, { x, bottom, h, tint = null, tintA = 0, sil = null, rim = null, crop = null }) {
+  const src = crop || [0, 0, img.width, img.height];
+  const k = h / src[3], w = src[2] * k, y = bottom - h;
+  const [c2, g2] = [document.createElement('canvas'), null];
+  c2.width = Math.ceil(w); c2.height = Math.ceil(h);
+  const q = c2.getContext('2d');
+  q.imageSmoothingQuality = 'high';
+  q.drawImage(img, src[0], src[1], src[2], src[3], 0, 0, w, h);
+  if (sil) { q.globalCompositeOperation = 'source-atop'; q.fillStyle = sil; q.fillRect(0, 0, w, h); }
+  if (tint) { q.globalCompositeOperation = 'source-atop'; q.globalAlpha = tintA; q.fillStyle = tint; q.fillRect(0, 0, w, h); q.globalAlpha = 1; }
+  if (rim) { // a warm/cool edge light on one side
+    q.globalCompositeOperation = 'source-atop';
+    q.fillStyle = grad(q, rim.side === 'left' ? 0 : w, 0, rim.side === 'left' ? w * 0.35 : w * 0.65, 0, [[0, rim.color], [1, 'rgba(0,0,0,0)']]);
+    q.fillRect(0, 0, w, h);
+  }
+  g.drawImage(c2, x - w / 2, y);
+  return { x, y, w, h };
+}
+function shadow(g, x, y, w, a = 0.35) { g.save(); g.fillStyle = radial(g, x, y, w, [[0, `rgba(0,0,0,${a})`], [1, 'rgba(0,0,0,0)']]); g.scale(1, 0.18); g.fillRect(x - w, y / 0.18 - w, w * 2, w * 2); g.restore(); }
+
+// ---------------------------------------------------------------- skylines
+function skyline(g, base, { minH, maxH, minW, maxW, color, windows = 0, warm = 0.35, lit = '#ffcf7a', tanks = 0, seedv = 1 }) {
+  seed = seedv;
+  let x = -20; const out = [];
+  while (x < W + 20) {
+    const w = R(minW, maxW), h = R(minH, maxH);
+    const p = new Path2D(); p.rect(x, base - h, w, h + 400);
+    g.fillStyle = color; g.fill(p);
+    if (windows) {
+      const cols = Math.max(1, Math.floor(w / windows)), rows = Math.floor(h / (windows * 1.3));
+      for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+        if (rnd() > warm) continue;
+        const wx = x + 6 + c * (w - 12) / cols, wy = base - h + 10 + r * windows * 1.3;
+        g.fillStyle = rnd() > 0.2 ? lit : '#a8c4ff';
+        g.globalAlpha = R(0.45, 0.95); g.fillRect(wx, wy, Math.max(3, windows * 0.42), windows * 0.55); g.globalAlpha = 1;
+      }
+    }
+    if (tanks && rnd() < tanks) { // water tank on legs + antenna
+      const tx = x + R(10, w - 40);
+      g.fillStyle = color; g.fillRect(tx, base - h - 34, 30, 22); g.fillRect(tx + 3, base - h - 12, 3, 12); g.fillRect(tx + 24, base - h - 12, 3, 12);
+      g.strokeStyle = color; g.lineWidth = 2; g.beginPath(); g.moveTo(tx + 50, base - h); g.lineTo(tx + 50, base - h - R(30, 70)); g.stroke();
+    }
+    out.push([x, w, h]); x += w + R(-4, 6);
+  }
+  return out;
+}
+
+// ---------------------------------------------------------------- scenes
+const S = {};
+
+S.city = () => {
+  const [c, g] = canvas();
+  g.fillStyle = grad(g, 0, 0, 0, H, [[0, '#07122c'], [0.45, '#1d3a6e'], [0.72, '#46618f'], [0.86, '#b7876f'], [1, '#d59a6c']]);
+  g.fillRect(0, 0, W, H);
+  seed = 3; for (let i = 0; i < 90; i++) { g.fillStyle = `rgba(255,245,225,${R(0.2, 0.8)})`; const s = R(0.8, 2); g.fillRect(R(0, W), R(0, H * 0.4), s, s); }
+  skyline(g, 700, { minH: 60, maxH: 170, minW: 30, maxW: 90, color: '#3a4f7d', windows: 9, warm: 0.12, seedv: 11 });
+  // the Obelisco
+  g.fillStyle = '#5873a6'; g.beginPath(); g.moveTo(1130, 720); g.lineTo(1143, 300); g.lineTo(1151, 272); g.lineTo(1159, 300); g.lineTo(1172, 720); g.fill();
+  g.fillStyle = 'rgba(255,255,255,.12)'; g.beginPath(); g.moveTo(1151, 272); g.lineTo(1159, 300); g.lineTo(1172, 720); g.lineTo(1151, 720); g.fill();
+  glow(g, 1151, 276, 18, 'rgba(255,90,90,.9)', 0.8);
+  skyline(g, 790, { minH: 120, maxH: 300, minW: 60, maxW: 150, color: '#1d2b50', windows: 14, warm: 0.3, seedv: 21 });
+  const front = skyline(g, 900, { minH: 150, maxH: 360, minW: 110, maxW: 230, color: '#0e1631', windows: 20, warm: 0.28, tanks: 0.7, seedv: 42 });
+  // the window that stays on
+  const wx = 572, wy = 452;
+  glow(g, wx + 20, wy + 16, 160, 'rgba(255,190,110,.55)');
+  g.fillStyle = '#0e1631'; g.fillRect(wx - 70, wy - 60, 180, 520);
+  rect(g, wx, wy, 40, 32, '#ffd48a'); g.fillStyle = 'rgba(120,70,30,.5)'; g.fillRect(wx + 19, wy, 2, 32); g.fillRect(wx, wy + 15, 40, 2);
+  glow(g, wx + 20, wy + 16, 60, 'rgba(255,220,150,.8)');
+  finish(g, 0.55, 0.05);
+  return { img: c };
+};
+
+S.shop = (me_) => {
+  const [c, g] = canvas();
+  g.fillStyle = grad(g, 0, 0, 0, H, [[0, '#d9c49c'], [1, '#b59a70']]); g.fillRect(0, 0, W, H);
+  // tiles
+  g.strokeStyle = 'rgba(90,70,40,.12)'; g.lineWidth = 2; for (let y = 60; y < 560; y += 46) { g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); }
+  for (let x = 0; x < W; x += 46) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 560); g.stroke(); }
+  // menu board and shelves with cones and cups
+  rrect(g, 170, 110, 430, 230, 10, '#2a2622', 'rgba(0,0,0,.4)');
+  g.fillStyle = 'rgba(240,230,210,.8)'; for (let i = 0; i < 7; i++) g.fillRect(205, 150 + i * 26, R(140, 260), 7);
+  g.fillStyle = 'rgba(240,160,170,.9)'; for (let i = 0; i < 7; i++) g.fillRect(520, 150 + i * 26, 50, 7);
+  rect(g, 1040, 250, 420, 14, '#8a6a45'); rect(g, 1040, 170, 420, 14, '#8a6a45');
+  seed = 5; for (let i = 0; i < 12; i++) { const x = 1055 + i * 34; g.fillStyle = pick(['#f4efe6', '#e8b8c0', '#bfe0d0']); g.fillRect(x, 222, 24, 28); g.fillStyle = '#d2a066'; g.beginPath(); g.moveTo(x + 2, 170); g.lineTo(x + 22, 170); g.lineTo(x + 12, 140); g.fill(); }
+  // fluorescent tube
+  rect(g, 520, 30, 560, 16, '#fbfbf2'); glow(g, 800, 38, 520, 'rgba(255,255,235,.35)');
+  finish(g, 0.4, 0.05);
+  // foreground: me behind the counter, the counter in front of me
+  const [f, q] = canvas();
+  me(q, me_, { x: 760, bottom: 1330, h: 1180, tint: '#ffcf8a', tintA: 0.12 });
+  // counter with the ice cream freezer
+  q.fillStyle = grad(q, 0, 560, 0, H, [[0, '#e7ecef'], [1, '#b7c0c6']]); q.fillRect(80, 590, 1440, 320);
+  q.strokeStyle = 'rgba(40,50,60,.5)'; q.lineWidth = 3; q.strokeRect(80, 590, 1440, 320);
+  rrect(q, 120, 610, 1000, 170, 8, 'rgba(160,200,215,.35)', 'rgba(60,80,95,.6)', 3);
+  seed = 9; const flav = ['#f3a9b8', '#bfe6cf', '#6b4128', '#f6e7b0', '#e2556a', '#c9a0dc', '#fff6e0', '#8fd0c8'];
+  for (let i = 0; i < 8; i++) { const x = 140 + i * 122; rrect(q, x, 690, 108, 70, 6, '#d9dde0'); q.fillStyle = flav[i]; q.beginPath(); q.ellipse(x + 54, 692, 50, 20, 0, 0, Math.PI * 2); q.fill(); q.strokeStyle = 'rgba(0,0,0,.2)'; q.stroke(); }
+  q.fillStyle = 'rgba(255,255,255,.25)'; q.beginPath(); q.moveTo(160, 612); q.lineTo(300, 612); q.lineTo(200, 778); q.lineTo(140, 778); q.fill();
+  // register + receipts
+  rrect(q, 1220, 470, 230, 130, 10, '#3a3d42', 'rgba(0,0,0,.5)'); rrect(q, 1245, 490, 120, 60, 4, '#9fd6b8'); rect(q, 1380, 500, 50, 70, '#55595f');
+  q.fillStyle = '#f7f3ea'; for (let i = 0; i < 6; i++) { q.save(); q.translate(1150 + i * 14, 585); q.rotate(R(-0.3, 0.3)); q.fillRect(0, 0, 44, 10); q.restore(); }
+  return { bg: c, fg: f };
+};
+
+S.desk = () => {
+  const [c, g] = canvas();
+  g.fillStyle = grad(g, 0, 0, 0, H, [[0, '#0c1226'], [1, '#141c34']]); g.fillRect(0, 0, W, H);
+  // window with the city
+  rect(g, 90, 90, 520, 420, '#0a1430');
+  const sub = g.save(); g.beginPath(); g.rect(96, 96, 508, 408); g.clip();
+  g.fillStyle = grad(g, 0, 96, 0, 504, [[0, '#0b1740'], [1, '#27406f']]); g.fillRect(96, 96, 508, 408);
+  seed = 31; for (let i = 0; i < 40; i++) { const x = R(96, 600), h = R(60, 260), w = R(30, 80); g.fillStyle = '#101b3c'; g.fillRect(x, 504 - h, w, h); for (let k = 0; k < 10; k++) { g.fillStyle = `rgba(255,205,120,${R(0.3, 0.9)})`; g.fillRect(x + R(4, w - 8), 504 - R(10, h - 10), 4, 5); } }
+  g.restore();
+  g.strokeStyle = '#1e2847'; g.lineWidth = 12; g.strokeRect(96, 96, 508, 408); g.lineWidth = 8; g.beginPath(); g.moveTo(350, 96); g.lineTo(350, 504); g.stroke();
+  // sticky notes and a diagram pinned to the wall
+  seed = 12; for (let i = 0; i < 6; i++) { const x = 980 + (i % 3) * 110 + R(-10, 10), y = 140 + Math.floor(i / 3) * 110 + R(-8, 8); g.save(); g.translate(x, y); g.rotate(R(-0.12, 0.12)); rect(g, 0, 0, 84, 80, pick(['#e8d65a', '#f0a45c', '#8fd3b6', '#e98fb0'])); g.fillStyle = 'rgba(30,30,40,.5)'; for (let l = 0; l < 3; l++) g.fillRect(10, 18 + l * 16, R(30, 60), 4); g.restore(); }
+  // desk
+  g.fillStyle = grad(g, 0, 640, 0, H, [[0, '#3a2a22'], [1, '#221812']]); g.fillRect(0, 640, W, 260);
+  glow(g, 800, 560, 620, 'rgba(110,160,255,.28)');
+  finish(g, 0.5, 0.05);
+  const [f, q] = canvas();
+  // laptop, screen facing us, code on it
+  q.fillStyle = '#1b1f2a'; q.beginPath(); q.moveTo(470, 720); q.lineTo(1130, 720); q.lineTo(1190, 770); q.lineTo(410, 770); q.fill();
+  rrect(q, 520, 330, 560, 380, 16, '#22262f', 'rgba(0,0,0,.6)', 3);
+  rrect(q, 540, 350, 520, 340, 6, '#0d1a2f');
+  seed = 77; const cols = ['#7fb4ff', '#f7c07a', '#8ee0b0', '#e2e8f5', '#d59cf2'];
+  for (let i = 0; i < 16; i++) { let x = 562 + (i % 5 === 0 ? 0 : R(10, 50)); const y = 370 + i * 19; for (let k = 0; k < R(2, 5); k++) { const w = R(30, 110); q.fillStyle = pick(cols); q.globalAlpha = 0.85; q.fillRect(x, y, w, 7); x += w + 10; } } q.globalAlpha = 1;
+  glow(q, 800, 520, 330, 'rgba(120,170,255,.25)');
+  // mug and notebook
+  rrect(q, 1240, 650, 90, 110, 12, '#c4553d', 'rgba(0,0,0,.4)'); q.strokeStyle = '#c4553d'; q.lineWidth = 12; q.beginPath(); q.arc(1335, 700, 26, -1.2, 1.2); q.stroke();
+  q.save(); q.translate(160, 700); q.rotate(-0.08); rect(q, 0, 0, 250, 170, '#e9e3d4', 'rgba(0,0,0,.35)'); q.strokeStyle = 'rgba(40,60,110,.7)'; q.lineWidth = 3; q.strokeRect(30, 30, 60, 40); q.strokeRect(150, 30, 60, 40); q.strokeRect(90, 105, 60, 40); q.beginPath(); q.moveTo(90, 50); q.lineTo(150, 50); q.moveTo(60, 70); q.lineTo(110, 105); q.moveTo(180, 70); q.lineTo(130, 105); q.stroke(); q.restore();
+  return { bg: c, fg: f };
+};
+
+S.street = (me_) => {
+  const [c, g] = canvas();
+  g.fillStyle = grad(g, 0, 0, 0, 500, [[0, '#8fbfe3'], [1, '#d8ecf3']]); g.fillRect(0, 0, W, H);
+  // Parisian-style facades with balconies and mansard roofs
+  seed = 17; let x = -40;
+  while (x < W + 40) {
+    const w = R(260, 360), top = R(90, 170), col = pick(['#efe2c8', '#e6d3b3', '#f2e9d8', '#dcc6a4']);
+    g.fillStyle = '#6c7482'; g.beginPath(); g.moveTo(x + 10, top); g.lineTo(x + w - 10, top); g.lineTo(x + w, top + 60); g.lineTo(x, top + 60); g.fill();
+    rect(g, x, top + 60, w, 760 - top - 60, col, 'rgba(90,70,50,.35)');
+    for (let fl = 0; fl < 4; fl++) {
+      const fy = top + 90 + fl * 130; if (fy > 660) break;
+      for (let k = 0; k < 3; k++) { const wx = x + 30 + k * (w - 60) / 3; rect(g, wx, fy, 52, 86, '#5c6b7a', 'rgba(40,40,50,.5)'); g.fillStyle = 'rgba(255,255,255,.25)'; g.fillRect(wx + 4, fy + 4, 10, 78); }
+      g.strokeStyle = '#2d2f35'; g.lineWidth = 3; g.beginPath(); g.moveTo(x + 18, fy + 100); g.lineTo(x + w - 18, fy + 100); g.stroke();
+      for (let b = x + 22; b < x + w - 18; b += 12) { g.beginPath(); g.moveTo(b, fy + 100); g.lineTo(b, fy + 120); g.stroke(); }
+      g.beginPath(); g.moveTo(x + 18, fy + 120); g.lineTo(x + w - 18, fy + 120); g.stroke();
+    }
+    x += w;
+  }
+  // street, taxi, sidewalk
+  rect(g, 0, 740, W, 70, '#5a5d63'); g.fillStyle = '#e7e1d2'; for (let i = 0; i < W; i += 90) g.fillRect(i, 772, 46, 5);
+  const tx = 1050; rrect(g, tx, 690, 300, 70, 18, '#111214', 'rgba(0,0,0,.5)'); rrect(g, tx + 60, 650, 170, 55, 16, '#111214'); rrect(g, tx + 70, 658, 150, 38, 10, '#8fb2c9'); rect(g, tx + 60, 640, 170, 14, '#f2c230');
+  g.fillStyle = '#1b1b1d'; g.beginPath(); g.arc(tx + 70, 760, 28, 0, 7); g.arc(tx + 235, 760, 28, 0, 7); g.fill();
+  g.fillStyle = grad(g, 0, 800, 0, H, [[0, '#cfc8b9'], [1, '#b3ab9b']]); g.fillRect(0, 800, W, 100);
+  g.strokeStyle = 'rgba(80,70,60,.25)'; g.lineWidth = 2; for (let i = 0; i < W; i += 70) { g.beginPath(); g.moveTo(i, 800); g.lineTo(i - 40, H); g.stroke(); }
+  // distant pedestrians
+  seed = 4; for (let i = 0; i < 5; i++) { const px = R(700, 1500); g.fillStyle = pick(['#39424f', '#6a4a3a', '#4b5a47']); rrect(g, px, 700, 22, 60, 8, g.fillStyle); g.beginPath(); g.arc(px + 11, 692, 10, 0, 7); g.fill(); }
+  // jacarandas
+  seed = 8; for (const tx2 of [300, 880, 1420]) { g.fillStyle = '#5a4332'; g.fillRect(tx2 - 10, 420, 20, 400); for (let i = 0; i < 70; i++) { g.fillStyle = pick(['#9a7bd6', '#b08ee4', '#8465c4', '#c3a6ee']); g.globalAlpha = 0.9; g.beginPath(); g.arc(tx2 + R(-170, 170), 330 + R(-110, 110), R(18, 42), 0, 7); g.fill(); } g.globalAlpha = 1; }
+  finish(g, 0.3, 0.05);
+  const [f, q] = canvas();
+  shadow(q, 470, 818, 150, 0.35);
+  me(q, me_, { x: 470, bottom: 822, h: 610, tint: '#fff2d8', tintA: 0.06 });
+  return { bg: c, fg: f };
+};
+
+S.rain = (me_) => {
+  const [c, g] = canvas();
+  g.fillStyle = '#0b0e17'; g.fillRect(0, 0, W, H);
+  // the window: blurred city lights behind wet glass
+  g.save(); g.beginPath(); g.rect(560, 90, 900, 700); g.clip();
+  g.fillStyle = grad(g, 0, 90, 0, 790, [[0, '#101a36'], [1, '#1d2946']]); g.fillRect(560, 90, 900, 700);
+  seed = 13; g.filter = 'blur(10px)';
+  for (let i = 0; i < 90; i++) { g.fillStyle = pick(['rgba(255,190,110,.55)', 'rgba(255,120,90,.45)', 'rgba(140,180,255,.45)', 'rgba(255,230,170,.5)']); g.beginPath(); g.arc(R(560, 1460), R(380, 790), R(8, 30), 0, 7); g.fill(); }
+  g.filter = 'none';
+  seed = 2; g.strokeStyle = 'rgba(200,220,255,.28)'; g.lineWidth = 2; for (let i = 0; i < 70; i++) { const x = R(570, 1450), y = R(100, 760); g.beginPath(); g.moveTo(x, y); g.bezierCurveTo(x + 2, y + 20, x - 3, y + 40, x + 1, y + R(40, 90)); g.stroke(); g.fillStyle = 'rgba(220,235,255,.35)'; g.beginPath(); g.arc(x + 1, y, 3, 0, 7); g.fill(); }
+  g.restore();
+  g.strokeStyle = '#05070c'; g.lineWidth = 26; g.strokeRect(560, 90, 900, 700); g.lineWidth = 14; g.beginPath(); g.moveTo(1010, 90); g.lineTo(1010, 790); g.moveTo(560, 440); g.lineTo(1460, 440); g.stroke();
+  // the lamp behind me
+  glow(g, 170, 420, 520, 'rgba(255,170,90,.35)');
+  finish(g, 0.6, 0.05);
+  const [f, q] = canvas();
+  me(q, me_, { x: 560, bottom: 1640, h: 1460, sil: '#07090f', rim: { side: 'left', color: 'rgba(255,170,90,.55)' } });
+  return { bg: c, fg: f };
+};
+
+S.read = () => {
+  const [c, g] = canvas();
+  g.fillStyle = '#07080b'; g.fillRect(0, 0, W, H);
+  // cone of lamp light
+  g.fillStyle = grad(g, 0, 170, 0, H, [[0, 'rgba(255,190,110,.32)'], [1, 'rgba(255,190,110,.04)']]);
+  g.beginPath(); g.moveTo(560, 200); g.lineTo(720, 200); g.lineTo(1100, H); g.lineTo(220, H); g.fill();
+  glow(g, 640, 560, 430, 'rgba(255,170,90,.22)');
+  // floor lamp
+  g.fillStyle = '#1a1510'; g.fillRect(636, 200, 8, 640); rrect(g, 590, 830, 100, 16, 6, '#1a1510');
+  g.fillStyle = '#e9b86f'; g.beginPath(); g.moveTo(570, 205); g.lineTo(710, 205); g.lineTo(680, 120); g.lineTo(600, 120); g.fill();
+  glow(g, 640, 210, 90, 'rgba(255,220,150,.9)');
+  // armchair
+  const chair = new Path2D(); chair.roundRect(780, 420, 420, 420, 60); ink(g, chair, '#5d2a24');
+  const back = new Path2D(); back.roundRect(820, 330, 340, 300, 70); ink(g, back, '#6e332b');
+  const arm1 = new Path2D(); arm1.roundRect(750, 560, 110, 260, 40); ink(g, arm1, '#4e231e');
+  const arm2 = new Path2D(); arm2.roundRect(1120, 560, 110, 260, 40); ink(g, arm2, '#4e231e');
+  g.save(); g.clip(chair); g.fillStyle = grad(g, 780, 0, 1100, 0, [[0, 'rgba(255,190,120,.28)'], [1, 'rgba(255,190,120,0)']]); g.fillRect(780, 420, 420, 420); g.restore();
+  // open book on the seat
+  g.save(); g.translate(930, 640); g.rotate(-0.1);
+  g.fillStyle = '#efe6d2'; g.beginPath(); g.moveTo(0, 0); g.quadraticCurveTo(70, -22, 140, 0); g.lineTo(140, 90); g.quadraticCurveTo(70, 70, 0, 90); g.fill();
+  g.beginPath(); g.moveTo(140, 0); g.quadraticCurveTo(210, -22, 280, 0); g.lineTo(280, 90); g.quadraticCurveTo(210, 70, 140, 90); g.fill();
+  g.fillStyle = 'rgba(60,50,40,.45)'; for (let i = 0; i < 6; i++) { g.fillRect(18, 16 + i * 11, 100, 3); g.fillRect(160, 16 + i * 11, 100, 3); }
+  g.restore();
+  finish(g, 0.65, 0.05);
+  const [f, q] = canvas();
+  // books stacked in the foreground
+  seed = 22; let y = 880;
+  for (let i = 0; i < 7; i++) { const w = R(230, 300), h = R(34, 52); y -= h; q.save(); q.translate(250, y); q.rotate(R(-0.04, 0.04)); rrect(q, -w / 2, 0, w, h, 4, pick(['#2b1d17', '#3a2920', '#1f2a2a', '#40221c', '#2a2433']), 'rgba(255,190,120,.25)'); q.fillStyle = 'rgba(255,200,130,.35)'; q.fillRect(-w / 2 + 16, h / 2 - 2, w * 0.4, 4); q.restore(); }
+  return { bg: c, fg: f };
+};
+
+S.cinema = () => {
+  const [c, g] = canvas();
+  g.fillStyle = '#06060a'; g.fillRect(0, 0, W, H);
+  // projector beam from the back, dust caught in it
+  g.fillStyle = grad(g, 1500, 60, 200, 700, [[0, 'rgba(220,230,255,.5)'], [1, 'rgba(220,230,255,0)']]);
+  g.beginPath(); g.moveTo(1470, 70); g.lineTo(1510, 70); g.lineTo(300, 700); g.lineTo(-100, 420); g.fill();
+  glow(g, 1490, 70, 60, 'rgba(255,255,255,.9)');
+  // silver light spilling on the rows from the screen (off frame, left)
+  glow(g, -100, 500, 900, 'rgba(170,190,230,.28)');
+  // rows of seats
+  for (let r = 0; r < 6; r++) {
+    const y = 360 + r * 95, s = 0.6 + r * 0.14, w = 90 * s, n = Math.ceil(W / (w + 8)) + 2;
+    for (let i = 0; i < n; i++) { const x = -40 + i * (w + 8) + (r % 2) * w / 2; rrect(g, x, y, w, 110 * s, 14 * s, `hsl(355,55%,${14 + r * 3}%)`, 'rgba(0,0,0,.6)'); g.fillStyle = 'rgba(190,205,240,.22)'; g.fillRect(x + 4, y + 2, w - 8, 5 * s); }
+  }
+  // me, in silhouette, one row in the middle, the only one here
+  g.fillStyle = '#030304'; g.beginPath(); g.arc(820, 520, 34, 0, 7); g.fill(); g.beginPath(); g.ellipse(820, 600, 78, 50, 0, Math.PI, 0); g.fill();
+  g.strokeStyle = 'rgba(200,215,255,.55)'; g.lineWidth = 3; g.beginPath(); g.arc(820, 520, 34, Math.PI * 0.8, Math.PI * 1.5); g.stroke();
+  finish(g, 0.6, 0.06);
+  const [f, q] = canvas();
+  // front row, very close to the camera
+  for (let i = 0; i < 8; i++) { const x = -60 + i * 230; rrect(q, x, 770, 214, 300, 40, '#1a0709', 'rgba(170,190,230,.25)'); }
+  return { bg: c, fg: f };
+};
+
+S.roof = (me_) => {
+  const [c, g] = canvas();
+  g.fillStyle = grad(g, 0, 0, 0, H, [[0, '#8fb0d6'], [0.35, '#f1c7a0'], [0.55, '#f6b26b'], [1, '#e08a4f']]); g.fillRect(0, 0, W, H);
+  glow(g, 420, 470, 380, 'rgba(255,230,160,.9)'); g.fillStyle = '#fff1c9'; g.beginPath(); g.arc(420, 470, 58, 0, 7); g.fill();
+  skyline(g, 600, { minH: 40, maxH: 140, minW: 30, maxW: 90, color: '#b77766', seedv: 51 });
+  g.fillStyle = '#b06d5e'; g.beginPath(); g.moveTo(1136, 600); g.lineTo(1144, 380); g.lineTo(1148, 364); g.lineTo(1152, 380); g.lineTo(1160, 600); g.fill();
+  skyline(g, 660, { minH: 60, maxH: 190, minW: 50, maxW: 130, color: '#8e5352', windows: 12, warm: 0.12, lit: '#ffd9a0', seedv: 61 });
+  // terrace floor, railing, plants, tank
+  g.fillStyle = grad(g, 0, 660, 0, H, [[0, '#a2685a'], [1, '#6e433d']]); g.fillRect(0, 660, W, 240);
+  g.strokeStyle = '#3b2522'; g.lineWidth = 6; g.beginPath(); g.moveTo(0, 600); g.lineTo(W, 600); g.moveTo(0, 630); g.lineTo(W, 630); g.stroke();
+  for (let x = 20; x < W; x += 90) { g.lineWidth = 6; g.beginPath(); g.moveTo(x, 590); g.lineTo(x, 665); g.stroke(); }
+  rect(g, 80, 420, 150, 110, '#6f4d45', 'rgba(0,0,0,.4)'); for (const lx of [95, 205]) rect(g, lx, 530, 10, 130, '#4a302b');
+  seed = 44; for (const px of [360, 700, 1450]) { rrect(g, px - 40, 700, 80, 80, 8, '#b4583d', 'rgba(0,0,0,.35)'); for (let i = 0; i < 16; i++) { g.fillStyle = pick(['#4f7b45', '#6b9a4c', '#3f6a3c']); g.beginPath(); g.ellipse(px + R(-45, 45), 690 - R(0, 70), R(12, 24), R(24, 40), R(-1, 1), 0, 7); g.fill(); } }
+  finish(g, 0.35, 0.05);
+  const [f, q] = canvas();
+  shadow(q, 1120, 872, 150, 0.4);
+  me(q, me_, { x: 1120, bottom: 875, h: 700, tint: '#ffb070', tintA: 0.14, rim: { side: 'left', color: 'rgba(255,215,150,.55)' } });
+  return { bg: c, fg: f };
+};
+
+S.face = (me_) => {
+  const [c, g] = canvas();
+  // the rooftop at sunrise, out of focus
+  const roof = S.roof(me_).bg; g.filter = 'blur(18px)'; g.drawImage(roof, -80, -60, W + 160, H + 120); g.filter = 'none';
+  g.fillStyle = 'rgba(255,200,140,.12)'; g.fillRect(0, 0, W, H);
+  finish(g, 0.35, 0.04);
+  const [f, q] = canvas();
+  // chest-up: the top third of the illustration, big
+  me(q, me_, { x: 800, bottom: 1060, h: 1160, crop: [0, 0, me_.width, me_.height * 0.4], tint: '#ffc080', tintA: 0.1, rim: { side: 'left', color: 'rgba(255,215,150,.4)' } });
+  return { bg: c, fg: f };
+};
+
+window.paint = async (charURL) => {
+  const img = new Image(); img.src = charURL; await img.decode();
+  const out = {};
+  for (const id of Object.keys(S)) {
+    const r = S[id](img);
+    if (r.img) out[id] = r.img.toDataURL('image/webp', 0.8);
+    else { out[`${id}-bg`] = r.bg.toDataURL('image/webp', 0.8); out[`${id}-fg`] = r.fg.toDataURL('image/webp', 0.84); }
+  }
+  return out;
+};
+</script>
+</body>

@@ -196,7 +196,7 @@ try {
     check('intro: ?intro=1 opens the window over the blurred site', await page.evaluate(() => !!document.querySelector('.intro-veil') && document.documentElement.classList.contains('intro-on') && document.querySelector('.cine-hero').classList.contains('is-paused')));
     await page.keyboard.press('Enter');
     await page.waitForTimeout(2500);
-    check('intro: the film runs', await page.evaluate(() => document.querySelector('.hud-tc').textContent !== '00:00:00:00'));
+    check('intro: the film runs', await page.evaluate(() => document.querySelector('.intro-win.is-playing') && document.querySelector('.cap.on') && document.querySelector('.cap').textContent.length > 3));
     await page.click('.intro-skip');
     await page.waitForTimeout(1300);
     check('intro: skip opens the site', await page.evaluate(() => !document.querySelector('.intro') && !document.documentElement.classList.contains('intro-on') && !document.querySelector('[inert]')));
@@ -207,6 +207,15 @@ try {
     await page.keyboard.press('Escape');
     await page.waitForTimeout(1300);
     check('intro: Escape skips', !(await page.$('.intro')));
+    // the end card: its button is on top of everything and takes you in
+    await page.goto(`${base}/?intro=1&introAt=53`, { waitUntil: 'load' });
+    await page.waitForSelector('.intro .intro-win', { timeout: 5000 }).catch(() => {});
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(2600);
+    check('intro: the end button is not covered', await page.evaluate(() => { const b = document.querySelector('.es-enter'); if (!b) return false; const r = b.getBoundingClientRect(); return b.contains(document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2)); }));
+    await page.click('.es-enter', { timeout: 3000 }).catch(() => {});
+    await page.waitForTimeout(1800);
+    check('intro: the end button opens the site', await page.evaluate(() => !document.querySelector('.intro') && !document.querySelector('[inert]')));
     check('intro: no page errors', errors.length === 0, errors.join(' | '));
     await ctx.close();
   }
