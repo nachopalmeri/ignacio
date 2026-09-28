@@ -261,3 +261,6 @@
   .intro-top { top: 10px; right: 10px; }
   .intro-top button { padding: 8px 11px; font-size: 12px; }
 }
+
+/* film layers never catch clicks — only the end card is interactive */
+.stamp, .bento, .cards, .phone, .notif, .noir, .ticker, .head, .chips, .nacho { pointer-events: none; }
