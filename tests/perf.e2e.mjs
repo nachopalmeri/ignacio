@@ -196,7 +196,7 @@ try {
     check('intro: ?intro=1 opens the window over the blurred site', await page.evaluate(() => !!document.querySelector('.intro-veil') && document.documentElement.classList.contains('intro-on') && document.querySelector('.cine-hero').classList.contains('is-paused')));
     await page.keyboard.press('Enter');
     await page.waitForTimeout(2500);
-    check('intro: the film runs', await page.evaluate(() => document.querySelector('.iw-tc').textContent !== '00:00:00:00'));
+    check('intro: the film runs', await page.evaluate(() => document.querySelector('.hud-tc').textContent !== '00:00:00:00'));
     await page.click('.intro-skip');
     await page.waitForTimeout(1300);
     check('intro: skip opens the site', await page.evaluate(() => !document.querySelector('.intro') && !document.documentElement.classList.contains('intro-on') && !document.querySelector('[inert]')));
