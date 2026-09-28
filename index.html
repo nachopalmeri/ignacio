@@ -27,6 +27,29 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,600..800&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script>
+    // Intro film: first visit to the home only, and never for crawlers,
+    // test browsers, reduced motion or data saver. ?intro=1 forces it,
+    // ?intro=0 skips it. Decided here so the veil is in the first paint.
+    (function () {
+      try {
+        var q = new URLSearchParams(location.search), f = q.get('intro');
+        var play = f === '1' || (f !== '0' && location.pathname === '/' && !q.has('r') && !location.hash
+          && !navigator.webdriver && !/bot|crawl|spider|slurp|facebookexternalhit|linkedin|whatsapp|preview/i.test(navigator.userAgent)
+          && localStorage.getItem('intro-seen') !== '1'
+          && !matchMedia('(prefers-reduced-motion: reduce)').matches
+          && !(navigator.connection && navigator.connection.saveData));
+        if (!play) return;
+        var d = document.documentElement;
+        d.classList.add('intro-pending');
+        [['stylesheet', '/intro/intro.css'], ['modulepreload', '/intro/intro.js'], ['modulepreload', '/intro/portrait.js']].forEach(function (l) {
+          var link = document.createElement('link'); link.rel = l[0]; link.href = l[1]; document.head.appendChild(link);
+        });
+        // never leave someone stuck behind the veil if the film can't load
+        setTimeout(function () { if (!window.__introReady) { d.classList.remove('intro-pending'); window.dispatchEvent(new Event('intro-state')); } }, 7000);
+      } catch (e) {}
+    })();
+  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -761,6 +784,7 @@
         <a href="https://github.com/nachopalmeri" target="_blank" rel="noopener noreferrer">GitHub</a>
         <a href="https://www.linkedin.com/in/ignaciopalmeri/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         <a href="mailto:ignaciopalmeri1@gmail.com" data-i18n="footer.contact">Contacto</a>
+        <button type="button" class="side-quests-toggle intro-replay" data-intro-replay data-i18n="footer.intro">▶ Ver la intro</button>
         <button type="button" id="side-quests-toggle" class="side-quests-toggle" aria-expanded="false" aria-controls="side-quests-reveal" data-i18n="sideQuests.toggle">Side Quests</button>
       </div>
     </div>

@@ -7124,3 +7124,19 @@ header.app-header.is-scrolled .nav-cta {
   .rs-aud-tabs { width: 100%; }
   .rs-aud-tabs button { flex: 1; padding: 7px 8px; }
 }
+
+/* Intro film: size of its window, and the veil + empty window painted before
+   intro/intro.js loads (same geometry, so the hand-off is invisible). */
+:root { --iw: min(74vw, calc((100svh - 150px) * 16 / 9), 1240px); --ih: calc(var(--iw) * 9 / 16); }
+@media (max-aspect-ratio: 4/5) { :root { --iw: 90vw; --ih: min(74svh, calc(90vw * 1.62)); } }
+html.intro-pending, html.intro-on { overflow: hidden; }
+html.intro-pending body::before {
+  content: ''; position: fixed; inset: 0; z-index: 9990;
+  background: rgba(6, 6, 8, .55);
+  -webkit-backdrop-filter: blur(16px) saturate(.55) brightness(.8); backdrop-filter: blur(16px) saturate(.55) brightness(.8);
+}
+html.intro-pending body::after {
+  content: ''; position: fixed; z-index: 9991; left: 50%; top: 50%; width: var(--iw); height: var(--ih);
+  transform: translate(-50%, -50%); border-radius: 14px; background: #050506;
+  box-shadow: 0 40px 120px -20px rgba(0, 0, 0, .75), 0 0 0 1px rgba(255, 255, 255, .1);
+}

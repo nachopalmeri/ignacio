@@ -180,6 +180,36 @@ try {
     check('case study: play asks for the film', films.length > 0 && await page.evaluate(() => document.querySelector('.cs-film video').controls));
     await ctx.close();
   }
+
+  // 9. Intro film: never forced on test browsers; ?intro=1 plays it, it can be
+  // skipped at any time, it is remembered, and the footer replays it.
+  {
+    const ctx = await context(browser);
+    const page = await ctx.newPage();
+    const errors = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    await page.goto(`${base}/`, { waitUntil: 'load' });
+    await page.waitForTimeout(500);
+    check('intro: not shown to automated browsers', !(await page.$('.intro')));
+    await page.goto(`${base}/?intro=1`, { waitUntil: 'load' });
+    await page.waitForSelector('.intro .intro-win', { timeout: 5000 }).catch(() => {});
+    check('intro: ?intro=1 opens the window over the blurred site', await page.evaluate(() => !!document.querySelector('.intro-veil') && document.documentElement.classList.contains('intro-on') && document.querySelector('.cine-hero').classList.contains('is-paused')));
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(2500);
+    check('intro: the film runs', await page.evaluate(() => document.querySelector('.iw-tc').textContent !== '00:00:00:00'));
+    await page.click('.intro-skip');
+    await page.waitForTimeout(1300);
+    check('intro: skip opens the site', await page.evaluate(() => !document.querySelector('.intro') && !document.documentElement.classList.contains('intro-on') && !document.querySelector('[inert]')));
+    check('intro: remembered as seen', (await page.evaluate(() => localStorage.getItem('intro-seen'))) === '1');
+    await page.click('[data-intro-replay]');
+    await page.waitForSelector('.intro', { timeout: 5000 }).catch(() => {});
+    check('intro: footer replays it', !!(await page.$('.intro')));
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(1300);
+    check('intro: Escape skips', !(await page.$('.intro')));
+    check('intro: no page errors', errors.length === 0, errors.join(' | '));
+    await ctx.close();
+  }
 } finally {
   await browser.close();
   server.close();

@@ -212,7 +212,7 @@ const UI_COPY = {
         copy: 'Copiar email',
         copied: '¡Copiado!'
       },
-      footer: { text: '2026 Ignacio Palmeri.', contact: 'Contacto' },
+      footer: { text: '2026 Ignacio Palmeri.', contact: 'Contacto', intro: '▶ Ver la intro' },
       sideQuests: { toggle: 'Side Quests', eyebrow: 'Fuera del código', heading: 'Side Quests', routeSummary: 'ver ruta técnica' },
       faq: {
         title: 'Preguntas frecuentes',
@@ -430,7 +430,7 @@ const UI_COPY = {
         copy: 'Copy email',
         copied: 'Copied!'
       },
-      footer: { text: '2026 Ignacio Palmeri.', contact: 'Contact' },
+      footer: { text: '2026 Ignacio Palmeri.', contact: 'Contact', intro: '▶ Watch the intro' },
       sideQuests: { toggle: 'Side Quests', eyebrow: 'Beyond the code', heading: 'Side Quests', routeSummary: 'view technical route' },
       faq: {
         title: 'FAQ',
@@ -2631,6 +2631,8 @@ function setupProjectVideoReveal() {
     });
   }
 
+  window.openProjectVideo = showModal;
+
   function hideModal() {
     if (!overlay || !video) return;
     overlay.classList.remove('is-visible', 'is-pinned');
@@ -2788,8 +2790,9 @@ function setupCineHero() {
   let spotlightTimer = null;
   let roleTimer = null;
 
+  const introPlaying = () => /\bintro-(on|pending)\b/.test(document.documentElement.className);
   const running = () => visible && !reduceMotion && document.visibilityState === 'visible'
-    && document.getElementById('overview-section')?.classList.contains('active') && !sideQuestsOpen();
+    && document.getElementById('overview-section')?.classList.contains('active') && !sideQuestsOpen() && !introPlaying();
 
   // One switch for everything that moves: CSS drift, the preview videos and
   // the spotlight timer all stop when nobody can see them.
@@ -2815,6 +2818,7 @@ function setupCineHero() {
   document.addEventListener('visibilitychange', sync);
   window.addEventListener('portfolio-tab-change', sync);
   window.addEventListener('side-quests-visibility', sync);
+  window.addEventListener('intro-state', sync);
   sync();
   probeHeroSmoothness(hero, running, sync);
 
@@ -3153,6 +3157,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFlowSection();
   setupMobileNav();
   setupRecruiterSummary();
+  setupIntro();
   // Navigation tabs
   const navTabs = document.querySelectorAll('.nav-tab');
   const viewSections = document.querySelectorAll('.view-section');
@@ -4683,3 +4688,21 @@ document.addEventListener('click', async (event) => {
   btn.classList.toggle('is-copied', ok);
   if (ok) setTimeout(() => { btn.textContent = getCopy('contact.copy'); btn.classList.remove('is-copied'); }, 2000);
 }, true); // capture: the recruiter dialog stops click propagation
+
+// Intro film (intro/intro.js). The <head> decides before the first paint
+// whether this visit gets it (first visit to the home, a person, motion OK)
+// and paints the veil and the window; the module takes over from there. It
+// can always be replayed from the footer.
+function setupIntro() {
+  const root = document.documentElement;
+  document.body.dataset.deployed = String(projectStats().deployed);
+  const load = (opts) => import('/intro/intro.js')
+    .then((m) => m.playIntro(opts))
+    .catch(() => { root.classList.remove('intro-pending'); window.dispatchEvent(new Event('intro-state')); });
+  if (root.classList.contains('intro-pending')) load({});
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('[data-intro-replay]')) return;
+    event.preventDefault();
+    load({ replay: true });
+  });
+}
