@@ -11,6 +11,8 @@ const UI_COPY = {
       title: 'Ignacio Palmeri',
       nowShowing: 'En pantalla',
       watchCta: 'Mirá lo que construí',
+      replayFirst: 'Ver el video (1 min)',
+      replayAgain: 'Ver el video de nuevo',
       trustLive: '{deployed} proyectos online',
       trustRole: 'Busco pasantía o trainee',
       trustPlace: 'Buenos Aires o remoto',
@@ -229,6 +231,8 @@ const UI_COPY = {
       title: 'Ignacio Palmeri',
       nowShowing: 'Now showing',
       watchCta: "See what I've built",
+      replayFirst: 'Watch the film (1 min)',
+      replayAgain: 'Watch the film again',
       trustLive: '{deployed} live projects',
       trustRole: 'Open to internship or trainee roles',
       trustPlace: 'Buenos Aires or remote',
@@ -4700,6 +4704,21 @@ function setupIntro() {
     .then((m) => m.playIntro(opts))
     .catch(() => { root.classList.remove('intro-pending'); window.dispatchEvent(new Event('intro-state')); });
   if (root.classList.contains('intro-pending')) load({});
+  // the hero's "watch it again" button: says "again" once the film was seen,
+  // and pulses for a moment right after it ends so nobody misses it
+  const seen = () => { try { return localStorage.getItem('intro-seen') === '1'; } catch (_e) { return false; } };
+  let wasOn = root.classList.contains('intro-on') || root.classList.contains('intro-pending');
+  const syncReplay = () => {
+    root.classList.toggle('intro-was-seen', seen());
+    const on = root.classList.contains('intro-on') || root.classList.contains('intro-pending');
+    if (wasOn && !on && seen()) {
+      const btn = document.querySelector('.cine-replay');
+      if (btn) { btn.classList.remove('is-pulse'); void btn.offsetWidth; btn.classList.add('is-pulse'); }
+    }
+    wasOn = on;
+  };
+  syncReplay();
+  window.addEventListener('intro-state', syncReplay);
   document.addEventListener('click', (event) => {
     if (!event.target.closest('[data-intro-replay]')) return;
     event.preventDefault();
