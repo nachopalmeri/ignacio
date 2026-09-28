@@ -201,9 +201,9 @@ try {
     await page.waitForTimeout(1300);
     check('intro: skip opens the site', await page.evaluate(() => !document.querySelector('.intro') && !document.documentElement.classList.contains('intro-on') && !document.querySelector('[inert]')));
     check('intro: remembered as seen', (await page.evaluate(() => localStorage.getItem('intro-seen'))) === '1');
-    await page.click('[data-intro-replay]');
+    await page.goto(`${base}/?intro=1`, { waitUntil: 'load' });
     await page.waitForSelector('.intro', { timeout: 5000 }).catch(() => {});
-    check('intro: footer replays it', !!(await page.$('.intro')));
+    check('intro: ?intro=1 replays it after it was seen', !!(await page.$('.intro')));
     await page.keyboard.press('Escape');
     await page.waitForTimeout(1300);
     check('intro: Escape skips', !(await page.$('.intro')));
