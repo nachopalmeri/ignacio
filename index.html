@@ -29,13 +29,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,600..800&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script>
-    // Intro film: off for visitors until there is a real animated film; only
-    // ?intro=1 plays it (for review). With AUTO on: first visit to the home
-    // only, never for crawlers, test browsers, reduced motion or data saver.
+    // Intro film: plays automatically on the first visit to the home. With AUTO
+    // on: first visit to the home only, never for crawlers, test browsers,
+    // reduced motion or data saver.
     // Decided here so the veil is in the first paint.
     (function () {
       try {
-        var AUTO = false;
+        var AUTO = true;
         var q = new URLSearchParams(location.search), f = q.get('intro');
         var play = f === '1' || (AUTO && f !== '0' && location.pathname === '/' && !q.has('r') && !location.hash
           && !navigator.webdriver && !/bot|crawl|spider|slurp|facebookexternalhit|linkedin|whatsapp|preview/i.test(navigator.userAgent)
