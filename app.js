@@ -4693,20 +4693,20 @@ document.addEventListener('click', async (event) => {
   if (ok) setTimeout(() => { btn.textContent = getCopy('contact.copy'); btn.classList.remove('is-copied'); }, 2000);
 }, true); // capture: the recruiter dialog stops click propagation
 
-// Intro film (intro/intro.js). The <head> decides before the first paint
+// Interactive intro (intro/player.js). The <head> decides before the first paint
 // whether this visit gets it (first visit to the home, a person, motion OK)
 // and paints the veil and the window; the module takes over from there. It
 // can always be replayed from the footer.
 function setupIntro() {
   const root = document.documentElement;
   document.body.dataset.deployed = String(projectStats().deployed);
-  const load = (opts) => import('/intro/intro.js')
+  const load = (opts) => import('/intro/player.js')
     .then((m) => m.playIntro(opts))
     .catch(() => { root.classList.remove('intro-pending'); window.dispatchEvent(new Event('intro-state')); });
   if (root.classList.contains('intro-pending')) load({});
   // the hero's "watch it again" button: says "again" once the film was seen,
   // and pulses for a moment right after it ends so nobody misses it
-  const seen = () => { try { return localStorage.getItem('intro-seen') === '1'; } catch (_e) { return false; } };
+  const seen = () => { try { return localStorage.getItem('intro-interactive-v1-seen') === '1'; } catch (_e) { return false; } };
   let wasOn = root.classList.contains('intro-on') || root.classList.contains('intro-pending');
   const syncReplay = () => {
     root.classList.toggle('intro-was-seen', seen());

@@ -39,17 +39,15 @@
         var q = new URLSearchParams(location.search), f = q.get('intro');
         var play = f === '1' || (AUTO && f !== '0' && location.pathname === '/' && !q.has('r') && !location.hash
           && !navigator.webdriver && !/bot|crawl|spider|slurp|facebookexternalhit|linkedin|whatsapp|preview/i.test(navigator.userAgent)
-          && localStorage.getItem('intro-seen') !== '1'
+          && localStorage.getItem('intro-interactive-v1-seen') !== '1'
           && !matchMedia('(prefers-reduced-motion: reduce)').matches
           && !(navigator.connection && navigator.connection.saveData));
         if (!play) return;
         var d = document.documentElement;
         d.classList.add('intro-pending');
-        [['stylesheet', '/intro/intro.css'], ['modulepreload', '/intro/intro.js']].forEach(function (l) {
+        [['stylesheet', '/intro/player.css'], ['modulepreload', '/intro/player.js']].forEach(function (l) {
           var link = document.createElement('link'); link.rel = l[0]; link.href = l[1]; document.head.appendChild(link);
         });
-        // the first shot, so the pre-roll never sits on a blank frame
-        var shot = document.createElement('link'); shot.rel = 'preload'; shot.as = 'image'; shot.href = '/intro/film/city.webp'; document.head.appendChild(shot);
         // never leave someone stuck behind the veil if the film can't load
         setTimeout(function () { if (!window.__introReady) { d.classList.remove('intro-pending'); window.dispatchEvent(new Event('intro-state')); } }, 7000);
       } catch (e) {}
