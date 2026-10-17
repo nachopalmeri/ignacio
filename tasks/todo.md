@@ -30,3 +30,19 @@ Next: user review of this restored base. Do not invent another redesign or resto
 
 - Rechecked 30 Agents browser checks, JS syntax and whitespace before committing. Corrected one obsolete tool-card selector in the performance test to match the restored text explanation.
 - Deployment target verified: Vercel ignacio (prj_7kRTHFG6Y9Nz817OQsthA3pnGl5K), team nachopalmeris-projects; production alias ignacio-nachopalmeris-projects.vercel.app. This is the active repo nachopalmeri/ignacio, not the other portfolio domain.
+
+## Side Quests — personal selection
+
+Status: implementation verified. User confirmed the grill-me recommendations, added a three-series bonus, and explicitly authorized commit, push and production deployment. Release from the current feature branch; no merge to main.
+
+- Four books, in order: AI Engineering; Zero to One; El sueño de los héroes; Crimen y castigo.
+- Four films: The Perks of Being a Wallflower; Pusher II; Ciudad de Dios; Midnight in Paris.
+- Three bonus series in a brief separate block: The Sopranos; Silicon Valley; Twin Peaks.
+- Existing warm room, artwork, overlay and browsing controls retained. Removed diary, automated matching, tracking, seen/read toggles, tags, ambient audio/share extras and recommendation crew. Brief ES/EN descriptions do not invent personal anecdotes or appear as quotations.
+- Original content/files preserved outside repo: D:/Codex/outputs/side-quests-curation/work/before-{app.js,index.html,style.css}.
+- Existing local covers reused except Midnight in Paris: official Sony Classics image, 89 KB; source recorded alongside the asset.
+- Fixed original mobile poster arithmetic overflowing the panel; fixed visibility transition delaying modal focus. Keyboard entry, Escape, focus containment/restoration and no-storage operation verified.
+- Files: app.js, index.html, scoped edits in style.css, one poster and source note; tests/side-quests.e2e.mjs.
+- Verification: 84 Side Quests checks passed at 1440/390 in ES/EN; all eight covers load, category cycling, three series, accessibility, reduced motion, blocked storage, no early artwork requests/overflow/browser errors. Existing 30 Agents checks and hero regression suite passed. Syntax and whitespace checks passed.
+- Screenshots: D:/Codex/outputs/side-quests-curation/{1440,390}-{books,films,series}.png.
+- Preview remains http://127.0.0.1:4176/agents; open Side Quests in the footer. Production target verified: Vercel ignacio, domain ignaciopalmeri.dev.
