@@ -26,8 +26,14 @@ await new Promise(resolve => server.listen(port, '127.0.0.1', resolve));
 
 const browser=await chromium.launch();let checks=0;const errors=[];
 const check=(label,ok)=>{assert.ok(ok,label);checks++;console.log('ok  '+label)};
+async function settle(page) {
+ await page.locator('#sq-poster').evaluate(image=>image.decode().catch(()=>{}));
+ await page.locator('#side-quests-reveal').evaluate(async panel=>{
+  await Promise.all(panel.getAnimations({subtree:true}).filter(a=>Number.isFinite(a.effect.getTiming().iterations)).map(a=>a.finished.catch(()=>{})));
+ });
+}
 try {
- await mkdir('D:/Codex/outputs/side-quests-curation',{recursive:true});
+ await mkdir('D:/Codex/outputs/side-quests-taste',{recursive:true});
  for(const width of [1440,390]) {
   const context=await browser.newContext({viewport:{width,height:width===390?844:900},locale:'es-AR',hasTouch:width===390});
   await context.route(/\/api\//,r=>r.fulfill({status:503,body:'{}'}));
@@ -41,14 +47,17 @@ try {
    const panel=page.locator('#side-quests-reveal');await page.waitForTimeout(500);
    check('accessible modal '+width+'/'+lang,await panel.getAttribute('role')==='dialog'&&await panel.getAttribute('aria-hidden')==='false'&&await panel.evaluate(e=>!e.inert));
    check('opening moves focus inside '+width+'/'+lang,await panel.evaluate(e=>e.contains(document.activeElement)));
-   check('exactly four books '+width+'/'+lang,await page.locator('.sq-thumb').count()===4);
+   check('exactly four books '+width+'/'+lang,await page.locator('.sq-index-item').count()===4);
+   check('text index shows four full titles '+width+'/'+lang,(await page.locator('.sq-index-item').allTextContents()).every(text=>text.trim().length>6));
+   check('no ambient decorative layers '+width+'/'+lang,await page.locator('.sq-grain,.sq-spotlight,.sq-vignette,.sq-flash').count()===0);
+   if(width===390) check('mobile recommendation fits first screen '+lang,await page.locator('.sq-why').evaluate(e=>e.getBoundingClientRect().bottom<=innerHeight-12));
    check('starts with AI Engineering '+width+'/'+lang,await page.locator('#sq-detail-title').textContent()==='AI Engineering');
    const books=['AI Engineering','Zero to One','El sueño de los héroes','Crimen y castigo'];
    const films=['The Perks of Being a Wallflower','Pusher II','Ciudad de Dios','Midnight in Paris'];
    for(const [kind,titles] of [['book',books],['film',films]]) {
     await page.locator(`[data-kind="${kind}"]`).click();
     for(const title of titles) {
-     await page.locator('.sq-thumb').filter({has:page.locator(`img`)}).nth(titles.indexOf(title)).click();
+     await page.locator('.sq-index-item').nth(titles.indexOf(title)).click();
      await page.waitForFunction(()=>{const i=document.querySelector('#sq-poster');return i.complete&&i.naturalWidth>0});
      check('correct work and loaded cover '+width+'/'+lang+'/'+title,await page.locator('#sq-detail-title').textContent()===title);
     }
@@ -63,10 +72,10 @@ try {
    check('focus stays within modal '+width+'/'+lang,await panel.evaluate(e=>e.contains(document.activeElement)));
    if(lang==='es') {
     await page.locator('[data-kind="book"]').click();
-    await panel.evaluate(e=>e.scrollTo(0,0));await page.screenshot({path:`D:/Codex/outputs/side-quests-curation/${width}-books.png`});
-    await page.locator('[data-kind="film"]').click();await page.locator('.sq-thumb').nth(3).click();
-    await panel.evaluate(e=>e.scrollTo(0,0));await page.screenshot({path:`D:/Codex/outputs/side-quests-curation/${width}-films.png`});
-    await page.locator('.sq-series').screenshot({path:`D:/Codex/outputs/side-quests-curation/${width}-series.png`});
+    await panel.evaluate(e=>e.scrollTo(0,0));await settle(page);await page.screenshot({path:`D:/Codex/outputs/side-quests-taste/${width}-books.png`});
+    await page.locator('[data-kind="film"]').click();await page.locator('.sq-index-item').nth(3).click();
+    await panel.evaluate(e=>e.scrollTo(0,0));await settle(page);await page.screenshot({path:`D:/Codex/outputs/side-quests-taste/${width}-films.png`});
+    await page.locator('.sq-series').screenshot({path:`D:/Codex/outputs/side-quests-taste/${width}-series.png`});
    }
    await page.keyboard.press('Escape');
    check('close restores focus '+width+'/'+lang,await page.locator('#side-quests-toggle').evaluate(e=>e===document.activeElement));

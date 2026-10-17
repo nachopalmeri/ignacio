@@ -947,6 +947,7 @@ function setupSideQuests() {
   let current = 0;
   let returnFocus = toggle;
   let previousOverflow = '';
+  let contentTransition;
   const visible = () => SIDE_QUESTS.filter(item => item.kind === kind);
   const isOpen = () => reveal.classList.contains('is-visible');
 
@@ -960,10 +961,21 @@ function setupSideQuests() {
       button.setAttribute('aria-pressed', String(selected));
       button.textContent = button.dataset.kind === 'book' ? (en ? 'Books · 4' : 'Libros · 4') : (en ? 'Films · 4' : 'Pelis · 4');
     });
-    document.getElementById('sq-detail-title').textContent = item.title;
-    document.getElementById('sq-detail-sub').textContent = item.author || (en ? 'Favourite film' : 'Película favorita');
+    const title = document.getElementById('sq-detail-title');
+    const changed = title.textContent && title.textContent !== item.title;
+    title.textContent = item.title;
+    const author = document.getElementById('sq-detail-sub');
+    author.textContent = item.author;
+    author.hidden = !item.author;
+    strip.setAttribute('aria-label', kind === 'book' ? (en ? 'Selected books' : 'Selección de libros') : (en ? 'Selected films' : 'Selección de películas'));
+    if (changed && isOpen() && !prefersReducedMotion()) {
+      contentTransition?.cancel();
+      contentTransition = document.getElementById('sq-selected-work').animate(
+        [{ opacity: .4, transform: 'translateY(3px)' }, { opacity: 1, transform: 'translateY(0)' }],
+        { duration: 180, easing: 'ease-out' }
+      );
+    }
     document.getElementById('sq-detail-why').textContent = sqL(item.why);
-    document.getElementById('sq-cat-chip').textContent = en ? 'Recommended' : 'Recomendado';
     document.getElementById('sq-prev').setAttribute('aria-label', en ? 'Previous recommendation' : 'Recomendación anterior');
     document.getElementById('sq-next').setAttribute('aria-label', en ? 'Next recommendation' : 'Recomendación siguiente');
     closeBtn.setAttribute('aria-label', en ? 'Close Side Quests' : 'Cerrar Side Quests');
@@ -975,13 +987,16 @@ function setupSideQuests() {
     items.forEach((entry, index) => {
       const button = document.createElement('button');
       button.type = 'button';
-      button.className = 'sq-thumb' + (index === current ? ' active' : '');
+      button.className = 'sq-index-item' + (index === current ? ' active' : '');
       button.setAttribute('aria-label', entry.title);
       button.setAttribute('aria-pressed', String(index === current));
-      const image = document.createElement('img');
-      image.alt = ''; image.loading = 'lazy'; image.decoding = 'async';
-      if (isOpen()) image.src = entry.poster;
-      button.appendChild(image);
+      const number = document.createElement('span');
+      number.className = 'sq-index-number';
+      number.setAttribute('aria-hidden', 'true');
+      number.textContent = String(index + 1).padStart(2, '0');
+      const label = document.createElement('span');
+      label.textContent = entry.title;
+      button.append(number, label);
       button.addEventListener('click', () => {
         current = index; render();
         strip.children[index]?.focus({ preventScroll: true });
@@ -1007,6 +1022,7 @@ function setupSideQuests() {
     window.dispatchEvent(new CustomEvent('side-quests-visibility', { detail: { open: true } }));
   }
   function close() {
+    contentTransition?.cancel();
     reveal.classList.remove('is-visible');
     reveal.setAttribute('aria-hidden', 'true');
     reveal.inert = true;

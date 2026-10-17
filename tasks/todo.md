@@ -46,3 +46,20 @@ Status: implementation verified. User confirmed the grill-me recommendations, ad
 - Verification: 84 Side Quests checks passed at 1440/390 in ES/EN; all eight covers load, category cycling, three series, accessibility, reduced motion, blocked storage, no early artwork requests/overflow/browser errors. Existing 30 Agents checks and hero regression suite passed. Syntax and whitespace checks passed.
 - Screenshots: D:/Codex/outputs/side-quests-curation/{1440,390}-{books,films,series}.png.
 - Preview remains http://127.0.0.1:4176/agents; open Side Quests in the footer. Production target verified: Vercel ignacio, domain ignaciopalmeri.dev.
+
+## Taste Library research — 2026-10-17
+
+- User requested TasteLabs/Taste Library research and application advice. Read remote skill + AGENTS.md, compact catalog, three profiles and saved previews; selected A24 primary for Side Quests, Cursor for a compatible explanation/demo hierarchy. Compared and rejected teenage engineering for this iteration.
+- Existing TasteLabs extraction evidence used; no native TasteLabs tool is exposed, no install or paid extraction. Read A24 layout/typography/review and Cursor layout/actions/review. Captures are extracted_unverified and do not certify motion or mobile.
+- Proposed bounded next iteration: calmer Side Quests after the curtain, four-title index, smaller mobile artwork so the recommendation fits in the first screen. Keep selected 4/4/3, existing fonts, modal and assets. Preserve the approved Agents graph; no wholesale redesign.
+- Decision and visual board: D:/Codex/outputs/taste-library-portfolio/design-decision.md and reference-board.html. Product files unchanged; no deployment for this research.
+
+## Taste Library application — 2026-10-17
+
+- User approved application of the bounded proposal. Implemented only Side Quests; Agents graph, portfolio fonts and curated 4/4/3 content retained.
+- Retained brief curtains, removed spotlight/vignette/grain/flash and ambient background animations. Edited original active CSS and removed obsolete rules instead of stacking overrides.
+- Replaced cover-thumbnail row with an accessible numbered four-title index in the selected-work column. Previous/next, keyboard, focus containment and Escape remain. Removed redundant Recommended/favourite-film labels; author metadata remains for books.
+- Mobile: 160 px cover, tighter spacing and readable title/recommendation within the first 390×844 screen. Desktop: artwork + explanation/index. One 180 ms native content transition on selection; disabled for reduced motion.
+- Validation: 94 Side Quests checks passed (84 original contracts adapted to text index + 10 composition checks); 30 Agents checks and complete hero browser suite passed. Syntax and whitespace clean. No new dependencies/assets/fonts.
+- Visual evidence: D:/Codex/outputs/side-quests-taste/comparison.html and {1440,390}-{books,films,series}.png. Capture helper waits for image decoding and finite transitions, avoiding mismatched covers during quick selection.
+- Local preview open: http://127.0.0.1:4176/agents → Side Quests. User explicitly authorized commit, push and production deployment for this iteration. Target verified: Vercel ignacio / ignaciopalmeri.dev; release from the feature branch without merging main.

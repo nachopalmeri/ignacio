@@ -794,10 +794,6 @@
   <div id="side-quests-reveal" class="side-quests-reveal" role="dialog" aria-modal="true" aria-labelledby="side-quests-heading" aria-hidden="true" inert>
     <div class="sq-curtain sq-curtain-left" aria-hidden="true"></div>
     <div class="sq-curtain sq-curtain-right" aria-hidden="true"></div>
-    <div class="sq-spotlight" aria-hidden="true"></div>
-    <div class="sq-vignette" aria-hidden="true"></div>
-    <div class="sq-grain" aria-hidden="true"></div>
-    <div class="sq-flash" aria-hidden="true"></div>
     <button type="button" id="side-quests-close" class="side-quests-close" aria-label="Cerrar">✕</button>
     <div class="sq-head">
       <span class="sq-eyebrow" data-i18n="sideQuests.eyebrow">Fuera del código</span>
@@ -814,14 +810,15 @@
         <button type="button" class="sq-nav" id="sq-next" aria-label="Siguiente">›</button>
       </div>
       <div class="sq-info">
-        <span class="sq-cat-chip" id="sq-cat-chip"></span>
-        <h4 id="sq-detail-title"></h4>
-        <p class="sq-meta" id="sq-detail-sub"></p>
-        <p class="sq-why" id="sq-detail-why"></p>
+        <div id="sq-selected-work">
+          <h4 id="sq-detail-title"></h4>
+          <p class="sq-meta" id="sq-detail-sub"></p>
+          <p class="sq-why" id="sq-detail-why"></p>
+        </div>
+        <nav class="sq-index" id="sq-strip" aria-label="Selección de libros"></nav>
         <p class="sq-meta" id="sq-position" aria-live="polite" aria-atomic="true"></p>
       </div>
     </div>
-    <div class="sq-strip" id="sq-strip"></div>
     <section class="sq-series" aria-labelledby="sq-series-title">
       <h4 id="sq-series-title" data-i18n="sideQuests.seriesTitle">Y tres series</h4>
       <ul>

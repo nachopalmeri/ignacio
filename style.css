@@ -464,11 +464,7 @@ header.app-header.mobile-nav-open .mobile-nav-toggle span:nth-child(3) {
   transform: translateY(0);
 }
 
-/* ═══════════════════ SIDE QUESTS: CINEMATIC OPEN ═══════════════════
-   Curtains part on open, a spotlight blooms on the poster, film grain +
-   vignette stay on for the whole session, and poster changes get a quick
-   light-leak sweep — the "cinema lounge" the section already leans into,
-   pushed further into an actual opening-night moment. */
+/* Side Quests opens with a brief curtain; the reading surface stays still. */
 
 .sq-curtain {
   position: absolute;
@@ -513,106 +509,14 @@ header.app-header.mobile-nav-open .mobile-nav-toggle span:nth-child(3) {
   100% { transform: translateX(105%); }
 }
 
-.sq-spotlight {
-  position: absolute;
-  inset: 0;
-  z-index: 45;
-  pointer-events: none;
-  background: radial-gradient(circle at 50% 44%, rgba(255, 238, 204, 0.38) 0%, rgba(255, 200, 140, 0.14) 24%, transparent 48%);
-  opacity: 0;
-}
-
-.side-quests-reveal.is-visible .sq-spotlight {
-  animation: sqSpotlightBloom 1.4s var(--ease) 550ms both;
-}
-
-@keyframes sqSpotlightBloom {
-  0% { opacity: 0; transform: scale(0.6); }
-  55% { opacity: 1; transform: scale(1.06); }
-  100% { opacity: 0.45; transform: scale(1); }
-}
-
-.sq-vignette {
-  position: absolute;
-  inset: 0;
-  z-index: 40;
-  pointer-events: none;
-  background: radial-gradient(ellipse at 50% 45%, transparent 36%, rgba(0, 0, 0, 0.58) 100%);
-}
-
-.sq-grain {
-  position: absolute;
-  inset: 0;
-  z-index: 46;
-  pointer-events: none;
-  opacity: 0.055;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 140px 140px;
-}
-
-/* The animation only runs while the panel is actually open (and visible) —
-   it used to run unconditionally, which meant this mix-blend-mode layer
-   kept compositing every 0.5s on every page of the site even with Side
-   Quests closed, which is what was causing the site-wide lag. */
-.side-quests-reveal.is-visible .sq-grain {
-  animation: sqGrainShift 0.5s steps(4) infinite;
-}
-
-@keyframes sqGrainShift {
-  0% { transform: translate(0, 0); }
-  25% { transform: translate(-2%, 1%); }
-  50% { transform: translate(1%, -2%); }
-  75% { transform: translate(-1%, 2%); }
-  100% { transform: translate(0, 0); }
-}
-
-.sq-leak {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0;
-  border-radius: 16px;
-  background: linear-gradient(115deg, transparent 25%, rgba(255, 196, 120, 0.85) 45%, rgba(255, 120, 60, 0.55) 52%, transparent 72%);
-  mix-blend-mode: screen;
-}
-
-.sq-leak.is-active {
-  animation: sqLeakSweep 550ms ease-out;
-}
-
-@keyframes sqLeakSweep {
-  0% { opacity: 0; transform: translateX(-60%); }
-  35% { opacity: 1; }
-  100% { opacity: 0; transform: translateX(60%); }
-}
-
-/* .side-quests-reveal, its ::before, and .sq-glow all carry pre-existing
-   "always on" animations (sq-warm-breathe, sq-dust, sq-glow-pulse) that
-   keep running site-wide even while this panel is hidden, since it's just
-   opacity/visibility toggled, not display:none. !important + :not() here
-   rather than editing those (duplicated elsewhere in this file) rules
-   directly, so this is guaranteed to win regardless of file order. */
-.side-quests-reveal:not(.is-visible),
-.side-quests-reveal:not(.is-visible)::before,
-.side-quests-reveal:not(.is-visible) .sq-glow {
-  animation: none !important;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .sq-curtain-left,
-  .sq-curtain-right,
-  .sq-spotlight {
+  .sq-curtain-right {
     animation: none !important;
   }
   .sq-curtain-left { transform: translateX(-105%); }
   .sq-curtain-right { transform: translateX(105%); }
-  .sq-spotlight { opacity: 0.35; }
-  .side-quests-reveal.is-visible .sq-grain { animation: none !important; }
-  .sq-leak { display: none; }
 }
-@media (max-width:900px){.sq-crew-cards{grid-template-columns:1fr}.sq-layout{grid-template-columns:minmax(0,1fr);gap:28px}.sq-poster-side{justify-content:center}.sq-info{display:flex;flex-direction:column;align-items:center}.sq-tagrow,.sq-actions{justify-content:center}}
 
 @media (prefers-reduced-motion: reduce){
   .side-quests-reveal{animation:none}
@@ -4836,7 +4740,7 @@ footer.app-footer {
   align-items: center;
   justify-content: center;
   gap: 20px;
-  background: radial-gradient(circle at 50% 30%, rgba(16, 20, 30, 0.97) 0%, rgba(3, 3, 5, 0.99) 72%);
+  background: #171411;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -4848,24 +4752,6 @@ footer.app-footer {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-}
-
-.sq-flash {
-  position: absolute;
-  inset: 0;
-  background: var(--accent-green);
-  opacity: 0;
-  pointer-events: none;
-}
-
-.side-quests-reveal.is-visible .sq-flash {
-  animation: sqFlash 0.6s ease-out;
-}
-
-@keyframes sqFlash {
-  0% { opacity: 0; }
-  12% { opacity: 0.55; }
-  100% { opacity: 0; }
 }
 
 .side-quests-close {
@@ -4915,49 +4801,33 @@ footer.app-footer {
   margin: 0;
 }
 
-/* --- Side Quests: sala cálida (cozy v4) --- */
-.side-quests-reveal{
-  background:
-    radial-gradient(55% 45% at 18% 12%, rgba(232,168,76,.16), transparent 70%),
-    radial-gradient(50% 55% at 82% 78%, rgba(212,121,91,.12), transparent 70%),
-    radial-gradient(70% 60% at 50% 110%, rgba(120,86,50,.18), transparent 75%),
-    linear-gradient(180deg, #1a1109 0%, #140d07 55%, #0b0705 100%);
-  animation: sq-warm-breathe 14s ease-in-out infinite alternate;
-}
-@keyframes sq-warm-breathe{
-  0%{background-position:0% 0%, 100% 100%, 50% 100%, 0 0}
-  100%{background-position:8% 4%, 92% 92%, 45% 100%, 0 0}
-}
-.side-quests-reveal::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.5;
-  background-image:radial-gradient(1.5px 1.5px at 20% 30%, rgba(232,168,76,.5), transparent),
-  radial-gradient(1px 1px at 70% 20%, rgba(243,234,217,.4), transparent),
-  radial-gradient(1.2px 1.2px at 45% 70%, rgba(212,121,91,.45), transparent),
-  radial-gradient(1px 1px at 85% 55%, rgba(232,168,76,.35), transparent),
-  radial-gradient(1.4px 1.4px at 12% 80%, rgba(243,234,217,.3), transparent);
-  background-size:900px 900px;animation:sq-dust 26s linear infinite}
-@keyframes sq-dust{0%{background-position:0 0, 0 0, 0 0, 0 0, 0 0}100%{background-position:-120px -340px, 90px -280px, -60px 300px, 140px -120px, -100px 220px}}
-
-.sq-layout{display:grid;grid-template-columns:320px minmax(0,1fr);width:100%;box-sizing:border-box;gap:48px;align-items:center;max-width:980px;margin:0 auto;padding:0 28px}
+/* Side Quests: artwork supplies the colour; the room stays quiet. */
+.sq-layout{display:grid;grid-template-columns:352px minmax(0,1fr);width:100%;box-sizing:border-box;gap:48px;align-items:center;max-width:980px;margin:0 auto;padding:0 28px}
 .sq-poster-side{display:flex;align-items:center;gap:12px;justify-content:center}
-.sq-poster-wrap{position:relative;width:min(320px,calc(100vw - 168px));min-width:0}
-.sq-glow{position:absolute;inset:6% -14% -8% -14%;border-radius:28px;filter:blur(52px);opacity:.55;transition:background .6s;z-index:0;animation:sq-glow-pulse 6s ease-in-out infinite alternate}
-@keyframes sq-glow-pulse{0%{opacity:.42}100%{opacity:.62}}
-.sq-poster-main{position:relative;z-index:1;display:block;width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:16px;
-  box-shadow:0 34px 80px rgba(0,0,0,.7),0 6px 20px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,240,220,.15);
+.sq-poster-wrap{position:relative;width:240px;min-width:0}
+
+.sq-poster-main{position:relative;z-index:1;display:block;width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:3px;
   transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .4s;transform-origin:50% 100%}
-.sq-poster-wrap:hover .sq-poster-main{transform:translateY(-7px) rotate(-.7deg) scale(1.02)}
+
 .sq-cat{position:absolute;z-index:2;top:14px;left:14px;font:700 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;
   padding:6px 11px;border-radius:999px;background:rgba(20,12,6,.75);color:#f3ead9;text-transform:uppercase;backdrop-filter:blur(5px)}
 .sq-nav{position:relative;z-index:2;flex:none;width:44px;height:44px;border-radius:50%;border:1px solid rgba(243,234,217,.22);
   background:rgba(243,234,217,.06);color:#f3ead9;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .sq-nav:hover{background:rgba(243,234,217,.14);border-color:rgba(243,234,217,.5)}
 .sq-info{min-width:0}
-.sq-cat-chip{display:inline-block;font:700 11px/1 'IBM Plex Mono',monospace;letter-spacing:.26em;text-transform:uppercase;
-  color:var(--sq-accent,#e8a84c);margin-bottom:13px}
+
 .sq-info h4{font:600 clamp(30px,4vw,44px)/1.1 'Fraunces',Georgia,serif;letter-spacing:-.01em;margin:0 0 8px;color:#f7efe0}
 .sq-meta{font:500 14px/1 'IBM Plex Sans',sans-serif;color:rgba(243,234,217,.55);margin:0 0 20px}
-.sq-why{margin:0 0 24px;padding:0;max-width:44ch;font:400 18px/1.7 'IBM Plex Sans',sans-serif;color:rgba(247,239,224,.9)}
+.sq-why{margin:0 0 22px;padding:0;max-width:44ch;font:400 18px/1.7 'IBM Plex Sans',sans-serif;color:rgba(247,239,224,.9)}
 .sq-intro{margin:12px auto 0;max-width:40ch;padding:0 24px;color:rgba(247,239,224,.65);font:400 15px/1.6 'IBM Plex Sans',sans-serif}
+.sq-index{width:100%;margin:0 0 16px;padding:15px 0 0;border-top:1px solid rgba(243,234,217,.18);display:grid;gap:0}
+.sq-index-item{display:grid;grid-template-columns:24px minmax(0,1fr);gap:12px;align-items:baseline;min-height:38px;width:100%;padding:8px 0;border:0;background:none;text-align:left;color:rgba(247,239,224,.65);font:400 15px/1.4 'IBM Plex Sans',sans-serif;cursor:pointer;transition:color .15s}
+.sq-index-number{font-size:11px;font-variant-numeric:tabular-nums;color:rgba(247,239,224,.45)}
+.sq-index-item.active{color:#f7efe0}
+.sq-index-item.active .sq-index-number{color:#e8a84c}
+.sq-index-item:hover{color:#fff}
+.sq-index-item:focus-visible{outline:2px solid #e8a84c;outline-offset:3px}
+.sq-info>#sq-position{font-size:12px;margin:0;color:rgba(247,239,224,.55)}
 .sq-series{max-width:980px;margin:36px auto 0;padding:24px 28px 0;border-top:1px solid rgba(243,234,217,.16);color:#f7efe0}
 .sq-series h4{margin:0 0 18px;font:600 22px/1.2 'Fraunces',Georgia,serif}
 .sq-series ul{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:0;padding:0}
@@ -4982,16 +4852,6 @@ footer.app-footer {
 .sq-col-chip:hover{color:#f7efe0;border-color:rgba(232,200,160,.45)}
 .sq-col-chip.active{background:rgba(232,168,76,.14);border-color:rgba(232,168,76,.6);color:#f7e2b8}
 
-.sq-strip{display:flex;gap:10px;justify-content:center;margin:22px auto 0;max-width:1020px;padding:6px 28px 10px;overflow-x:auto;scrollbar-width:thin;scrollbar-color:rgba(232,168,76,.4) transparent}
-.sq-thumb{position:relative;flex:none;width:58px;aspect-ratio:2/3;border-radius:9px;overflow:hidden;cursor:pointer;opacity:.4;
-  outline:2px solid transparent;outline-offset:2px;transition:all .25s;padding:0;border:none;background:#1a120a}
-.sq-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.sq-thumb:hover{opacity:.85;transform:translateY(-3px)}
-.sq-thumb.active{opacity:1;outline-color:rgba(232,168,76,.75);transform:translateY(-4px) scale(1.05);box-shadow:0 12px 30px rgba(0,0,0,.5)}
-.sq-thumb.seen::after{content:'';position:absolute;inset:0;background:rgba(232,168,76,.18)}
-.sq-thumb.seen::before{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#f7e2b8;font-size:20px;z-index:2;font-weight:700}
-.sq-thumb.foryou::after{content:'♥';position:absolute;top:5px;right:6px;color:#e8a84c;font-size:11px}
-
 /* --- crew: el club recomienda --- */
 .sq-crew{max-width:1000px;margin:36px auto 0;padding:0 28px}
 .sq-crew-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
@@ -5004,7 +4864,7 @@ footer.app-footer {
 .sq-mode:hover{color:#f7efe0;border-color:rgba(232,200,160,.45)}
 .sq-mode.active{background:rgba(232,168,76,.15);border-color:rgba(232,168,76,.6);color:#f7e2b8}
 .sq-crew-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
-@media (max-width:900px){.sq-crew-cards{grid-template-columns:1fr}.sq-layout{grid-template-columns:minmax(0,1fr);gap:28px}.sq-poster-side{justify-content:center}.sq-info{display:flex;flex-direction:column;align-items:center}.sq-tagrow,.sq-actions{justify-content:center}}
+@media (max-width:900px){.sq-crew-cards{grid-template-columns:1fr}.sq-layout{grid-template-columns:minmax(0,1fr);gap:18px}.sq-poster-wrap{width:160px}.sq-head h3{font-size:28px}.sq-info h4{font-size:28px}.sq-info #sq-selected-work{width:100%;text-align:left}.sq-why{font-size:16px;line-height:1.6}.sq-meta{margin-bottom:12px}.sq-poster-side{justify-content:center}.sq-info{display:flex;flex-direction:column;align-items:center}.sq-tagrow,.sq-actions{justify-content:center}}
 .sq-review{position:relative;border:1px solid rgba(232,200,160,.16);border-radius:16px;padding:17px 19px;background:rgba(243,234,217,.05);
   opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.8,.2,1),border-color .3s}
 .sq-review.in{opacity:1;transform:none}
@@ -5910,24 +5770,10 @@ header.app-header.is-scrolled .nav-cta {
 }
 
 .side-quests-reveal .sq-curtain,
-.side-quests-reveal .sq-spotlight,
-.side-quests-reveal .sq-vignette,
-.side-quests-reveal .sq-grain,
-.side-quests-reveal .sq-flash,
-.side-quests-reveal .side-quests-close,
-.side-quests-reveal::before {
+.side-quests-reveal .side-quests-close {
   position: fixed;
 }
 
-/* The strip is wider than its box, and `center` on an overflowing flex row
-   pushes the first posters off the left edge where they can't be scrolled
-   to. `safe center` centers only while everything fits. */
-.sq-strip {
-  justify-content: center;
-  justify-content: safe center;
-  align-items: flex-start;
-  flex-shrink: 0;
-}
 
 /* The JobBot card links to its full case study: make that link read as the
    primary next step rather than one more pill. */
