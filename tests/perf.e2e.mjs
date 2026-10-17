@@ -101,20 +101,16 @@ try {
     await ctx.close();
   }
 
-  // 4. Agents tab: 3D/2D switch, remembered.
+  // 4. Agents stays lightweight: the legacy 3D lab is not embedded.
   {
     const ctx = await context(browser);
     const page = await ctx.newPage();
     await page.goto(`${base}/agents`, { waitUntil: 'load' });
     await page.waitForTimeout(1000);
-    check('3D view by default', await page.isVisible('#agents-3d') && !(await page.isVisible('#eco-viewport')));
-    check('3D view embeds the lab', (await page.getAttribute('#agents-3d iframe', 'src')) === '/lab?embed=1');
-    await page.click('[data-agents-view="2d"]');
-    await page.waitForTimeout(800);
-    check('2D shows the original graph', await page.isVisible('#eco-viewport') && await page.locator('#eco-graph-wrapper *').count() > 20);
-    await page.reload({ waitUntil: 'load' });
-    await page.waitForTimeout(800);
-    check('view choice is remembered', await page.isVisible('#eco-viewport'));
+    check('single Agents graph mounts', await page.isVisible('#eco-viewport'));
+    check('only the principal and five specialists are shown', await page.locator('#eco-graph-wrapper .eco-node').count() === 6);
+    check('Agents does not embed a 3D scene', await page.locator('#agents-section iframe').count() === 0);
+    check('tool explanation is available', await page.locator('#agents-tools-title').isVisible() || await page.locator('#agents-tools-title').count() === 1);
     await ctx.close();
   }
 

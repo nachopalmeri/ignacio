@@ -11,14 +11,14 @@
   <meta property="og:site_name" content="Ignacio Palmeri">
   <meta property="og:locale" content="es_AR">
   <meta property="og:title" content="Ignacio Palmeri - Junior AI Automation & Product Engineer">
-  <meta property="og:description" content="Construyo agentes de IA, bots y automatizaciones. 10 proyectos online con demo, tests en CI y mi sistema de agentes en 3D. Busco pasantía o rol trainee, en Buenos Aires o remoto.">
+  <meta property="og:description" content="Construyo agentes de IA, bots y automatizaciones. 10 proyectos online con demo, tests en CI y mi flujo de trabajo con IA. Busco pasantía o rol trainee, en Buenos Aires o remoto.">
   <meta property="og:image" content="https://ignaciopalmeri.dev/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Ignacio Palmeri: construyo agentes de IA, bots y automatizaciones. 10 proyectos online, tests en CI, sistema de agentes en 3D.">
+  <meta property="og:image:alt" content="Ignacio Palmeri: construyo agentes de IA, bots y automatizaciones. 10 proyectos online, tests en CI, flujo de trabajo con IA.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Ignacio Palmeri - Junior AI Automation & Product Engineer">
-  <meta name="twitter:description" content="Construyo agentes de IA, bots y automatizaciones. 10 proyectos online con demo, tests en CI y mi sistema de agentes en 3D.">
+  <meta name="twitter:description" content="Construyo agentes de IA, bots y automatizaciones. 10 proyectos online con demo, tests en CI y mi flujo de trabajo con IA.">
   <meta name="twitter:image" content="https://ignaciopalmeri.dev/og-image.jpg">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
@@ -670,35 +670,21 @@
     <div class="container">
       <div class="agents-intro" data-reveal="up">
         <div>
-          <p class="eyebrow" data-i18n="agents.eyebrow">Sistema real del repo</p>
+          <p class="eyebrow" data-i18n="agents.eyebrow">Mi forma de trabajar</p>
           <h2 data-i18n="agents.title">Sistema de trabajo</h2>
         </div>
         <p data-i18n="agents.description">Sistema local que uso para construir, revisar y documentar proyectos con asistentes de IA. No es un producto: es mi forma de trabajar con más orden, pruebas y contexto.</p>
       </div>
 
       <div class="agents-guide">
-        <p class="agents-guide-text" data-i18n="agents.guide">Cada nodo del grafo es un rol con instrucciones propias (planear, construir, revisar, testear, documentar). Resuelve el problema de perder contexto entre tareas: cada rol sabe qué hizo el anterior.</p>
+        <p class="agents-guide-text" data-i18n="agents.guide">Yo defino el objetivo y reviso el resultado. Gandalf representa al agente principal: trabaja directamente o delega una tarea acotada cuando aporta valor.</p>
         <p class="agents-guide-hint">
           <span class="agents-guide-cursor" aria-hidden="true"></span>
           <span data-i18n="agents.guideHint">Clickeá cualquier agente del grafo para ver su rol y simular un flujo documentado</span>
         </p>
-        <p class="agents-lab-cta">
-          <a class="btn btn-primary" href="/lab" data-i18n="agents.labCta">Abrir en pantalla completa</a>
-          <span data-i18n="agents.labNote">Abajo lo tenés en vivo: escribile un pedido al sistema y mirá a quién se lo da y por qué.</span>
-        </p>
       </div>
 
-      <!-- Two views of the same system: the 3D command center (/lab, embedded)
-           and the original 2D graph. The switch remembers the choice. -->
-      <div class="agents-view-switch" role="group" aria-label="Vista del sistema de agentes">
-        <button type="button" data-agents-view="3d" aria-pressed="true">3D</button>
-        <button type="button" data-agents-view="2d" aria-pressed="false">2D</button>
-      </div>
-      <div class="agents-3d" id="agents-3d">
-        <iframe src="/lab?embed=1" title="Centro de mando 3D del sistema de agentes" loading="lazy" allow="fullscreen"></iframe>
-      </div>
-
-      <div id="eco-viewport" hidden>
+      <div id="eco-viewport">
         <div class="eco-grid-bg"></div>
         <!-- Decorative: the links between agents are drawn here, but every agent
              is a real DOM node with its own accessible name below. -->
@@ -708,7 +694,7 @@
         <div id="eco-sub-universe"></div>
 
         <div id="eco-stats-badge" class="eco-stats-badge" data-i18n="agents.stats">
-          19 roles reales - Workflows documentados - Memoria local activa
+          Principal + 5 especialistas · según la tarea
         </div>
 
         <button id="eco-back-btn"><span>&larr;</span> <span data-i18n="agents.back">Volver a la red</span></button>
@@ -745,17 +731,26 @@
           <span data-i18n="agents.steps.test">Test</span>
           <span data-i18n="agents.steps.ship">Ship</span>
         </div>
-        <div class="workflow-cases">
-          <article><span>01</span><strong data-i18n="agents.workflow1.label">JobBot feature</strong></article>
-          <article><span>02</span><strong data-i18n="agents.workflow2.label">Portfolio verification</strong></article>
-          <article><span>03</span><strong data-i18n="agents.workflow3.label">README handoff</strong></article>
-        </div>
         <div id="eco-wfp" class="eco-wfp" aria-label="Workflow launcher">
           <div>
             <h3 data-i18n="agents.workflowsTitle">Workflows documentados</h3>
             <p data-i18n="agents.workflowsBody">Diagrama basado en archivos reales de ~/.agents. Visualiza rutas de trabajo; no ejecuta archivos markdown.</p>
           </div>
           <div id="eco-wf-list" class="wf-list" aria-label="Selected workflows"></div>
+        </div>
+      </section>
+
+      <section class="workflow-proof" aria-labelledby="agents-tools-title">
+        <div class="workflow-proof-copy">
+          <h3 id="agents-tools-title" data-i18n="agents.codeToolsTitle">Qué herramienta elijo</h3>
+          <p data-i18n="agents.codeToolsBody"></p>
+        </div>
+      </section>
+      <section class="workflow-proof" aria-labelledby="agents-learning-title">
+        <div class="workflow-proof-copy">
+          <h3 id="agents-learning-title" data-i18n="agents.learningTitle">Más no siempre es mejor</h3>
+          <p data-i18n="agents.learningBody"></p>
+          <p data-i18n="agents.learningAttribution"></p>
         </div>
       </section>
 

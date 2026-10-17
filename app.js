@@ -177,25 +177,30 @@ const UI_COPY = {
       exploreAgents: 'Explorar ecosistema'
     },
     agents: {
-      eyebrow: 'Sistema real del repo',
+      eyebrow: "Mi forma de trabajar",
       title: 'Sistema de trabajo',
       description: 'Sistema local que uso para construir, revisar y documentar con IA. Prioriza contexto, pruebas y decisiones claras.',
-      guide: 'Cada nodo del grafo es un rol con instrucciones propias (planear, construir, revisar, testear, documentar). Resuelve el problema de perder contexto entre tareas: cada rol sabe qué hizo el anterior.',
-      guideHint: 'Clickeá cualquier agente del grafo para ver su rol y simular un flujo documentado',
+      guide: "Yo defino el objetivo y reviso el resultado. Gandalf representa al agente principal: trabaja directamente o delega una tarea acotada cuando aporta valor.",
+      guideHint: "Elegí un personaje para explorar su función. Los recorridos son ilustrativos.",
       labCta: 'Abrir en pantalla completa',
       labNote: 'Abajo lo tenés en vivo: escribile un pedido al sistema y mirá a quién se lo da y por qué.',
-      workflowsTitle: 'Flujos de trabajo',
-      workflowsBody: 'Basado en archivos reales de ~/.agents.',
-      proofTitle: 'Flujo real',
-      proofBody: 'Tres rutas que uso para entregar mejor.',
+      workflowsTitle: "Recorridos ilustrativos",
+      workflowsBody: "Estas animaciones explican posibles recorridos entre los roles configurados. No ejecutan agentes ni demuestran una ejecución real.",
+      proofTitle: "Cómo organizo una tarea",
+      proofBody: "No convoco a todos por defecto. Elijo los roles según el alcance; revisar el resultado e integrar o publicar sigue siendo mi decisión.",
       workflow1: { label: 'JobBot feature', body: 'Plan, build, review y documentación.' },
       workflow2: { label: 'Portfolio verification', body: 'Playwright, mobile checks y localStorage.' },
       workflow3: { label: 'README handoff', body: 'Setup, diagramas y próximos pasos.' },
-      stats: '19 roles reales - Workflows documentados - Memoria local activa',
+      stats: 'Principal + 5 especialistas · según la tarea',
       back: 'Volver a la red',
       hint: 'Click en un agente para explorar - Simula una ruta documentada',
       stageIdle: 'Esperando workflow',
-      steps: { plan: 'Plan', build: 'Build', review: 'Review', test: 'Test', ship: 'Ship' }
+      steps: { plan: 'Plan', build: 'Build', review: 'Review', test: 'Test', ship: 'Ship' },
+      learningTitle: "Más no siempre es mejor",
+      learningBody: "Con tantas herramientas nuevas, me pasó de creer que más era mejor. Sumé agentes, reglas y contexto hasta preguntarme por qué se me iban los tokens en centrar un div. Leer AI Engineering me ayudó a reconocer la sobreingeniería: hoy empiezo por una tarea clara y sumo ayuda cuando tiene sentido.",
+      learningAttribution: "Aprendizaje personal a partir de AI Engineering, de Chip Huyen.",
+      codeToolsTitle: "Qué herramienta elijo",
+      codeToolsBody: "Uso Codex para programar, corregir e iterar; OpenCode para investigar y resolver tareas complejas; Orca para organizar el trabajo y aislar tareas en worktrees cuando conviene. Son entornos con funciones que se superponen, no tres especialistas del grafo.",
     },
     graph: {
       subnodes: 'sub-nodos',
@@ -203,8 +208,8 @@ const UI_COPY = {
       step: 'Paso',
       complete: 'COMPLETO',
       ready: 'Listo',
-      selfImproved: 'Automejora completada: sistema adaptado',
-      validated: 'Ecosistema visualizado: evidencia revisada',
+      selfImproved: 'Fin de la simulación',
+      validated: 'Ruta ilustrada; requiere revisión humana',
       system: 'Sistema'
     },
       contact: {
@@ -397,25 +402,30 @@ const UI_COPY = {
       exploreAgents: 'Explore ecosystem'
     },
     agents: {
-      eyebrow: 'Real repo system',
+      eyebrow: "How I work",
       title: 'Workflow system',
       description: 'A local system I use to build, review and document with AI.',
-      guide: 'Each node in the graph is a role with its own instructions (plan, build, review, test, document). It solves context loss between tasks: every role knows what the previous one did.',
-      guideHint: 'Click any agent in the graph to see its role and simulate a documented flow',
+      guide: "I define the goal and review the result. Gandalf represents the primary agent: it works directly or delegates a focused task when that helps.",
+      guideHint: "Choose a character to explore its role. Routes are illustrative.",
       labCta: 'Open full screen',
       labNote: 'It runs live below: send the system a request and see who gets it and why.',
-      workflowsTitle: 'Workflows',
-      workflowsBody: 'Based on real ~/.agents files.',
-      proofTitle: 'Real flow',
-      proofBody: 'Three routes I use to ship better.',
+      workflowsTitle: "Illustrative routes",
+      workflowsBody: "These animations explain possible routes between configured roles. They do not run agents or prove an actual execution.",
+      proofTitle: "How I organize a task",
+      proofBody: "I do not call every role by default. I choose roles for the scope; reviewing results and deciding whether to integrate or publish remain my responsibility.",
       workflow1: { label: 'JobBot feature', body: 'Plan, build, review and document.' },
       workflow2: { label: 'Portfolio verification', body: 'Playwright, mobile checks and localStorage.' },
       workflow3: { label: 'README handoff', body: 'Setup, diagrams and next steps.' },
-      stats: '19 real roles - Documented workflows - Local memory active',
+      stats: 'Primary + 5 specialists · chosen for the task',
       back: 'Back to graph',
       hint: 'Click an agent to inspect it - Simulate a route',
       stageIdle: 'Waiting for workflow',
-      steps: { plan: 'Plan', build: 'Build', review: 'Review', test: 'Test', ship: 'Ship' }
+      steps: { plan: 'Plan', build: 'Build', review: 'Review', test: 'Test', ship: 'Ship' },
+      learningTitle: "More is not always better",
+      learningBody: "With so many new tools, I started believing more was better. I added agents, rules and context until I wondered why centering a div consumed so many tokens. Reading AI Engineering helped me recognize overengineering: now I start with a clear task and add help when it makes sense.",
+      learningAttribution: "A personal lesson from reading AI Engineering by Chip Huyen.",
+      codeToolsTitle: "Choosing a tool",
+      codeToolsBody: "I use Codex to code, fix bugs and iterate; OpenCode for research and complex tasks; Orca to organize work and isolate tasks in worktrees when useful. These environments have overlapping functions; they are not three specialists in the graph.",
     },
     graph: {
       subnodes: 'sub-nodes',
@@ -423,8 +433,8 @@ const UI_COPY = {
       step: 'Step',
       complete: 'COMPLETE',
       ready: 'Ready',
-      selfImproved: 'Self-improvement complete: system adapted',
-      validated: 'Ecosystem visualized: evidence reviewed',
+      selfImproved: 'End of simulation',
+      validated: 'Illustrative route; human review required',
       system: 'System'
     },
       contact: {
@@ -2969,7 +2979,7 @@ const RECRUITER_AUDIENCES = {
       points: [
         ['{deployed} proyectos online, cada uno con demo pública y un video del producto funcionando.', '/projects', 'Ver proyectos'],
         ['Parte de problemas reales: FranquiYA nació de ver el stock y la recepción de mercadería en papel en el local donde trabaja.'],
-        ['Usa la IA como multiplicador: un sistema propio de 19 agentes para planear, construir, testear y revisar.', '/agents', 'Verlo en 3D'],
+        ['Trabaja con un agente principal y cinco especialistas cuando la tarea lo justifica.', '/agents', 'Ver el grafo'],
         ['Honesto con los números: ninguna métrica ni usuario inventado en todo el portfolio.']
       ],
       projects: ['jobbot', 'pisculichi', 'franquiya']
@@ -3004,7 +3014,7 @@ const RECRUITER_AUDIENCES = {
       points: [
         ['{deployed} projects online, each with a public demo and a video of the product working.', '/projects', 'See projects'],
         ['Starts from real problems: FranquiYA came from seeing stock and deliveries tracked on paper at the store where he works.'],
-        ['Uses AI as a multiplier: his own 19-agent system to plan, build, test and review.', '/agents', 'See it in 3D'],
+        ['Works with a primary agent and five specialists when the task warrants them.', '/agents', 'See the graph'],
         ['Honest with numbers: no invented metrics or users anywhere in the portfolio.']
       ],
       projects: ['jobbot', 'pisculichi', 'franquiya']
@@ -3508,143 +3518,53 @@ function initEcosystem() {
 
 function setupCurrentAgentPortfolioData() {
   const es = currentLang === 'es';
-  const g = {
-    director: es ? 'Ordena prioridades, define el siguiente paso y mantiene evidencia visible.' : 'Orders priorities, defines the next step and keeps evidence visible.',
-    architect: es ? 'Baja una idea a arquitectura simple: datos, API, UI, riesgos y despliegue.' : 'Turns an idea into simple architecture: data, API, UI, risks and deployment.',
-    mcp: es ? 'Evalúa herramientas, permisos e integraciones antes de sumarlas al flujo.' : 'Reviews tools, permissions and integrations before adding them to the workflow.',
-    researcher: es ? 'Investiga documentación y alternativas antes de proponer una implementación.' : 'Researches documentation and alternatives before proposing an implementation.',
-    design: es ? 'Cuida responsive, accesibilidad visual, motion y claridad de interfaz.' : 'Cares about responsive behavior, visual accessibility, motion and interface clarity.',
-    tests: es ? 'Cobertura, Playwright, regresión y evidencia verificable.' : 'Coverage, Playwright, regression and verifiable evidence.',
-    security: es ? 'Secretos, dependencias, permisos y publicación segura.' : 'Secrets, dependencies, permissions and safe publishing.',
-    docs: es ? 'Documentación técnica clara: README, guías, API docs y handoff.' : 'Clear technical documentation: README, guides, API docs and handoff.',
-    obsidian: es ? 'Memoria local, MOCs, notas y captura durable de conocimiento.' : 'Local memory, MOCs, notes and durable knowledge capture.',
-    product: es ? 'Define alcance, usuario, prueba mínima y próximos pasos concretos.' : 'Defines scope, user, minimum proof and concrete next steps.',
-    growth: es ? 'Ajusta posicionamiento, claridad de oferta y canales de búsqueda.' : 'Improves positioning, offer clarity and search channels.',
-    marketing: es ? 'Posicionamiento, GTM y research de audiencia.' : 'Positioning, GTM and audience research.',
-    content: es ? 'Contenido multiplataforma con voz propia y consistencia.' : 'Multi-platform content with a consistent voice.',
-    reviewer: es ? 'Revisión de código, riesgos y calidad antes de integrar cambios.' : 'Code review, risks and quality before merging changes.',
-    release: es ? 'Changelog, validación de instalación y publicación reproducible.' : 'Changelog, install validation and reproducible publishing.',
-    user: es ? 'Entrada externa y pedidos en lenguaje natural.' : 'External input and requests in natural language.',
-    rules: es ? 'Reglas globales, permisos y estilo del sistema.' : 'Global rules, permissions and system style.',
-    memory: es ? 'Notas locales para no perder decisiones, lecciones y patrones útiles.' : 'Local notes for preserving decisions, lessons and useful patterns.',
-    gate: es ? 'Criterios de validación y evidencia antes de cerrar una tarea.' : 'Validation criteria and evidence before closing a task.',
-    harness: es ? 'Captura correcciones y mejora el sistema con feedback.' : 'Captures corrections and improves the system with feedback.'
-  };
-
+  // Matches the five installed specialist contracts. Characters are visual
+  // identities; neither the graph nor its playback launches these agents.
+  const role = (id, name, character, avatarKey, desc, x, y, col, input, output, limit) => ({
+    ...agentNode(id, name, character, desc, x, y, col, [
+      sub(input, es ? 'entrada' : 'input'), sub(output, es ? 'resultado' : 'output'), sub(limit, es ? 'límite' : 'limit')
+    ]),
+    avatarKey, source: id === 'principal' ? 'AGENTS.md' : `.agents/agents/${id}.md`
+  });
   nodesData = [
-    agentNode('principal', es ? 'Plan' : 'Plan', 'workflow-planning', g.director, 50, 48, 'principal', [
-      sub('workflows/index.md', 'workflow'), sub('Agent Routing', 'workflow'), sub('validation.md', 'rules'), sub('session_checkpoint.md', 'memory'), sub('Release Manager', 'workflow'), sub('project_kickoff_lean.md', 'workflow')
-    ]),
-    agentNode('mcp', es ? 'Tools' : 'Tools', 'tooling-check', g.mcp, 50, 15, 'mcp', [
-      sub('mcp_catalog.md', 'workflow'), sub('mcp_adoption.md', 'workflow'), sub('mcp_security.md', 'rules'), sub('Tool Schemas', 'tool')
-    ]),
-    agentNode('architect', es ? 'Architecture' : 'Architecture', 'simple-architecture', g.architect, 67, 21, 'architect', [
-      sub('ai_production.md', 'workflow'), sub('Prompt Registry', 'memory'), sub('Evaluations', 'rules'), sub('Cost Control', 'rules'), sub('Tech Radar', 'rules')
-    ]),
-    agentNode('researcher', 'Researcher', 'agente-researcher.md', g.researcher, 81, 33, 'researcher', [
-      sub('Current Docs', 'tool'), sub('Library Research', 'workflow'), sub('Repo Grep', 'tool'), sub('Options Brief', 'memory')
-    ]),
-    agentNode('design', 'Designer', 'agente-design.md', g.design, 32, 24, 'design', [
-      sub('Responsive Gate', 'rules'), sub('AI Slop Test', 'rules'), sub('world-class-web.md', 'workflow'), sub('Accessibility Gate', 'rules')
-    ]),
-    agentNode('product', 'Product', 'product-scope', g.product, 18, 42, 'product', [
-      sub('venture_loop.md', 'workflow'), sub('MVP Scope', 'rules'), sub('Kill / Keep / Scale', 'rules'), sub('Product Evidence', 'memory')
-    ]),
-    agentNode('docs', 'Docs', 'agente-docs.md', g.docs, 22, 64, 'docs', [
-      sub('README', 'tool'), sub('API Docs', 'workflow'), sub('Changelog', 'memory'), sub('Handoff', 'workflow')
-    ]),
-    agentNode('tests', 'QA', 'agente-tests.md', g.tests, 40, 83, 'tests', [
-      sub('Playwright E2E', 'tool'), sub('Unit Tests', 'tool'), sub('Coverage', 'rules'), sub('Regression Evidence', 'memory')
-    ]),
-    agentNode('security', 'Security', 'agente-security-auditor.md', g.security, 63, 74, 'security', [
-      sub('Secret Scan', 'tool'), sub('mcp_security.md', 'workflow'), sub('Permission Boundaries', 'rules'), sub('Repo Safety', 'workflow')
-    ]),
-    agentNode('growth', 'Positioning', 'positioning', g.growth, 82, 60, 'growth', [
-      sub('seo_geo_growth.md', 'workflow'), sub('AEO / GEO', 'rules'), sub('Opportunity Map', 'memory'), sub('Programmatic SEO', 'workflow'), sub('SEO / Metadata', 'tool')
-    ]),
-    agentNode('marketing', 'Marketing', 'agente-marketing-strategist.md', g.marketing, 88, 70, 'marketing', [
-      sub('marketing.md', 'workflow'), sub('GTM', 'workflow'), sub('GO / NO-GO / PIVOT', 'rules'), sub('Audience Research', 'memory')
-    ]),
-    agentNode('content', 'X Content', 'agente-x-content-strategist.md', g.content, 75, 85, 'content', [
-      sub('x_content_system.md', 'workflow'), sub('LinkedIn', 'tool'), sub('Substack', 'tool'), sub('Authentic Voice', 'rules')
-    ]),
-    agentNode('reviewer', 'Review', 'code-review', g.reviewer, 46, 89, 'reviewer', [
-      sub('pr_code_review.md', 'workflow'), sub('Residual Risks', 'rules'), sub('Scope Check', 'rules'), sub('Review Verdict', 'memory'), sub('Simplify System', 'workflow')
-    ]),
-    agentNode('release', 'Ship', 'release-check', g.release, 28, 90, 'release', [
-      sub('pr_policy.md', 'workflow'), sub('Changelog', 'memory'), sub('Install Checks', 'tool'), sub('Release Checklist', 'rules')
-    ]),
-    systemNode('user', 'User', es ? 'Entrada externa' : 'External input', g.user, 'user', 92, 22, 'system', []),
-    systemNode('rules', 'AGENTS.md', es ? 'Reglas globales' : 'Global rules', g.rules, 'rules', 41, 38, 'system', [
-      sub('rules/*.md', 'rules'), sub('workflows/index.md', 'workflow'), sub('Permissions', 'rules'), sub('Chat-first', 'rules')
-    ]),
-    systemNode('memory', 'Memory', es ? 'Lessons / Notas / Tech Radar' : 'Lessons / Notes / Tech Radar', g.memory, 'memory', 42, 60, 'obsidian', [
-      sub('Local Lessons', 'memory'), sub('Global Lessons', 'memory'), sub('promote_lesson.md', 'workflow'), sub('developer_growth.md', 'memory'), sub('Obsidian Vault Sync', 'workflow')
-    ]),
-    systemNode('gate', 'Validation', 'validation.md', g.gate, 'gate', 58, 58, 'gate', [
-      sub('Evidence Levels', 'rules'), sub('Scope Check', 'workflow'), sub('Residual Risks', 'rules'), sub('Human Verdict', 'rules')
-    ]),
-    systemNode('harness', 'Harness', es ? 'Feedback loop' : 'Feedback loop', g.harness, 'harness', 50, 68, 'harness', [
-      sub('feedback_loop.md', 'workflow'), sub('Capture', 'workflow'), sub('Analyze', 'workflow'), sub('Promote Proposal', 'workflow')
-    ])
+    role('principal', 'Gandalf', es ? 'Agente principal' : 'Primary agent', 'principal',
+      es ? 'Recibe mi objetivo, conserva el contexto de la tarea y decide si hace falta delegar. En tareas simples trabaja directamente. Gandalf representa este rol; no es un servicio autónomo.' : 'Takes my goal, keeps the task context and decides whether delegation helps. Handles simple tasks directly. Gandalf represents this role, not an autonomous service.',
+      50, 48, 'principal', es ? 'Objetivo y contexto' : 'Goal and context', es ? 'Resultado y evidencia' : 'Result and evidence', es ? 'Yo apruebo integrar o publicar' : 'I approve integration or publishing'),
+    role('explorador', es ? 'Investigar' : 'Research', 'Elrond', 'researcher',
+      es ? 'Investiga documentación o recorre un repo desconocido. Devuelve fuentes, archivos y preguntas abiertas. No edita el código.' : 'Researches documentation or explores an unfamiliar repo. Returns sources, file references and open questions. Does not edit code.',
+      25, 27, 'researcher', es ? 'Pregunta acotada' : 'Focused question', es ? 'Fuentes y hallazgos' : 'Sources and findings', es ? 'Sólo lectura' : 'Read only'),
+    role('planner', es ? 'Planificar' : 'Plan', 'Aragorn', 'architect',
+      es ? 'Ordena tareas de varios pasos y analiza arquitectura, riesgos y verificación. Entrega un plan; no implementa los cambios.' : 'Structures multi-step tasks and examines architecture, risks and verification. Returns a plan; does not implement changes.',
+      74, 27, 'architect', es ? 'Objetivo y restricciones' : 'Goal and constraints', es ? 'Plan y riesgos' : 'Plan and risks', es ? 'Sin cambios de código' : 'No code edits'),
+    role('implementador', es ? 'Construir' : 'Build', 'Legolas', 'design',
+      es ? 'Implementa una parte definida del plan en los archivos asignados. Se usa para trabajo independiente cuando dividirlo aporta valor; el principal revisa el resultado.' : 'Implements a defined part of a plan within assigned files. Used for independent work when splitting it helps; the primary reviews the result.',
+      82, 57, 'design', es ? 'Plan y archivos asignados' : 'Plan and owned files', es ? 'Diff y checks' : 'Diff and checks', es ? 'No integra ni publica' : 'No integration or publishing'),
+    role('reviewer', es ? 'Revisar' : 'Review', 'Saruman', 'reviewer',
+      es ? 'Busca fallas en el diff y contrasta el cambio con el pedido. Devuelve hallazgos y riesgos, sin editar. Una revisión independiente se usa cuando el alcance o el riesgo la justifican.' : 'Looks for flaws in the diff and checks changes against the request. Returns findings and risks without editing. Independent review is used when scope or risk warrants it.',
+      50, 79, 'reviewer', es ? 'Diff y pedido' : 'Diff and request', es ? 'Hallazgos priorizados' : 'Prioritized findings', es ? 'Revisión, no aprobación humana' : 'Review, not human approval'),
+    role('verificador', es ? 'Verificar' : 'Verify', 'Sam', 'tests',
+      es ? 'Ejecuta tests, builds y checks relevantes. Informa qué pasó, qué falló y qué no se pudo comprobar. No modifica la implementación.' : 'Runs relevant tests, builds and checks. Reports what passed, what failed and what could not be verified. Does not modify the implementation.',
+      18, 57, 'tests', es ? 'Cambio y comandos' : 'Changes and commands', es ? 'Evidencia observable' : 'Observable evidence', es ? 'No edita la implementación' : 'No implementation edits')
   ];
-
-  linksData = [
-    link('user', 'principal', 'core'), link('rules', 'principal', 'core'), link('memory', 'principal', 'core'),
-    link('principal', 'architect', 'primary'), link('principal', 'design', 'primary'), link('principal', 'tests', 'primary'), link('principal', 'security', 'primary'),
-    link('principal', 'docs', 'primary'), link('principal', 'growth', 'secondary'), link('principal', 'mcp', 'secondary'),
-    link('principal', 'researcher', 'secondary'), link('principal', 'product', 'primary'), link('principal', 'reviewer', 'secondary'), link('principal', 'release', 'secondary'),
-    link('growth', 'marketing', 'primary'), link('marketing', 'content', 'primary'), link('product', 'marketing', 'secondary'), link('product', 'design', 'primary'),
-    link('docs', 'memory', 'secondary'), link('architect', 'researcher', 'primary'), link('mcp', 'security', 'primary'),
-    link('tests', 'gate', 'core'), link('security', 'gate', 'core'), link('reviewer', 'gate', 'secondary'), link('release', 'gate', 'secondary'),
-    link('gate', 'harness', 'core'), link('harness', 'memory', 'core')
-  ];
-
+  linksData = nodesData.filter(n => n.id !== 'principal').map(n => link('principal', n.id, 'primary'));
   workflowsData = [
-    workflow('feature', es ? 'Implementacion de feature' : 'Feature Implementation', false, es ? 'User -> Director -> Architect -> Design -> QA -> Security -> Validation' : 'User -> Director -> Architect -> Design -> QA -> Security -> Validation', [
-      step('user', 'principal', '[Intent]', es ? 'Leyendo pedido y seleccionando el workflow mínimo útil' : 'Parsing request and selecting the smallest useful workflow'),
-      step('principal', 'architect', '[Architecture]', es ? 'Definiendo profundidad técnica para la tarea' : 'Choosing technical depth for the task'),
-      step('architect', 'researcher', '[Docs]', es ? 'Verificando docs actuales y alternativas' : 'Checking current docs and alternatives'),
-      step('principal', 'design', '[UI]', es ? 'Refinando interacción responsive y estados visuales' : 'Refining responsive interaction and visual states'),
-      step('design', 'tests', '[QA path]', es ? 'Preparando superficie de validación visible' : 'Preparing user-facing validation surface'),
-      step('tests', 'security', '[Risk]', es ? 'Chequeando regresión, secretos y comportamiento riesgoso' : 'Checking regression, secrets and risky behavior'),
-      step('security', 'gate', '[Evidence]', es ? 'Enviando evidencia a validation.md' : 'Sending evidence to validation.md'),
-      step('gate', 'principal', '[Report]', es ? 'Reportando resultado verificado y riesgos residuales' : 'Reporting verified outcome and residual risks', '#10b981')
+    workflow('research', es ? 'Investigar' : 'Research', false, es ? 'Pregunta → exploración → síntesis para mi revisión' : 'Question → exploration → synthesis for my review', [
+      step('principal', 'explorador', es ? 'Pregunta' : 'Question', es ? 'El principal acota la pregunta y comparte sólo el contexto necesario.' : 'The primary narrows the question and shares only the required context.'),
+      step('explorador', 'principal', es ? 'Fuentes' : 'Sources', es ? 'El explorador devuelve fuentes y hallazgos. Yo reviso la síntesis y decido cómo seguir.' : 'The explorer returns sources and findings. I review the synthesis and decide what comes next.')
     ]),
-    workflow('validation', es ? 'Validation Gate' : 'Validation Gate', false, es ? 'Diff / tests / build / logs / screenshot -> reporte honesto' : 'Diff / tests / build / logs / screenshot -> honest report', [
-      step('principal', 'tests', '[Checks]', es ? 'Ejecutando verificación relevante para el cambio' : 'Running relevant verification for the change'),
-      step('tests', 'security', '[Risk]', es ? 'Revisando regresión y riesgos del cambio' : 'Reviewing regression and change risk'),
-      step('security', 'gate', '[Evidence]', es ? 'Consolidando evidencia en validation.md' : 'Consolidating evidence in validation.md'),
-      step('gate', 'principal', '[Report]', es ? 'Reportando resultado y limitaciones explícitas' : 'Reporting result and explicit limitations', '#10b981')
+    workflow('feature', es ? 'Desarrollar' : 'Develop', false, es ? 'Un cambio que justifica planificación y revisión' : 'A change that warrants planning and review', [
+      step('principal', 'planner', es ? 'Alcance' : 'Scope', es ? 'Defino el objetivo. El planner propone un plan y sus riesgos.' : 'I define the goal. The planner proposes a plan and its risks.'),
+      step('planner', 'principal', es ? 'Plan' : 'Plan', es ? 'El principal recibe el plan. Yo resuelvo las decisiones de alcance que hagan falta.' : 'The primary receives the plan. I resolve any scope decisions that need my input.'),
+      step('principal', 'implementador', es ? 'Construir' : 'Build', es ? 'Se asigna una parte independiente y sus archivos al implementador, si dividir el trabajo aporta valor.' : 'An independent part and its files are assigned to the implementer if splitting the work helps.'),
+      step('implementador', 'reviewer', es ? 'Criticar' : 'Critique', es ? 'Un reviewer busca fallas en el diff. Se elige esta revisión por el alcance del ejemplo, no para cualquier cambio.' : 'A reviewer looks for flaws in the diff. This example warrants review because of its scope; not every change needs it.'),
+      step('reviewer', 'verificador', es ? 'Comprobar' : 'Verify', es ? 'El verificador corre los checks relevantes y devuelve evidencia. Una falla vuelve a implementación.' : 'The verifier runs relevant checks and returns evidence. A failure goes back to implementation.'),
+      step('verificador', 'principal', es ? 'Revisar' : 'Review', es ? 'Recibo el diff y la evidencia para mi revisión final. Integrar o publicar requiere mi aprobación.' : 'I receive the diff and evidence for final review. Integration or publishing requires my approval.')
     ]),
-    workflow('learning-loop', es ? 'Harness Learning Loop' : 'Harness Learning Loop', true, es ? 'Corrección -> Harness -> Lessons -> Patrón -> promoción humana' : 'Correction -> Harness -> Lessons -> Pattern -> human promotion', [
-      step('user', 'principal', '[Correction]', es ? 'La corrección del usuario se convierte en señal de aprendizaje' : 'User correction becomes a learning signal'),
-      step('principal', 'harness', '[Watch]', es ? 'Harness detecta señal de routing, output, scope o calidad' : 'Harness detects routing, output, scope or quality signals'),
-      step('harness', 'memory', '[Capture]', es ? 'Guardando lesson local en markdown' : 'Writing local lesson to markdown', '#a855f7'),
-      step('memory', 'harness', '[Analyze]', es ? 'Buscando patrones repetidos y estado candidato' : 'Checking repeated patterns and candidate status', '#a855f7'),
-      step('harness', 'principal', '[Proposal]', es ? 'Preparando propuesta promote_lesson.md si hay evidencia' : 'Preparing promote_lesson.md proposal when evidence exists'),
-      step('principal', 'user', '[Human OK]', es ? 'La promoción global espera confirmación humana explícita' : 'Global promotion waits for explicit human confirmation', '#10b981')
-    ]),
-    workflow('review-loop', es ? 'Review Loop multiagente' : 'Multiagent Review Loop', true, es ? 'Crear -> Criticar -> Red Team -> Roadmap -> Re-evaluar' : 'Create -> Critique -> Red Team -> Roadmap -> Re-evaluate', [
-      step('principal', 'architect', '[Create]', es ? 'Borrador inicial con contexto real' : 'Drafting initial solution with real context'),
-      step('architect', 'reviewer', '[Critique]', es ? 'Buscando contradicciones, riesgos y falta de tests' : 'Finding contradictions, risks and missing tests'),
-      step('reviewer', 'security', '[Red Team]', es ? 'Atacando modos de falla y automatización insegura' : 'Attacking failure modes and unsafe automation', '#ef4444'),
-      step('security', 'reviewer', '[Simplify]', es ? 'Quitando proceso que no cambia el resultado' : 'Removing process that does not change the outcome'),
-      step('reviewer', 'principal', '[Roadmap]', es ? 'Devolviendo fases ejecutables y criterios de exito' : 'Returning executable phases and success criteria'),
-      step('principal', 'gate', '[Re-evaluate]', es ? 'Verificando si las criticas originales quedaron resueltas' : 'Checking whether original critiques are resolved')
-    ]),
-    workflow('obsidian-flow', es ? 'Obsidian Knowledge Sync' : 'Obsidian Knowledge Sync', false, es ? 'Decision -> Docs -> Obsidian Brain -> MOC / Retro / Lesson' : 'Decision -> Docs -> Obsidian Brain -> MOC / Retro / Lesson', [
-      step('principal', 'docs', '[Decision]', es ? 'Capturando decisión, retro o aprendizaje técnico' : 'Capturing decision, retro or technical learning'),
-      step('docs', 'memory', '[Vault]', es ? 'Eligiendo tipo de nota y ruta en Obsidian' : 'Choosing Obsidian note type and path'),
-      step('memory', 'principal', '[Handoff]', es ? 'Devolviendo ruta de nota y próxima acción' : 'Returning note path and next action', '#10b981')
-    ]),
-    workflow('parallel-agents', es ? 'Parallel Agents' : 'Parallel Agents', true, es ? 'Director -> tareas independientes -> revisión -> integración' : 'Director -> independent tasks -> review -> integration', [
-      step('principal', 'researcher', '[Research]', es ? 'Investigación independiente de opciones' : 'Independent options research'),
-      step('principal', 'design', '[Design]', es ? 'Exploración visual independiente' : 'Independent visual exploration'),
-      step('principal', 'security', '[Risk]', es ? 'Revisión de riesgos en paralelo' : 'Parallel risk review'),
-      step('reviewer', 'principal', '[Integrate]', es ? 'Integrando conclusiones con criterio humano' : 'Integrating conclusions with human judgment', '#10b981')
-    ]),
-    
+    workflow('review', es ? 'Revisar un cambio' : 'Review a change', false, es ? 'Crítica independiente + evidencia, si el riesgo lo justifica' : 'Independent critique + evidence when risk warrants it', [
+      step('principal', 'reviewer', es ? 'Diff' : 'Diff', es ? 'El reviewer recibe el diff y el pedido; busca contradicciones y modos de falla.' : 'The reviewer gets the diff and request, looking for contradictions and failure modes.'),
+      step('reviewer', 'verificador', es ? 'Checks' : 'Checks', es ? 'El verificador contrasta los hallazgos con pruebas y checks disponibles.' : 'The verifier checks findings against available tests and checks.'),
+      step('verificador', 'principal', es ? 'Evidencia' : 'Evidence', es ? 'El principal reúne hallazgos y evidencia. Yo decido si el cambio se integra.' : 'The primary gathers findings and evidence. I decide whether to integrate the change.')
+    ])
   ];
 }
 
@@ -3665,48 +3585,11 @@ function link(from, to, tier = 'secondary') {
 }
 
 function getNodeLayer(id) {
-  const core = new Set(['principal', 'rules', 'memory', 'gate', 'harness']);
-  const execution = new Set(['architect', 'design', 'product', 'docs', 'security', 'tests', 'growth']);
-  if (core.has(id)) return 'core';
-  if (execution.has(id)) return 'execution';
-  return 'specialist';
+  return id === 'principal' ? 'core' : 'execution';
 }
 
 function agentNode(id, name, role, desc, x, y, col, subs) {
-  const roleLabels = currentLang === 'es'
-    ? {
-      principal: 'PLAN / EVIDENCIA',
-      mcp: 'TOOLS / PERMISOS',
-      architect: 'API / DATOS / RIESGO',
-      researcher: 'RESEARCH / DOCS',
-      growth: 'POSICIONAMIENTO',
-      security: 'SEGURIDAD / AUDIT',
-      tests: 'TESTING / E2E / COVERAGE',
-      reviewer: 'REVISIÓN / CALIDAD',
-      docs: 'DOCUMENTACIÓN TÉCNICA',
-      product: 'PRODUCTO / MVP',
-      design: 'UI / VISUAL / CSS',
-      marketing: 'MARKETING / GTM',
-      content: 'CONTENIDO / PERSONAL BRAND',
-      release: 'PUBLICACIÓN'
-    }
-    : {
-      principal: 'PLANNING / EVIDENCE',
-      mcp: 'TOOLS / PERMISSIONS',
-      architect: 'API / DATA / RISK',
-      researcher: 'RESEARCH / DOCS',
-      growth: 'POSITIONING',
-      security: 'GUARDIAN / AUDIT',
-      tests: 'TESTING / E2E / COVERAGE',
-      reviewer: 'PR REVIEW / QUALITY',
-      docs: 'TECHNICAL DOCUMENTATION',
-      product: 'FOUNDER / MVP BUILDER',
-      design: 'UI / VISUAL / CSS',
-      marketing: 'MARKETING / GTM',
-      content: 'CONTENT / PERSONAL BRAND',
-      release: 'PUBLISHING'
-    };
-  return { id, type: 'agent', layer: getNodeLayer(id), name, role: roleLabels[id] || role, source: role, desc, x, y, col, subs };
+  return { id, type: 'agent', layer: getNodeLayer(id), name, role, desc, x, y, col, subs };
 }
 
 function systemNode(id, name, role, desc, icon, x, y, col, subs) {
@@ -3732,11 +3615,11 @@ function buildNodes() {
     
     let bubbleContent = '';
     if (node.type === 'agent') {
-      const avatar = AGENT_AVATARS[node.id];
-      const fallbackIcon = (AGENT_ICONS[node.id] || '').replace(/'/g, "\'").replace(/"/g, '&quot;');
+      const avatar = AGENT_AVATARS[node.avatarKey || node.id];
+      const fallbackIcon = (AGENT_ICONS[node.avatarKey || node.id] || '').replace(/'/g, "\'").replace(/"/g, '&quot;');
       const inner = avatar
         ? `<img src="${avatar}" alt="" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML='${fallbackIcon}'">`
-        : (AGENT_ICONS[node.id] || '');
+        : (AGENT_ICONS[node.avatarKey || node.id] || '');
       bubbleContent = `<div class="node-bubble" style="border-color:${col.c}33;">${inner}</div>`;
     } else {
       bubbleContent = `<div class="node-bubble" style="color:${col.c}; border-color:${col.c}33;">${SYSTEM_ICONS[node.icon]}</div>`;
@@ -4622,47 +4505,6 @@ function setupSideQuestAgents() {
   syncModes();
 }
 setupSideQuestAgents();
-
-
-// Agents tab: one place, two views of the same system. 3D is the command
-// center (/lab in an iframe); 2D is the original graph. The choice sticks.
-(function setupAgentsViewSwitch() {
-  const buttons = document.querySelectorAll('[data-agents-view]');
-  const lab = document.getElementById('agents-3d');
-  const graph = document.getElementById('eco-viewport');
-  if (!buttons.length || !lab || !graph) return;
-  function show(view, init = true) {
-    const is2d = view === '2d';
-    lab.hidden = is2d;
-    graph.hidden = !is2d;
-    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.agentsView === view)));
-    if (is2d && init) {
-      window.dispatchEvent(new Event('resize'));
-      if (typeof initEcosystem === 'function') initEcosystem();
-    }
-    try { localStorage.setItem('agents-view', view); } catch (_e) {}
-  }
-  buttons.forEach((b) => b.addEventListener('click', () => show(b.dataset.agentsView)));
-  // The workflow launcher animates the 2D graph, so it brings that view up.
-  document.getElementById('eco-wf-list')?.addEventListener('click', () => {
-    if (graph.hidden) show('2d');
-    graph.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }, true);
-  let saved = '3d';
-  try { saved = localStorage.getItem('agents-view') || '3d'; } catch (_e) {}
-  // On load only set the view; the tab itself starts the graph when opened.
-  if (saved === '2d') show('2d', false);
-  // The lab reads the same saved language; reload it when the visitor
-  // switches ES/EN so the embedded view follows.
-  document.addEventListener('click', (event) => {
-    if (!event.target.closest('[data-lang-btn]')) return;
-    setTimeout(() => {
-      const frame = lab.querySelector('iframe');
-      const want = `/lab?embed=1&lang=${currentLang}`;
-      if (frame && frame.getAttribute('src') !== want) frame.setAttribute('src', want);
-    }, 0);
-  });
-})();
 
 
 // "Copiar email": mailto links do nothing on machines without a mail app
