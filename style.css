@@ -6200,6 +6200,39 @@ header.app-header.is-scrolled .nav-cta {
 
 /* Colour grade: a heavy left/bottom falloff keeps the headline legible over
    any screen, plus a vignette so the wall reads as depth, not wallpaper. */
+.cine-light {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  --light-x: 76%;
+  --light-y: 36%;
+  background: radial-gradient(ellipse at var(--light-x) var(--light-y), rgba(52, 211, 153, 0.30), transparent 54%);
+}
+
+.cine-light canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.cine-light.is-ready canvas { opacity: 1; }
+.cine-light.is-ready { background: none; }
+
+.project-proof-points .project-result {
+  padding: 12px 14px;
+  border-left: 2px solid var(--accent-green-text);
+  background: color-mix(in srgb, var(--accent-green) 7%, var(--bg-card));
+}
+
+.project-proof-points .project-result dt { color: var(--accent-green-text); }
+.project-proof-points .project-result dd { color: var(--text-primary); }
+
+@media (prefers-reduced-motion: reduce) {
+  .cine-light canvas { transition: none; }
+}
+
 .cine-grade {
   position: absolute;
   inset: 0;

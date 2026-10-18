@@ -2454,7 +2454,7 @@ function renderProjectPreview(project, index, mode = 'active') {
         <dl class="project-proof-points">
           <div><dt>${currentLang === 'es' ? 'Problema' : 'Problem'}</dt><dd>${escapeHtml(projectField(project, 'problem'))}</dd></div>
           <div><dt>${currentLang === 'es' ? 'Rol' : 'Role'}</dt><dd>${escapeHtml(projectField(project, 'role'))}</dd></div>
-          <div><dt>${currentLang === 'es' ? 'Resultado' : 'Result'}</dt><dd>${escapeHtml(projectField(project, 'result'))}</dd></div>
+          <div class="project-result"><dt>${currentLang === 'es' ? 'Resultado' : 'Result'}</dt><dd>${escapeHtml(projectField(project, 'result'))}</dd></div>
           ${project.metrics ? `<div><dt>${currentLang === 'es' ? 'Métricas' : 'Metrics'}</dt><dd>${escapeHtml(projectField(project, 'metrics'))}</dd></div>` : ''}
         </dl>
         <div class="project-preview-tags">${project.stack.slice(0, 4).map(item => `<span>${escapeHtml(item)}</span>`).join('')}</div>
@@ -2782,6 +2782,108 @@ function probeHeroSmoothness(hero, running, sync) {
   requestAnimationFrame(frame);
 }
 
+// One low-resolution fragment pass adds light to the project wall. The CSS
+// glow remains when WebGL is unavailable, motion is reduced or the hero is lite.
+function setupHeroLight(hero, running) {
+  const canvas = hero.querySelector('[data-hero-light]');
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (!canvas || motion.matches || navigator.connection?.saveData) return () => {};
+  let gl;
+  try { gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: false, antialias: false, depth: false, stencil: false, powerPreference: 'low-power' }); } catch (_e) {}
+  if (!gl) return () => {};
+  const shaders = [];
+  let program;
+  let buffer;
+  let frame = 0;
+  let last = 0;
+  let elapsed = 0;
+  let lost = false;
+  let disposed = false;
+  const compile = (type, source) => {
+    const shader = gl.createShader(type);
+    if (!shader) throw new Error('Shader unavailable');
+    shaders.push(shader);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) throw new Error('Shader compilation failed');
+    return shader;
+  };
+  const dispose = () => {
+    disposed = true;
+    cancelAnimationFrame(frame);
+    frame = 0;
+    canvas.parentElement.classList.remove('is-ready');
+    if (buffer) gl.deleteBuffer(buffer);
+    if (program) gl.deleteProgram(program);
+    shaders.forEach((shader) => gl.deleteShader(shader));
+  };
+  try {
+    const vertex = compile(gl.VERTEX_SHADER, `attribute vec2 position;
+      varying vec2 uv;
+      void main() { uv = position * 0.5 + 0.5; gl_Position = vec4(position, 0.0, 1.0); }`);
+    const fragment = compile(gl.FRAGMENT_SHADER, `precision mediump float;
+      varying vec2 uv;
+      uniform float time;
+      uniform vec2 pointer;
+      void main() {
+        vec2 p = uv;
+        float center = pointer.x + 0.025 * sin(time * 0.18);
+        float bend = 0.12 * sin(p.y * 3.0 + time * 0.24);
+        float distance = (p.x - center - bend + (p.y - pointer.y) * 0.30);
+        float beam = exp(-distance * distance * 36.0);
+        float halo = exp(-distance * distance * 5.0) * 0.28;
+        float folds = 0.78 + 0.22 * sin(p.y * 8.0 + p.x * 5.0 - time * 0.28);
+        float vertical = exp(-pow((p.y - pointer.y) * 1.8, 2.0));
+        float mask = vertical * smoothstep(0.0, 0.12, p.y);
+        float strength = (beam * folds + halo) * mask;
+        vec3 color = mix(vec3(0.025, 0.40, 0.30), vec3(0.23, 0.88, 0.64), beam);
+        gl_FragColor = vec4(color, strength * 0.36);
+      }`);
+    program = gl.createProgram();
+    gl.attachShader(program, vertex);
+    gl.attachShader(program, fragment);
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error('Shader link failed');
+    gl.useProgram(program);
+    buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
+    const position = gl.getAttribLocation(program, 'position');
+    gl.enableVertexAttribArray(position);
+    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+    const time = gl.getUniformLocation(program, 'time');
+    const pointer = gl.getUniformLocation(program, 'pointer');
+    const draw = (stamp) => {
+      frame = 0;
+      if (disposed || lost || !running() || motion.matches || hero.classList.contains('is-lite')) { last = 0; return; }
+      frame = requestAnimationFrame(draw);
+      if (last && stamp - last < 1000 / 30) return;
+      elapsed += last ? Math.min(stamp - last, 100) / 1000 : 0;
+      last = stamp;
+      const scale = Math.min(0.65, 960 / Math.max(1, hero.clientWidth));
+      const width = Math.max(1, Math.round(hero.clientWidth * scale));
+      const height = Math.max(1, Math.round(hero.clientHeight * scale));
+      if (canvas.width !== width || canvas.height !== height) { canvas.width = width; canvas.height = height; gl.viewport(0, 0, width, height); }
+      gl.uniform1f(time, elapsed);
+      const light = canvas.parentElement;
+      const x = parseFloat(light.style.getPropertyValue('--light-x'));
+      const y = parseFloat(light.style.getPropertyValue('--light-y'));
+      gl.uniform2f(pointer, Number.isFinite(x) ? x / 100 : 0.76, Number.isFinite(y) ? 1 - y / 100 : 0.64);
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+      canvas.parentElement.classList.add('is-ready');
+    };
+    const sync = () => {
+      const active = !disposed && !lost && running() && !motion.matches && !hero.classList.contains('is-lite');
+      if (!active) { cancelAnimationFrame(frame); frame = 0; last = 0; canvas.parentElement.classList.remove('is-ready'); }
+      else if (!frame) frame = requestAnimationFrame(draw);
+    };
+    canvas.addEventListener('webglcontextlost', () => { lost = true; cancelAnimationFrame(frame); frame = 0; canvas.parentElement.classList.remove('is-ready'); });
+    motion.addEventListener('change', sync);
+    window.addEventListener('pagehide', (event) => { if (!event.persisted) dispose(); });
+    return sync;
+  } catch (_e) { dispose(); return () => {}; }
+}
+
 function setupCineHero() {
   const hero = document.querySelector('[data-cine-hero]');
   const wall = hero?.querySelector('[data-cine-wall]');
@@ -2797,12 +2899,14 @@ function setupCineHero() {
   const introPlaying = () => /\bintro-(on|pending)\b/.test(document.documentElement.className);
   const running = () => visible && !reduceMotion && document.visibilityState === 'visible'
     && document.getElementById('overview-section')?.classList.contains('active') && !sideQuestsOpen() && !introPlaying();
+  const syncLight = setupHeroLight(hero, running);
 
   // One switch for everything that moves: CSS drift, the preview videos and
   // the spotlight timer all stop when nobody can see them.
   function sync() {
     const on = running();
     hero.classList.toggle('is-paused', !on);
+    syncLight();
     const lite = hero.classList.contains('is-lite');
     hero.querySelectorAll('video').forEach((v) => { if (on && !lite) v.play().catch(() => {}); else v.pause(); });
     if (on && !spotlightTimer) {
@@ -2847,11 +2951,16 @@ function setupCineHero() {
         const rect = hero.getBoundingClientRect();
         hero.style.setProperty('--mx', ((event.clientX - rect.left) / rect.width - 0.5).toFixed(3));
         hero.style.setProperty('--my', ((event.clientY - rect.top) / rect.height - 0.5).toFixed(3));
+        const light = hero.querySelector('.cine-light');
+        light?.style.setProperty('--light-x', `${Math.max(0, Math.min(100, (event.clientX - rect.left) / rect.width * 100)).toFixed(2)}%`);
+        light?.style.setProperty('--light-y', `${Math.max(0, Math.min(100, (event.clientY - rect.top) / rect.height * 100)).toFixed(2)}%`);
       });
     });
     hero.addEventListener('pointerleave', () => {
       hero.style.setProperty('--mx', '0');
       hero.style.setProperty('--my', '0');
+      hero.querySelector('.cine-light')?.style.removeProperty('--light-x');
+      hero.querySelector('.cine-light')?.style.removeProperty('--light-y');
     });
   }
 
