@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-
 *, *::before, *::after {
   margin: 0;
   padding: 0;
@@ -6048,8 +6046,8 @@ header.app-header.is-scrolled .nav-cta {
   --my: 0;
   --out: 0;
   --cine-ink: #f6f3ec;
-  --cine-dim: rgba(246, 243, 236, 0.72);
-  --cine-accent: #34d399;
+  --cine-dim: rgba(246, 243, 236, 0.92);
+  --cine-accent: #a7f3d0;
   position: relative;
   isolation: isolate;
   display: grid;
@@ -6326,7 +6324,7 @@ header.app-header.is-scrolled .nav-cta {
   font-style: italic;
   font-weight: 500;
   font-variation-settings: normal;
-  color: var(--cine-accent);
+  color: #d1fae5;
 }
 
 .cine-kicker {
@@ -6491,7 +6489,7 @@ header.app-header.is-scrolled .nav-cta {
   font: 600 11px/1 'IBM Plex Sans', system-ui, sans-serif;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(246, 243, 236, 0.5);
+  color: rgba(246, 243, 236, 0.88);
   text-decoration: none;
   opacity: calc(1 - var(--out) * 3);
 }
@@ -7112,15 +7110,50 @@ header.app-header.is-scrolled .nav-cta {
 }
 
 /* Lite hero (see probeHeroSmoothness): one still picture of the wall instead
-   of 40 moving screens in 3D. Only downloaded when the class applies. */
+   of the moving screens. html.hero-lite is set before first paint on phones
+   so the still is the LCP image, not a background requested after JS. */
+.cine-still {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+html.hero-lite .cine-wall,
 .cine-hero.is-lite .cine-wall { display: none; }
+html.hero-lite .cine-still,
+.cine-hero.is-lite .cine-still { display: block; }
+html.hero-lite .cine-stage,
 .cine-hero.is-lite .cine-stage {
   background: #0a0a0c url("project-assets/hero-wall.webp") center / cover no-repeat;
 }
+html.hero-lite .cine-stage { background-image: url("project-assets/hero-wall-m.webp"); }
 
 @media (max-width: 900px) {
   .cine-hero.is-lite .cine-stage { background-image: url("project-assets/hero-wall-m.webp"); }
 }
+
+.experience-list { list-style: none; display: grid; gap: 18px; margin: 8px 0 0; padding: 0; }
+.experience-item { padding: 18px 20px; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-card); }
+.experience-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; margin-bottom: 8px; }
+.experience-row span { color: var(--text-muted); font-size: 14px; }
+.experience-item p { margin: 0; color: var(--text-secondary); line-height: 1.5; }
+
+.hackathons-section { margin-bottom: 48px; }
+.hackathon-list { display: grid; gap: 16px; }
+.hackathon-card {
+  display: grid; gap: 8px; padding: 18px 20px; border-radius: 16px;
+  border: 1px solid var(--border); background: var(--bg-card); color: inherit; text-decoration: none;
+}
+.hackathon-kicker { display: flex; gap: 8px; align-items: center; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+.hackathon-winner { padding: 2px 8px; border-radius: 999px; background: #047857; color: #ecfdf5; letter-spacing: 0; text-transform: none; font-size: 12px; }
+.hackathon-card strong { font-size: 22px; }
+.hackathon-card p { margin: 0; color: var(--text-secondary); line-height: 1.5; }
+.hackathon-result { color: var(--text-primary); }
+.hackathon-links { display: flex; flex-wrap: wrap; gap: 12px; }
+.hackathon-links a { font-weight: 700; color: var(--accent-green-text); text-decoration: none; }
+.hackathon-links a:hover { text-decoration: underline; }
 
 .copy-email {
   padding: 4px 10px;
@@ -7178,7 +7211,7 @@ html.intro-pending body::after {
 .cine-replay {
   display: inline-flex; align-items: center; gap: 10px; min-height: 56px; padding: 0 6px;
   border: 0; background: none; color: var(--cine-ink); cursor: pointer; border-radius: 999px;
-  font: 600 15px/1.2 'IBM Plex Sans', system-ui, sans-serif; opacity: .82; transition: opacity .2s var(--ease);
+  font: 600 15px/1.2 'IBM Plex Sans', system-ui, sans-serif; opacity: 1; transition: opacity .2s var(--ease);
 }
 .cine-replay:hover, .cine-replay:focus-visible { opacity: 1; }
 .cine-replay-icon {

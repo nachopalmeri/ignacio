@@ -33,7 +33,9 @@ async function open(browser, options = {}) {
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: 'load' });
-  await page.waitForSelector('[data-cine-hero] .cine-tile');
+  const width = options.viewport?.width || 1280;
+  if (width >= 900) await page.waitForSelector('[data-cine-hero] .cine-tile');
+  else await page.waitForSelector('[data-cine-hero].is-lite .cine-still');
   return { context, page, errors };
 }
 
@@ -59,7 +61,7 @@ try {
     check('spotlight cycles', (await page.locator('[data-cine-now] strong').textContent()) !== first);
 
     await page.getByRole('button', { name: 'EN', exact: true }).click();
-    check('english description', (await page.locator('.cine-hero .hero-description').textContent()).includes('trainee role'));
+    check('english description', (await page.locator('.cine-hero .hero-description').textContent()).includes('Zentra'));
     check('english role word', ['automations', 'dashboards', 'bots', 'AI agents', 'APIs'].includes(await page.locator('#hero-role-word').textContent()));
     check('english caption', (await page.locator('.cine-now-label').textContent()) === 'Now showing');
 

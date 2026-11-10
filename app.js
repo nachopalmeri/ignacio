@@ -14,13 +14,13 @@ const UI_COPY = {
       replayFirst: 'Ver el video (1 min)',
       replayAgain: 'Ver el video de nuevo',
       trustLive: '{deployed} proyectos online',
-      trustRole: 'Busco pasantía o trainee',
+      trustRole: 'En Zentra desde nov 2026',
       trustPlace: 'Buenos Aires o remoto',
       scrollCue: 'Deslizá',
       rolePrefix: 'Construyo',
-      availability: 'Disponible para pasantías y roles trainee',
+      availability: 'IT, Web & SEO/GEO en Zentra',
       kicker: 'Estudiante de Gestión IT. Construyo herramientas desplegadas con Python, FastAPI, automatización de procesos y asistentes de IA.',
-      description: 'Busco una pasantía o rol trainee donde pueda aportar criterio operativo, aprendizaje rápido y capacidad real de convertir procesos repetitivos en software útil.',
+      description: 'Trabajo en Zentra (IT, web y SEO/GEO) desde noviembre de 2026. Sigo construyendo herramientas desplegadas con Python, FastAPI y asistentes de IA.',
       contactCta: 'Contactame',
       cvCta: 'Descargar CV',
       projectsCta: 'Ver proyectos',
@@ -38,7 +38,7 @@ const UI_COPY = {
       kicker: 'Hecho para personas',
       title: 'Antes hacía caja e inventario.',
       sticker: 'Ahora lo automatizo.',
-      body: 'Trabajo en una franquicia de Grido desde octubre de 2024: caja, conciliaciones, inventario y auditorías de facturación. Ahí aprendí qué tareas se repiten todos los días, y empecé a construir herramientas para dejar de hacerlas a mano.',
+      body: 'Fui empleado en una franquicia de Grido cerca de dos años (oct 2024 – oct 2026): caja, conciliaciones, inventario y auditorías de facturación. Ahí aprendí qué tareas se repiten todos los días, y empecé a construir herramientas para dejar de hacerlas a mano. Desde noviembre de 2026 trabajo en Zentra.',
       film: 'Ver JobBot en acción',
       filmMeta: 'Demo real · menos de 1 minuto'
     },
@@ -63,13 +63,13 @@ const UI_COPY = {
       prompt: 'Comandos: about, skills, projects, agents, contact, whoami, log, clear',
       unknown: 'Comando no encontrado',
       help: 'Comandos: about, skills, projects, agents, contact, whoami, log, clear',
-      about: 'Ignacio Palmeri - estudiante de Gestión IT que combina experiencia operativa, producto y automatización para construir software útil.',
+      about: 'Ignacio Palmeri. Estudiante de Gestión IT. Desde noviembre de 2026, IT, web y SEO/GEO en Zentra. Antes, empleado en una franquicia de Grido.',
       skills: 'Python, FastAPI, TypeScript, SQL, Linux, Git, Playwright, automatización de procesos y desarrollo asistido por IA.',
       projects: 'Proyectos principales: JobBot, Agents System, Motor Estadístico Predictivo y Pisculichi Labs. El archivo completo tiene {total} proyectos, {deployed} con demo pública.',
       agents: 'Uso asistentes de IA como parte de un flujo ordenado: plan, construcción, revisión, pruebas, documentación y publicación.',
       contact: 'GitHub: @nachopalmeri | LinkedIn: in/ignaciopalmeri | Email: ignaciopalmeri1@gmail.com',
-      whoami: 'Ignacio Palmeri. Gestión de IT en UADE, Analista de Operaciones en Grido desde oct-2024. Construyo con Python, FastAPI e IA. Ni senior ni sorprendido de estar acá.',
-      log: 'oct-2024  grido      → caja, inventario y auditorías, la fricción real que me hizo automatizar\n2025      uade       → arranco Gestión de IT\nongoing   jobbot     → SaaS full-stack para búsqueda laboral, auth+webhooks+pagos\nongoing   portfolio  → este sitio, iterado en público con IA'
+      whoami: 'Ignacio Palmeri. Gestión de IT en UADE. Desde nov 2026, IT, Web & SEO/GEO en Zentra. Antes, empleado en una franquicia de Grido (cerca de dos años). Construyo con Python, FastAPI e IA.',
+      log: 'oct-2024  grido      → empleado en una franquicia: caja, inventario y auditorías\noct-2026  grido      → cierro esa etapa, cerca de dos años\nnov-2026  zentra     → IT, web y SEO/GEO (zentra.com.ar, Tiendanube)\n2025      uade       → arranco Gestión de IT\nongoing   portfolio  → este sitio, iterado en público con IA'
     },
     github: {
       eyebrow: 'Actividad verificable',
@@ -104,12 +104,12 @@ const UI_COPY = {
     },
     about: {
       title: 'Sobre mí',
-      p1: 'Estudio Gestión IT en UADE desde 2025 y estoy construyendo mi primera experiencia profesional en tecnología. Mezclo criterio de producto y contexto operativo para convertir procesos repetitivos en software útil.',
+      p1: 'Estudio Gestión IT en UADE desde 2025 y trabajo en Zentra desde noviembre de 2026 (IT, web y SEO/GEO). Mezclo criterio de producto y contexto operativo para convertir procesos repetitivos en software útil.',
       p2: 'Trabajo con Python, FastAPI, SQL, Linux, Git y asistentes de IA para construir dashboards, bots, automatizaciones y prototipos desplegados. Me importa más entregar trabajo revisable que parecer senior.',
-      p3: 'Desde octubre de 2024 trabajo como Analista de Operaciones en Grido, con caja, inventario y auditorías — presión real que me enseñó cómo se rompen los procesos en la práctica. Quiero llevar esa base a soporte IT, QA trainee, automatización o startups.'
+      p3: 'Antes fui empleado en una franquicia de Grido, cerca de dos años, con caja, inventario y auditorías. Esa presión me enseñó cómo se rompen los procesos. Hoy uso esa base en Zentra y en lo que sigo construyendo.'
     },
     recruiter: { trigger: '¿Poco tiempo? Resumen en 30 segundos' },
-    counters: { deployed: 'Proyectos con demo pública', certs: 'Certificaciones', stack: 'Tecnologías core', own: 'Código propio' },
+    counters: { deployed: 'Proyectos con demo pública', certs: 'Certificaciones', stack: 'Tecnologías core', own: 'En el flujo, con revisión propia' },
     flow: {
       eyebrow: 'Cómo trabajo',
       title: 'Un flujo, cinco pasos',
@@ -126,7 +126,7 @@ const UI_COPY = {
     ops: {
       eyebrow: 'Antes de programar',
       title: 'Contexto operativo',
-      body: 'Trabajé en el negocio familiar manejando caja, inventario y auditorías. Ahí aprendí cómo se rompen los procesos en la práctica, que es exactamente lo que hoy automatizo.',
+      body: 'Fui empleado en una franquicia de Grido durante cerca de dos años: caja, inventario y auditorías. Ahí aprendí cómo se rompen los procesos en la práctica, que es exactamente lo que hoy automatizo.',
       cash: {
         title: 'Caja diaria que tenía que cuadrar',
         body: 'Cierres con plata real de por medio: aprendí que un sistema que falla en silencio es peor que uno que no existe. Por eso hoy valido entradas y registro todo lo que corre.'
@@ -145,15 +145,35 @@ const UI_COPY = {
       cta: 'Ver credencial',
       rh: { title: 'RH124 / System Administrator', issuer: 'Red Hat' },
       cisco: { title: 'CCNA 1', issuer: 'Cisco Networking Academy' },
-      anthropic: { title: 'Claude Code in Action', issuer: 'Anthropic' }
+      anthropic: { title: 'Claude Code in Action', issuer: 'Curso · Anthropic' }
     },
     stack: { title: 'Stack y herramientas', core: 'Core técnico', product: 'Producto y operaciones', ai: 'IA aplicada' },
+    experience: {
+      eyebrow: 'Experiencia',
+      title: 'Dónde trabajo',
+      zentra: {
+        title: 'Zentra · IT, Web & SEO/GEO',
+        when: 'Nov 2026 – actualidad',
+        body: 'E-commerce de escritorios de pie y muebles ergonómicos (zentra.com.ar), en Tiendanube. Me ocupo de IT, del sitio y de SEO/GEO.'
+      },
+      grido: {
+        title: 'Franquicia Grido · empleado',
+        when: 'Oct 2024 – oct 2026',
+        body: 'Empleado en una franquicia, cerca de dos años: caja, conciliaciones, inventario y auditorías de facturación.'
+      }
+    },
+    hackathons: {
+      title: 'Hackathons',
+      body: 'Proyectos de hackathon. El premio se escribe solo si está confirmado.',
+      winner: 'Ganador',
+      team: 'Equipo'
+    },
     projects: {
       title: 'Proyectos destacados',
       archiveTitle: 'Archivo de proyectos',
       featuredBody: 'Un camino por todos los proyectos: producto, trabajo, analytics, comercio y lab.',
       roadmapHint: 'Seguí scrolleando para recorrer el camino',
-      archiveBody: 'El archivo completa el rango: CLI, deportes, comercio local y landings.',
+      archiveBody: 'El archivo completa el rango: CLI, deportes, comercio local, herramientas y landings. Los hackathons están arriba.',
       github: 'Ver GitHub',
       watchVideo: 'Ver video',
       status: { active: 'Activo', public: 'Público', demo: 'Demo', local: 'Local' },
@@ -209,8 +229,8 @@ const UI_COPY = {
     },
       contact: {
         eyebrow: 'Contacto',
-        title: '¿Buscás un trainee que ya entrega software?',
-        body: 'Estoy disponible para pasantía o rol trainee en Buenos Aires o remoto. Escribime y te respondo el mismo día.',
+        title: '¿Hablamos?',
+        body: 'Estoy en Zentra y escribo de vuelta el mismo día si me hablás por un proyecto o para conocernos.',
         copy: 'Copiar email',
         copied: '¡Copiado!'
       },
@@ -218,10 +238,10 @@ const UI_COPY = {
       sideQuests: { toggle: 'Side Quests', eyebrow: 'Fuera del código', heading: 'Side Quests', routeSummary: 'ver ruta técnica' },
       faq: {
         title: 'Preguntas frecuentes',
-        q1: { q: '¿Cómo pasaste de atender un local a programar?', a: 'Trabajando en el negocio familiar manejando caja, inventario y auditorías vi de cerca cómo se rompen los procesos manuales. Esa fricción real fue lo que me hizo empezar a estudiar Gestión de IT y a construir software para resolverla — no al revés.' },
+        q1: { q: '¿Cómo pasaste de atender un local a programar?', a: 'Como empleado en una franquicia de Grido, cerca de dos años, manejé caja, inventario y auditorías y vi de cerca cómo se rompen los procesos manuales. Esa fricción real fue lo que me hizo empezar a estudiar Gestión de IT y a construir software para resolverla.' },
         q2: { q: '¿Por qué certificaciones tan distintas (Red Hat, Cisco, IA)?', a: 'Porque quiero entender la pila completa, no solo la capa de arriba: RH124 me dio administración de sistemas Linux, CCNA me dio la base de redes y Claude Code in Action me dio un flujo serio para trabajar con IA sin perder criterio propio. Prefiero tener base antes de especializarme.' },
         q3: { q: '¿Cómo usás la IA sin que te termine reemplazando el criterio?', a: 'La uso en cada etapa de mi flujo (plan, build, review, test, documentación), igual que cualquier developer usa hoy su IDE o un linter. Pero decidir qué construir, revisar el diff buscando qué se rompe y probar el camino real en el navegador sigue siendo trabajo mío. Si algo falla, la responsabilidad es mía, no de la IA.' },
-        q4: { q: '¿Qué estás buscando ahora?', a: 'Una pasantía o rol trainee, en Buenos Aires o remoto, donde pueda seguir aprendiendo rápido y aportar el criterio operativo que traigo de caja, inventario y auditorías. Escribime directo — te respondo el mismo día.' }
+        q4: { q: '¿Qué estás haciendo ahora?', a: 'Estoy trabajando en Zentra, en IT, web y SEO/GEO. Si querés escribirme por un proyecto o para conocernos, te respondo el mismo día.' }
       }
   },
   en: {
@@ -234,13 +254,13 @@ const UI_COPY = {
       replayFirst: 'Watch the film (1 min)',
       replayAgain: 'Watch the film again',
       trustLive: '{deployed} live projects',
-      trustRole: 'Open to internship or trainee roles',
+      trustRole: 'At Zentra since Nov 2026',
       trustPlace: 'Buenos Aires or remote',
       scrollCue: 'Scroll',
       rolePrefix: 'Building',
-      availability: 'Available for internships and trainee roles',
+      availability: 'IT, Web & SEO/GEO at Zentra',
       kicker: 'IT Management student. I build deployed tools with Python, FastAPI, process automation and AI assistants.',
-      description: 'I am looking for an internship or trainee role where I can contribute operational judgment, fast learning and the ability to turn repetitive workflows into useful software.',
+      description: 'I work at Zentra (IT, web and SEO/GEO) since November 2026. I keep shipping deployed tools with Python, FastAPI and AI assistants.',
       contactCta: 'Get in touch',
       cvCta: 'Download CV',
       projectsCta: 'View projects',
@@ -258,7 +278,7 @@ const UI_COPY = {
       kicker: 'Built for people',
       title: 'I used to run the register and count stock.',
       sticker: 'Now I automate it.',
-      body: 'I have worked at a Grido franchise since October 2024: cash, reconciliations, inventory and billing audits. That is where I learned which tasks repeat every single day, and started building tools so nobody has to do them by hand.',
+      body: 'I was an employee at a Grido franchise for about two years (Oct 2024 – Oct 2026): cash, reconciliations, inventory and billing audits. That is where I learned which tasks repeat every single day, and started building tools so nobody has to do them by hand. Since November 2026 I work at Zentra.',
       film: 'Watch JobBot in action',
       filmMeta: 'Real demo · under a minute'
     },
@@ -283,13 +303,13 @@ const UI_COPY = {
       prompt: 'Commands: about, skills, projects, agents, contact, whoami, log, clear',
       unknown: 'Command not found',
       help: 'Commands: about, skills, projects, agents, contact, whoami, log, clear',
-      about: 'Ignacio Palmeri - IT Management student combining operations, product and automation to build useful software.',
+      about: 'Ignacio Palmeri. IT Management student. Since November 2026, IT, web and SEO/GEO at Zentra. Before that, an employee at a Grido franchise.',
       skills: 'Python, FastAPI, TypeScript, SQL, Linux, Git, Playwright, process automation and applied AI.',
       projects: 'Main projects: JobBot, Agents System, Sports Predictive Analytics Engine and Pisculichi Labs. The full archive has {total} projects, {deployed} with a public demo.',
       agents: 'I use AI assistants inside an ordered workflow: planning, building, review, tests, documentation and shipping.',
       contact: 'GitHub: @nachopalmeri | LinkedIn: in/ignaciopalmeri | Email: ignaciopalmeri1@gmail.com',
-      whoami: "Ignacio Palmeri. IT Management at UADE, Operations Analyst at Grido since oct-2024. I build with Python, FastAPI and AI. Not senior, not surprised to be here.",
-      log: 'oct-2024  grido      -> cash, inventory and audits, the real friction that got me automating\n2025      uade       -> started IT Management\nongoing   jobbot     -> full-stack job-search SaaS, auth+webhooks+payments\nongoing   portfolio  -> this site, iterated in public with AI'
+      whoami: 'Ignacio Palmeri. IT Management at UADE. Since Nov 2026, IT, Web & SEO/GEO at Zentra. Before that, an employee at a Grido franchise for about two years. I build with Python, FastAPI and AI.',
+      log: 'oct-2024  grido      -> employee at a franchise: cash, inventory and audits\noct-2026  grido      -> left after about two years\nnov-2026  zentra     -> IT, web and SEO/GEO (zentra.com.ar, Tiendanube)\n2025      uade       -> started IT Management\nongoing   portfolio  -> this site, iterated in public with AI'
     },
     github: {
       eyebrow: 'Verifiable activity',
@@ -324,12 +344,12 @@ const UI_COPY = {
     },
     about: {
       title: 'About me',
-      p1: 'I have been studying IT Management at UADE since 2025, building my first professional path in technology. I combine product judgment and operational context to turn repetitive processes into useful software.',
+      p1: 'I have been studying IT Management at UADE since 2025, and I have worked at Zentra since November 2026 (IT, web and SEO/GEO). I combine product judgment and operational context to turn repetitive processes into useful software.',
       p2: 'I work with Python, FastAPI, SQL, Linux, Git and AI assistants to build dashboards, bots, automations and deployed prototypes. I care more about shipping reviewable work than looking senior.',
-      p3: "Since October 2024 I have worked as an Operations Analyst at Grido, handling cash, inventory and audits — real pressure that taught me how processes actually break. I want to bring that base into IT support, QA trainee, automation or startups."
+      p3: 'Before Zentra I was an employee at a Grido franchise for about two years, handling cash, inventory and audits. That pressure taught me how processes actually break. I use that base at Zentra and in what I keep building.'
     },
     recruiter: { trigger: 'Short on time? 30-second summary' },
-    counters: { deployed: 'Projects with a public demo', certs: 'Certifications', stack: 'Core technologies', own: 'Own code' },
+    counters: { deployed: 'Projects with a public demo', certs: 'Certifications', stack: 'Core technologies', own: 'In the workflow, and I review it' },
     flow: {
       eyebrow: 'How I work',
       title: 'One flow, five steps',
@@ -346,7 +366,7 @@ const UI_COPY = {
     ops: {
       eyebrow: 'Before writing code',
       title: 'Operations background',
-      body: 'I worked in the family business handling the till, inventory and audits. That is where I learned how processes actually break - exactly what I automate today.',
+      body: 'I was an employee at a Grido franchise for about two years, handling the till, inventory and audits. That is where I learned how processes actually break, which is what I automate today.',
       cash: {
         title: 'A daily till that had to balance',
         body: 'Closing out with real money on the line taught me that a system failing silently is worse than no system at all. That is why I validate inputs and log everything that runs.'
@@ -365,15 +385,35 @@ const UI_COPY = {
       cta: 'View credential',
       rh: { title: 'RH124 / System Administrator', issuer: 'Red Hat' },
       cisco: { title: 'CCNA 1', issuer: 'Cisco Networking Academy' },
-      anthropic: { title: 'Claude Code in Action', issuer: 'Anthropic' }
+      anthropic: { title: 'Claude Code in Action', issuer: 'Curso · Anthropic' }
     },
     stack: { title: 'Stack and tools', core: 'Technical core', product: 'Product and operations', ai: 'Applied AI' },
+    experience: {
+      eyebrow: 'Experience',
+      title: 'Where I work',
+      zentra: {
+        title: 'Zentra · IT, Web & SEO/GEO',
+        when: 'Nov 2026 – present',
+        body: 'E-commerce for standing desks and ergonomic furniture (zentra.com.ar), on Tiendanube. I cover IT, the website and SEO/GEO.'
+      },
+      grido: {
+        title: 'Grido franchise · employee',
+        when: 'Oct 2024 – Oct 2026',
+        body: 'Employee at a franchise for about two years: cash, reconciliations, inventory and billing audits.'
+      }
+    },
+    hackathons: {
+      title: 'Hackathons',
+      body: 'Hackathon projects. A prize is written only when it is confirmed.',
+      winner: 'Winner',
+      team: 'Team'
+    },
     projects: {
       title: 'Featured projects',
       archiveTitle: 'Project archive',
       featuredBody: 'One path through every project: product, workflow systems, analytics, commerce and lab.',
       roadmapHint: 'Keep scrolling to travel the path',
-      archiveBody: 'The archive completes the range: CLI, sports, local commerce and landing pages.',
+      archiveBody: 'The archive completes the range: CLI, sports, local commerce, tools and landing pages. Hackathons are above.',
       github: 'View GitHub',
       watchVideo: 'Watch video',
       status: { active: 'Active', public: 'Public', demo: 'Demo', local: 'Local' },
@@ -429,8 +469,8 @@ const UI_COPY = {
     },
       contact: {
         eyebrow: 'Contact',
-        title: 'Looking for a trainee who already ships?',
-        body: 'Available for an internship or trainee role in Buenos Aires or remote. Write me and I reply the same day.',
+        title: 'Want to talk?',
+        body: 'I am at Zentra. Write me about a project or just to say hello and I reply the same day.',
         copy: 'Copy email',
         copied: 'Copied!'
       },
@@ -438,10 +478,10 @@ const UI_COPY = {
       sideQuests: { toggle: 'Side Quests', eyebrow: 'Beyond the code', heading: 'Side Quests', routeSummary: 'view technical route' },
       faq: {
         title: 'FAQ',
-        q1: { q: 'How did you go from working retail to programming?', a: 'Working at my family business handling cash, inventory and audits, I saw up close how manual processes break. That real friction is what pushed me to start studying IT Management and building software to fix it — not the other way around.' },
+        q1: { q: 'How did you go from working retail to programming?', a: 'As an employee at a Grido franchise for about two years, I handled cash, inventory and audits and saw up close how manual processes break. That friction is what pushed me to start studying IT Management and building software to fix it.' },
         q2: { q: 'Why such different certifications (Red Hat, Cisco, AI)?', a: 'Because I want to understand the whole stack, not just the top layer: RH124 gave me Linux system administration, CCNA gave me networking fundamentals, and Claude Code in Action gave me a real workflow for using AI without losing my own judgment. I prefer having a base before specializing.' },
         q3: { q: 'How do you use AI without it replacing your judgment?', a: "I use it at every stage of my workflow (plan, build, review, test, document), the same way any developer today uses their IDE or a linter. But deciding what to build, reviewing the diff for what breaks, and testing the real path in the browser is still my work. If something fails, that's on me, not the AI." },
-        q4: { q: 'What are you looking for right now?', a: "An internship or trainee role, in Buenos Aires or remote, where I can keep learning fast and bring the operational judgment I built handling cash, inventory and audits. Write me directly — I'll reply the same day." }
+        q4: { q: 'What are you doing right now?', a: "I work at Zentra, on IT, the website and SEO/GEO. If you want to write about a project or just to meet, I'll reply the same day." }
       }
   }
 };
@@ -501,8 +541,8 @@ function getCopy(path, lang = currentLang) {
 // means it has a public demo URL (Darter is private, Agents System is local).
 function projectStats() {
   return {
-    total: FEATURED_PROJECTS.length,
-    deployed: FEATURED_PROJECTS.filter((p) => /^https?:\/\//.test(p.href || '')).length
+    total: PORTFOLIO_PROJECTS.length,
+    deployed: PORTFOLIO_PROJECTS.filter((p) => /^https?:\/\//.test(p.href || '')).length
   };
 }
 
@@ -2374,6 +2414,164 @@ const FEATURED_PROJECTS = [
   }
 ];
 
+// Projects verified on public GitHub after the original archive. Hackathon
+// cards stay out of the cinematic wall (no screenshots) and render in
+// #hackathon-list. Results that are not public stay unstated.
+const MORE_PROJECTS = [
+  {
+    id: 'on-check',
+    hackathon: true,
+    winner: true,
+    title: 'onCheck',
+    repo: 'https://github.com/joacolasca/hackatwin-fondo-cheques',
+    href: 'https://hackatwin-fondo-cheques.vercel.app/',
+    status: 'LIVE',
+    kind: { es: 'Hackathon · equipo', en: 'Hackathon · team' },
+    description: {
+      es: 'Fondo on-chain de cheques para pymes sin aval. La IA puntúa el riesgo, el contrato cumple los topes y el inversor entra en ARGt. Lo armamos en 12 horas en HackaTwin (Twin Finance, Digital House), el 7 de noviembre de 2026.',
+      en: 'An on-chain fund of cheques for SMEs without guarantees. AI scores the risk, the smart contract enforces the caps and the investor enters in ARGt. Built in 12 hours at HackaTwin (Twin Finance, Digital House) on 7 November 2026.'
+    },
+    problem: {
+      es: 'Sin aval, una pyme no consigue descontar el cheque, y quien pone la plata no ve las reglas.',
+      en: 'Without a guarantee, an SME cannot get the cheque discounted, and the person putting up the money cannot see the rules.'
+    },
+    role: {
+      es: 'Equipo con @joacolasca_, @ramakwon_ y @faculasca. No es un proyecto solo mío.',
+      en: 'Team with @joacolasca_, @ramakwon_ and @faculasca. Not a solo project.'
+    },
+    result: {
+      es: 'Ganamos el track Blockchain, de Avalanche.',
+      en: 'We won the Blockchain track, by Avalanche.'
+    },
+    evidence: {
+      es: 'Demo en vivo y repo del equipo. El post está en x.com/nachoDev5/status/2120189010026905834.',
+      en: 'Live demo and the team repo. The post is at x.com/nachoDev5/status/2120189010026905834.'
+    },
+    stack: ['HackaTwin', 'ARGt', 'Avalanche', 'Vercel'],
+    metrics: null
+  },
+  {
+    id: 'beca-modular',
+    hackathon: true,
+    title: 'Beca Modular',
+    repo: 'https://github.com/nachopalmeri/beca-modular',
+    href: 'https://beca-clara.vercel.app/',
+    status: 'PUBLIC',
+    kind: { es: 'Hackathon · LABITCONF 2026', en: 'Hackathon · LABITCONF 2026' },
+    description: {
+      es: 'EduTrust / Beca Modular, track Inclusión Financiera del EDU HUB en LABITCONF 2026: complementos de beca que se pagarían por Lightning cuando el estudiante cumple un hito, con recibo verificable. El sitio es una propuesta con simulaciones: no recibe fondos ni conecta billeteras.',
+      en: 'EduTrust / Beca Modular, Financial Inclusion track at the LABITCONF 2026 EDU HUB: scholarship top-ups that would pay over Lightning when a student hits a milestone, with a verifiable receipt. The site is a proposal with simulations: it takes no funds and connects no wallets.'
+    },
+    problem: {
+      es: 'Mostrar un complemento de beca que se pueda seguir (pagado, devuelto, reservado) sin mover plata real en la demo.',
+      en: 'Show a scholarship top-up that can be followed (paid, returned, reserved) without moving real money in the demo.'
+    },
+    role: {
+      es: 'Repo público mío: simulador en sats, verificador de recibos BOLT11 y el sitio de la propuesta.',
+      en: 'My public repo: the sats simulator, the BOLT11 receipt checker and the proposal site.'
+    },
+    result: {
+      es: 'Participé. Sin premio.',
+      en: 'I took part. No prize.'
+    },
+    evidence: {
+      es: 'Repo nachopalmeri/beca-modular y el sitio beca-clara.vercel.app.',
+      en: 'Repo nachopalmeri/beca-modular and the site beca-clara.vercel.app.'
+    },
+    stack: ['JavaScript', 'Lightning', 'Vercel'],
+    metrics: null
+  },
+  {
+    id: 'worddock',
+    title: 'WordDock',
+    repo: 'https://github.com/nachopalmeri/vocabulary',
+    status: 'PUBLIC',
+    kind: { es: 'App nativa · Windows', en: 'Native app · Windows' },
+    description: {
+      es: 'Tarjeta de vocabulario y estante de portapapeles para Windows 11, en Rust y Win32. Vive en el área de notificación. El repo se llama vocabulary.',
+      en: 'A vocabulary card and clipboard shelf for Windows 11, in Rust and Win32. It lives in the notification area. The repo is named vocabulary.'
+    },
+    problem: {
+      es: 'Repasar vocabulario propio y recuperar lo último que copié, sin cuenta ni telemetría.',
+      en: 'Review my own vocabulary and get back what I just copied, with no account and no telemetry.'
+    },
+    role: {
+      es: 'App propia: UI nativa, colecciones, pronunciación offline y el estante de portapapeles.',
+      en: 'My own app: native UI, collections, offline pronunciation and the clipboard shelf.'
+    },
+    result: {
+      es: 'En desarrollo temprano. Todavía no hay instalador: se compila desde el repo.',
+      en: 'Early development. There is no installer yet: build it from the repo.'
+    },
+    evidence: {
+      es: 'Repo público nachopalmeri/vocabulary, licencia MIT.',
+      en: 'Public repo nachopalmeri/vocabulary, MIT license.'
+    },
+    stack: ['Rust', 'Win32', 'Windows 11'],
+    metrics: null
+  },
+  {
+    id: 'kindle-offline-kit',
+    title: 'Kindle Offline Kit',
+    repo: 'https://github.com/nachopalmeri/kindle-offline-kit',
+    status: 'PUBLIC',
+    kind: { es: 'Guía · Kindle', en: 'Guide · Kindle' },
+    description: {
+      es: 'Guía para configurar un Kindle con un agente en la PC (Claude Code o Codex) y leer EPUB y diccionarios sin Wi-Fi, sin instalar IA en el lector.',
+      en: 'A guide to set up a Kindle with an agent on the PC (Claude Code or Codex) and read EPUBs and dictionaries offline, without installing AI on the reader.'
+    },
+    problem: {
+      es: 'Leer en el tren sin Wi-Fi, conservando el lector de Amazon y los datos, sin copiar comandos de foros a ciegas.',
+      en: 'Read on the train without Wi-Fi, keeping the Amazon reader and the data, without blindly copying commands from forums.'
+    },
+    role: {
+      es: 'Escribí la guía, el runbook y el caso documentado. No es un jailbreak automático ni un binario.',
+      en: 'I wrote the guide, the runbook and the documented case. It is not an automatic jailbreak or a binary.'
+    },
+    result: {
+      es: 'Caso documentado: Paperwhite de 7 pulgadas, firmware 5.20.1, KOReader v2026.07.1. Una experiencia individual, no compatibilidad universal.',
+      en: 'Documented case: 7-inch Paperwhite, firmware 5.20.1, KOReader v2026.07.1. One device, not a universal compatibility claim.'
+    },
+    evidence: {
+      es: 'Repo público con README, AGENTS.md y el runbook.',
+      en: 'Public repo with the README, AGENTS.md and the runbook.'
+    },
+    stack: ['Markdown', 'KOReader', 'Kindle'],
+    metrics: null
+  },
+  {
+    id: 'cm',
+    title: 'Cm',
+    repo: 'https://github.com/nachopalmeri/Cm',
+    status: 'PUBLIC',
+    kind: { es: 'Sistema de contenido', en: 'Content system' },
+    description: {
+      es: 'Sistema para una marca personal: un pipeline de agentes que pasa de un brief semanal a piezas aprobadas, packs de TikTok y videos, con Telegram como interfaz de aprobación.',
+      en: 'A system for a personal brand: an agent pipeline that turns a weekly brief into approved pieces, TikTok packs and videos, with Telegram as the approval interface.'
+    },
+    problem: {
+      es: 'Pasar de un brief a piezas listas para revisar, sin publicarlas solas y sin perder el criterio de quien aprueba.',
+      en: 'Go from a brief to pieces ready for review, without publishing them on their own and without losing the approver’s judgment.'
+    },
+    role: {
+      es: 'Diseño y backend propios: API, agentes, bot de Telegram y generación de video. El README lo marca como privado de licencia.',
+      en: 'My own design and backend: API, agents, Telegram bot and video generation. The README marks the license as private.'
+    },
+    result: {
+      es: 'El README del repo reporta 141 tests pasando. No hay demo pública.',
+      en: 'The repo README reports 141 passing tests. There is no public demo.'
+    },
+    evidence: {
+      es: 'Repo público nachopalmeri/Cm (Python, FastAPI).',
+      en: 'Public repo nachopalmeri/Cm (Python, FastAPI).'
+    },
+    stack: ['Python', 'FastAPI', 'Telegram', 'pytest'],
+    metrics: null
+  }
+];
+
+const PORTFOLIO_PROJECTS = FEATURED_PROJECTS.concat(MORE_PROJECTS);
+
 // Internal hrefs are app routes (/agents); everything else opens in a new tab.
 function isInternalHref(href) {
   return typeof href === 'string' && href.startsWith('/') && !href.startsWith('//');
@@ -2414,6 +2612,9 @@ window.handleProjectMediaError = function handleProjectMediaError(img) {
 };
 
 function projectImage(project, index, variant = 'mission') {
+  if (!project.media) {
+    return projectMediaFallbackMarkup(project, projectField(project, 'kind'), projectField(project, 'kind'));
+  }
   const alt = `${project.title} screenshot`;
   const loading = variant === 'preview' && index === 0 ? 'eager' : 'lazy';
   const dataset = [
@@ -2462,7 +2663,7 @@ function renderProjectPreview(project, index, mode = 'active') {
           ${project.caseStudy ? `<a class="carousel-proof case-study-link" href="${project.caseStudy}">${escapeHtml(getCopy('projects.caseStudy'))}</a>` : ''}
           ${project.href ? `<a class="carousel-proof" href="${project.href}" ${isInternalHref(project.href) ? `data-route="${project.href.replace(/^\//, '')}"` : 'target="_blank" rel="noopener noreferrer"'}>${escapeHtml(getCopy('projects.open'))}</a>` : ''}
           ${project.repo ? `<a class="carousel-proof subtle" href="${project.repo}" target="_blank" rel="noopener noreferrer">${escapeHtml(getCopy('projects.repo'))}</a>` : ''}
-          <button type="button" class="carousel-proof subtle share-trigger" data-share-project="${project.id}">${escapeHtml(getCopy('projects.share'))}</button>
+          ${project.status === 'PRIVATE' ? '' : `<button type="button" class="carousel-proof subtle share-trigger" data-share-project="${project.id}">${escapeHtml(getCopy('projects.share'))}</button>`}
           ${project.video ? `<button type="button" class="carousel-proof subtle video-trigger" data-video-trigger="${project.video}">${escapeHtml(getCopy('projects.watchVideo'))}</button>` : ''}
         </div>
       </div>
@@ -2478,7 +2679,7 @@ document.addEventListener('click', async (event) => {
   if (!btn) return;
   event.preventDefault();
   event.stopPropagation();
-  const project = FEATURED_PROJECTS.find((proj) => proj.id === btn.dataset.shareProject);
+  const project = PORTFOLIO_PROJECTS.find((proj) => proj.id === btn.dataset.shareProject);
   if (!project) return;
   const url = `${window.location.origin}/p/${project.id}`;
   if (navigator.share && window.matchMedia('(pointer: coarse)').matches) {
@@ -2510,8 +2711,26 @@ function renderProjectCarousel() {
     `;
   }
 
+  const hackathonList = document.getElementById('hackathon-list');
+  if (hackathonList) {
+    hackathonList.innerHTML = PORTFOLIO_PROJECTS.filter((project) => project.hackathon).map((project) => {
+      const winner = project.winner ? `<span class="hackathon-winner">${escapeHtml(getCopy('hackathons.winner'))}</span>` : '';
+      const live = project.href ? `<a href="${project.href}" target="_blank" rel="noopener noreferrer">${escapeHtml(getCopy('projects.open'))}</a>` : '';
+      const repo = project.repo ? `<a href="${project.repo}" target="_blank" rel="noopener noreferrer">${escapeHtml(getCopy('projects.repo'))}</a>` : '';
+      return `
+      <article class="hackathon-card">
+        <span class="hackathon-kicker">${winner}<span>${escapeHtml(projectField(project, 'kind'))}</span></span>
+        <strong>${escapeHtml(project.title)}</strong>
+        <p>${escapeHtml(projectField(project, 'description'))}</p>
+        <p class="hackathon-role">${escapeHtml(projectField(project, 'role'))}</p>
+        <p class="hackathon-result">${escapeHtml(projectField(project, 'result'))}</p>
+        <div class="hackathon-links">${live}${repo}</div>
+      </article>`;
+    }).join('');
+  }
+
   if (archive) {
-    archive.innerHTML = FEATURED_PROJECTS.map((project, index) => {
+    archive.innerHTML = PORTFOLIO_PROJECTS.filter((project) => !project.hackathon).map((project, index) => {
       const tag = project.href ? 'a' : 'div';
       const hrefAttr = project.href ? ` href="${project.href}"` : '';
       const targetAttr = project.href && !isInternalHref(project.href) ? ' target="_blank" rel="noopener noreferrer"' : ` data-route="${(project.href || '').replace(/^\//, '')}"`;
@@ -2708,6 +2927,10 @@ function cineHost(project) {
 }
 
 function buildCineWall(wall) {
+  if (document.documentElement.classList.contains('hero-lite')) {
+    wall.innerHTML = '';
+    return;
+  }
   const projects = cineProjects();
   if (!projects.length) return;
   const reduceMotion = prefersReducedMotion();
@@ -2762,7 +2985,7 @@ function probeHeroSmoothness(hero, running, sync) {
   };
   let stored = null;
   try { stored = sessionStorage.getItem('hero-lite'); } catch (_e) {}
-  if (stored === '1' || navigator.connection?.saveData) { goLite(); return; }
+  if (document.documentElement.classList.contains('hero-lite') || stored === '1' || navigator.connection?.saveData) { goLite(); return; }
   if (stored === '0') return;
   const deltas = [];
   let last = 0;
@@ -3019,10 +3242,10 @@ const RECRUITER_SUMMARY = {
   es: {
     title: 'Ignacio Palmeri en 30 segundos',
     close: 'Cerrar',
-    seeks: 'Busca', seeksBody: 'Pasantía o rol trainee en desarrollo, automatización, QA o soporte IT. Buenos Aires o remoto.',
+    seeks: 'Ahora', seeksBody: 'IT, Web & SEO/GEO en Zentra (e-commerce en Tiendanube), desde noviembre de 2026.',
     availability: 'Disponibilidad', availabilityBody: 'Amplia, para programas de largo plazo. Estudia hasta diciembre de 2028 (egreso estimado).',
     education: 'Estudios', educationBody: 'Lic. en Gestión de Tecnología de la Información, UADE (2.º año, desde 2025).',
-    experience: 'Experiencia', experienceBody: 'Analista de Operaciones y Atención al Cliente en una franquicia Grido, desde octubre de 2024: caja, conciliaciones, inventario y auditoría de facturación.',
+    experience: 'Experiencia', experienceBody: 'Zentra desde nov 2026. Antes, empleado en una franquicia de Grido cerca de dos años (oct 2024 – oct 2026): caja, conciliaciones, inventario y auditoría de facturación.',
     projects: 'Tres proyectos para mirar',
     stack: 'Stack', certs: 'Certificaciones', languages: 'Idiomas', languagesBody: 'Español nativo · Inglés B1+ técnico',
     email: 'Enviar un email', cv: 'Descargar CV', full: 'Ver el portfolio completo',
@@ -3031,17 +3254,17 @@ const RECRUITER_SUMMARY = {
   en: {
     title: 'Ignacio Palmeri in 30 seconds',
     close: 'Close',
-    seeks: 'Looking for', seeksBody: 'An internship or trainee role in development, automation, QA or IT support. Buenos Aires or remote.',
+    seeks: 'Now', seeksBody: 'IT, Web & SEO/GEO at Zentra (Tiendanube e-commerce), since November 2026.',
     availability: 'Availability', availabilityBody: 'Broad, suited to long-term programs. Studying until December 2028 (expected graduation).',
     education: 'Education', educationBody: "Bachelor's in IT Management, UADE (2nd year, since 2025).",
-    experience: 'Experience', experienceBody: 'Operations & Customer Service Analyst at a Grido franchise since October 2024: cash, reconciliations, inventory and billing audits.',
+    experience: 'Experience', experienceBody: 'Zentra since Nov 2026. Before that, an employee at a Grido franchise for about two years (Oct 2024 – Oct 2026): cash, reconciliations, inventory and billing audits.',
     projects: 'Three projects to look at',
     stack: 'Stack', certs: 'Certifications', languages: 'Languages', languagesBody: 'Spanish (native) · English B1+ (technical)',
     email: 'Send an email', cv: 'Download CV', full: 'See the full portfolio',
     caseStudy: 'Case study', demo: 'Demo', code: 'Code'
   },
   stack: ['Python', 'FastAPI', 'Next.js', 'PostgreSQL', 'Linux', 'GitHub Actions', 'Playwright'],
-  certs: ['Red Hat RH124', 'Cisco CCNA 1', 'Anthropic · Claude Code in Action'],
+  certs: ['Red Hat RH124', 'Cisco CCNA 1', 'Curso · Claude Code in Action (Anthropic)'],
   projects: ['jobbot', 'franquiya', 'motor-estadistico']
 };
 
@@ -3054,11 +3277,11 @@ const RECRUITER_AUDIENCES = {
     share: 'Copiar link de este resumen', shared: '¡Link copiado!',
     shareHint: { hr: 'Para pasárselo al equipo técnico, elegí “Líder técnico” y copiá el link.', tech: 'Link directo a esta vista, para compartir internamente.', startup: 'Link directo a esta vista, para compartir con el equipo.' },
     hr: {
-      tab: 'RR.HH.', pitch: 'Busca su primera experiencia en tecnología. Trae trabajo de cara al cliente, responsabilidad con la caja y proyectos propios online.',
+      tab: 'RR.HH.', pitch: 'Trabaja en Zentra (IT, web y SEO/GEO) y antes fue empleado en una franquicia de Grido, cerca de dos años.',
       points: [
         ['Estudia Gestión de TI en UADE (2.º año) con promedio 8,2.', '/cv.pdf', 'Ver CV'],
-        ['Trabaja en atención al cliente y operaciones en una franquicia Grido: caja, conciliaciones e inventario.'],
-        ['Certificado en Red Hat RH124, Cisco CCNA 1 y Claude Code in Action (Anthropic).'],
+        ['Empleado en una franquicia de Grido cerca de dos años: caja, conciliaciones e inventario. Hoy está en Zentra.'],
+        ['Red Hat RH124, Cisco CCNA 1 y el curso Claude Code in Action (Anthropic).'],
         ['Todo lo que muestra se puede comprobar: demos online, código en GitHub y CV descargable.', 'https://github.com/nachopalmeri', 'GitHub']
       ],
       projects: ['jobbot', 'franquiya', 'motor-estadistico']
@@ -3077,7 +3300,7 @@ const RECRUITER_AUDIENCES = {
       tab: 'Startup', pitch: 'Le gusta llevar una idea a algo online y usable, rápido, y medir si sirve.',
       points: [
         ['{deployed} proyectos online, cada uno con demo pública y un video del producto funcionando.', '/projects', 'Ver proyectos'],
-        ['Parte de problemas reales: FranquiYA nació de ver el stock y la recepción de mercadería en papel en el local donde trabaja.'],
+        ['Parte de problemas reales: FranquiYA nació de ver el stock y la recepción de mercadería en papel en la franquicia donde trabajaba.'],
         ['Usa la IA como multiplicador: un sistema propio de 19 agentes para planear, construir, testear y revisar.', '/agents', 'Verlo en 3D'],
         ['Honesto con los números: ninguna métrica ni usuario inventado en todo el portfolio.']
       ],
@@ -3089,11 +3312,11 @@ const RECRUITER_AUDIENCES = {
     share: 'Copy a link to this summary', shared: 'Link copied!',
     shareHint: { hr: 'To forward it to the tech team, pick “Tech lead” and copy the link.', tech: 'A direct link to this view, to share internally.', startup: 'A direct link to this view, to share with the team.' },
     hr: {
-      tab: 'HR / Talent', pitch: 'Looking for a first role in tech. Brings customer-facing work, responsibility for cash handling and his own projects online.',
+      tab: 'HR / Talent', pitch: 'Works at Zentra (IT, web and SEO/GEO). Before that, an employee at a Grido franchise for about two years.',
       points: [
         ["Studies IT Management at UADE (2nd year), GPA 8.2/10.", '/cv-en.pdf', 'See CV'],
-        ['Works in customer service and operations at a Grido franchise: cash, reconciliations and inventory.'],
-        ['Certified in Red Hat RH124, Cisco CCNA 1 and Claude Code in Action (Anthropic).'],
+        ['Employee at a Grido franchise for about two years: cash, reconciliations and inventory. Now at Zentra.'],
+        ['Red Hat RH124, Cisco CCNA 1, and the Claude Code in Action course (Anthropic).'],
         ['Everything shown can be checked: live demos, code on GitHub and a downloadable CV.', 'https://github.com/nachopalmeri', 'GitHub']
       ],
       projects: ['jobbot', 'franquiya', 'motor-estadistico']
@@ -3112,7 +3335,7 @@ const RECRUITER_AUDIENCES = {
       tab: 'Startup', pitch: 'Likes taking an idea to something live and usable, fast, and measuring whether it works.',
       points: [
         ['{deployed} projects online, each with a public demo and a video of the product working.', '/projects', 'See projects'],
-        ['Starts from real problems: FranquiYA came from seeing stock and deliveries tracked on paper at the store where he works.'],
+        ['Starts from real problems: FranquiYA came from seeing stock and deliveries tracked on paper at the franchise where he worked.'],
         ['Uses AI as a multiplier: his own 19-agent system to plan, build, test and review.', '/agents', 'See it in 3D'],
         ['Honest with numbers: no invented metrics or users anywhere in the portfolio.']
       ],
@@ -3140,7 +3363,7 @@ function setupRecruiterSummary() {
       return `<li>${esc(text.replace('{deployed}', deployed))}${link}</li>`;
     }).join('');
     const projects = a.projects
-      .map((id) => FEATURED_PROJECTS.find((proj) => proj.id === id))
+      .map((id) => PORTFOLIO_PROJECTS.find((proj) => proj.id === id))
       .filter(Boolean)
       .map((proj) => {
         const links = [
@@ -3177,7 +3400,7 @@ function setupRecruiterSummary() {
           <div><h3 class="rs-sub">${esc(t.languages)}</h3><p>${esc(t.languagesBody)}</p></div>
         </div>
         <footer class="rs-actions">
-          <a class="btn btn-primary" href="mailto:ignaciopalmeri1@gmail.com?subject=${encodeURIComponent(en ? 'Internship / trainee role' : 'Pasantía / rol trainee')}">${esc(t.email)}</a>
+          <a class="btn btn-primary" href="mailto:ignaciopalmeri1@gmail.com?subject=${encodeURIComponent(en ? 'Hello Ignacio' : 'Hola Ignacio')}">${esc(t.email)}</a>
           <button type="button" class="btn btn-secondary" data-copy-email>${esc(getCopy('contact.copy'))}</button>
           <a class="btn btn-secondary" href="${en ? '/cv-en.pdf' : '/cv.pdf'}" download="${en ? 'Ignacio-Palmeri-CV-EN.pdf' : 'Ignacio-Palmeri-CV.pdf'}">${esc(t.cv)}</a>
           <a class="rs-social" href="https://www.linkedin.com/in/ignaciopalmeri/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
@@ -3352,7 +3575,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('popstate', () => handleRouting());
   handleRouting({ replace: true }); // Initial call
 
-  if (sharedProject && FEATURED_PROJECTS.some((proj) => proj.id === sharedProject)) {
+  if (sharedProject && PORTFOLIO_PROJECTS.some((proj) => proj.id === sharedProject)) {
     if (!document.getElementById('projects-section')?.classList.contains('active')) navigate('projects', { replace: true });
     setTimeout(() => {
       const row = document.querySelector(`#project-archive [data-project-id="${CSS.escape(sharedProject)}"]`);
@@ -4496,7 +4719,7 @@ function renderEcosystem(timestamp) {
       
       // Flow pill labels (V7 premium step markers)
       if (p.label) {
-        ctxOver.font = 'bold 10px "Space Grotesk", sans-serif';
+        ctxOver.font = 'bold 10px "IBM Plex Sans", sans-serif';
         const textWidth = ctxOver.measureText(p.label).width;
         const rectX = pt.x - textWidth / 2 - 8;
         const rectY = pt.y - 32;

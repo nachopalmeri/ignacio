@@ -115,7 +115,7 @@ async function main() {
       await page.getByRole('button', { name: 'EN', exact: true }).click();
       await page.waitForFunction(() => document.documentElement.lang === 'en');
       const englishHero = await page.locator('[data-i18n="hero.description"]').textContent();
-      if (!englishHero || !englishHero.includes('trainee role')) {
+      if (!englishHero || !englishHero.includes('Zentra')) {
         throw new Error(`unexpected English hero copy: ${englishHero}`);
       }
 
@@ -130,7 +130,7 @@ async function main() {
       await page.getByRole('button', { name: 'Proyectos' }).click();
       await page.waitForSelector('#projects-section.view-section.active');
       const archiveRows = await page.locator('#project-archive .archive-row').count();
-      if (archiveRows !== 11) throw new Error(`expected 11 archive rows, got ${archiveRows}`);
+      if (archiveRows !== 14) throw new Error(`expected 14 archive rows, got ${archiveRows}`);
       const archiveImages = await page.locator('#project-archive img').evaluateAll((images) =>
         images.map((img) => ({
           src: img.getAttribute('src'),
