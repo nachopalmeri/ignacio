@@ -68,7 +68,7 @@ const OG_HTML = `<!doctype html>
       </div>
     </div>
     <div class="bottom">
-      <span class="seek"><i></i>Busco pasantía o rol trainee · Buenos Aires o remoto</span>
+      <span class="seek"><i></i>IT, Web &amp; SEO/GEO en Zentra · Buenos Aires</span>
       <span class="url">ignaciopalmeri.dev</span>
     </div>
   </div>

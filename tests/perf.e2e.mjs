@@ -27,9 +27,13 @@ function check(name, ok, detail = '') {
   if (!ok) failures.push(name);
 }
 
-async function context(browser, options = {}, init) {
+async function context(browser, options = {}, init, allow = []) {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, locale: 'es-AR', ...options });
-  await ctx.route(/^https?:\/\/(?!127\.0\.0\.1)/, (route) => route.abort());
+  await ctx.route(/^https?:\/\/(?!127\.0\.0\.1)/, (route) => {
+    const url = route.request().url();
+    if (allow.some((pattern) => pattern.test(url))) return route.continue();
+    return route.abort();
+  });
   await ctx.route(/\/api\//, (route) => route.fulfill({ status: 503, body: '{}' }));
   if (init) await ctx.addInitScript(init);
   return ctx;
@@ -181,41 +185,60 @@ try {
     await ctx.close();
   }
 
-  // 9. Intro film: never forced on test browsers; ?intro=1 plays it, it can be
-  // skipped at any time, it is remembered, and the footer replays it.
+  // 9. Interactive intro (intro/player.js + the film iframe). Automated
+  // browsers never get it; ?intro=1 opens the player over the paused hero.
+  // GSAP is the one external the film needs; everything else stays offline.
   {
-    const ctx = await context(browser);
+    const ctx = await context(browser, {}, null, [/cdnjs\.cloudflare\.com\/ajax\/libs\/gsap\//]);
     const page = await ctx.newPage();
     const errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
+    const film = () => page.frames().find((frame) => frame.url().includes('/intro/interactive/'));
     await page.goto(`${base}/`, { waitUntil: 'load' });
     await page.waitForTimeout(500);
-    check('intro: not shown to automated browsers', !(await page.$('.intro')));
+    check('intro: not shown to automated browsers', !(await page.$('.intro-player')));
     await page.goto(`${base}/?intro=1`, { waitUntil: 'load' });
-    await page.waitForSelector('.intro .intro-win', { timeout: 5000 }).catch(() => {});
-    check('intro: ?intro=1 opens the window over the blurred site', await page.evaluate(() => !!document.querySelector('.intro-veil') && document.documentElement.classList.contains('intro-on') && document.querySelector('.cine-hero').classList.contains('is-paused')));
-    await page.keyboard.press('Enter');
-    await page.waitForTimeout(2500);
-    check('intro: the film runs', await page.evaluate(() => document.querySelector('.intro-win.is-playing') && document.querySelector('.cap.on') && document.querySelector('.cap').textContent.length > 3));
-    await page.click('.intro-skip');
-    await page.waitForTimeout(1300);
-    check('intro: skip opens the site', await page.evaluate(() => !document.querySelector('.intro') && !document.documentElement.classList.contains('intro-on') && !document.querySelector('[inert]')));
-    check('intro: remembered as seen', (await page.evaluate(() => localStorage.getItem('intro-seen'))) === '1');
+    await page.waitForSelector('.intro-player[open]', { timeout: 8000 });
+    check('intro: ?intro=1 opens the player over the paused site', await page.evaluate(() => document.documentElement.classList.contains('intro-on') && document.querySelector('.cine-hero').classList.contains('is-paused') && !!document.querySelector('.intro-player[open] iframe')));
+    const opened = film();
+    await opened.waitForSelector('#go-mute', { timeout: 10000 });
+    await opened.click('#go-mute');
+    await opened.waitForSelector('#hud .slug', { timeout: 8000 });
+    await page.waitForTimeout(600);
+    check('intro: the film runs', await opened.evaluate(() => !document.querySelector('#gate') && (document.querySelector('#hud .slug')?.textContent || '').length > 3));
+    await page.click('.intro-player-skip');
+    await page.waitForTimeout(400);
+    check('intro: skip opens the site', await page.evaluate(() => !document.querySelector('.intro-player') && !document.documentElement.classList.contains('intro-on') && !document.querySelector('[inert]')));
+    check('intro: remembered as seen', (await page.evaluate(() => localStorage.getItem('intro-interactive-v1-seen'))) === '1');
     await page.goto(`${base}/?intro=1`, { waitUntil: 'load' });
-    await page.waitForSelector('.intro', { timeout: 5000 }).catch(() => {});
-    check('intro: ?intro=1 replays it after it was seen', !!(await page.$('.intro')));
+    await page.waitForSelector('.intro-player[open]', { timeout: 8000 }).catch(() => {});
+    check('intro: ?intro=1 replays it after it was seen', !!(await page.$('.intro-player[open]')));
     await page.keyboard.press('Escape');
-    await page.waitForTimeout(1300);
-    check('intro: Escape skips', !(await page.$('.intro')));
-    // the end card: its button is on top of everything and takes you in
-    await page.goto(`${base}/?intro=1&introAt=53`, { waitUntil: 'load' });
-    await page.waitForSelector('.intro .intro-win', { timeout: 5000 }).catch(() => {});
-    await page.keyboard.press('Enter');
-    await page.waitForTimeout(2600);
-    check('intro: the end button is not covered', await page.evaluate(() => { const b = document.querySelector('.es-enter'); if (!b) return false; const r = b.getBoundingClientRect(); return b.contains(document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2)); }));
-    await page.click('.es-enter', { timeout: 3000 }).catch(() => {});
-    await page.waitForTimeout(1800);
-    check('intro: the end button opens the site', await page.evaluate(() => !document.querySelector('.intro') && !document.querySelector('[inert]')));
+    await page.waitForTimeout(400);
+    check('intro: Escape skips', !(await page.$('.intro-player')));
+    await page.goto(`${base}/?intro=1`, { waitUntil: 'load' });
+    await page.waitForSelector('.intro-player[open]', { timeout: 8000 });
+    const ending = film();
+    // Don't press play: that clock overwrites a seek. Drop the entry gate
+    // (the same node play() removes) and park the timeline on the end card.
+    await ending.waitForFunction(() => window.__tl && window.__tl.duration() > 20, null, { timeout: 10000 });
+    await ending.evaluate(() => {
+      document.querySelector('#gate')?.remove();
+      window.__tl.pause();
+      window.__tl.time(Math.max(0, window.__tl.duration() - 4));
+    });
+    await page.waitForTimeout(300);
+    check('intro: the end button is not covered', await ending.evaluate(() => {
+      const button = document.querySelector('.es-cta');
+      if (!button) return false;
+      const rect = button.getBoundingClientRect();
+      if (rect.width < 8 || rect.height < 8) return false;
+      const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      return !!hit && (hit === button || button.contains(hit));
+    }));
+    await ending.click('.es-cta');
+    await page.waitForFunction(() => !document.querySelector('.intro-player'), null, { timeout: 8000 }).catch(() => {});
+    check('intro: the end button opens the site', await page.evaluate(() => !document.querySelector('.intro-player') && !document.querySelector('[inert]')));
     check('intro: no page errors', errors.length === 0, errors.join(' | '));
     await ctx.close();
   }

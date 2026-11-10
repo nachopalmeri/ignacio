@@ -50,7 +50,7 @@ const COPY = {
       [46.2, 'Pero ya estoy *construyendo.*'],
       [49.4, '¿Construimos algo *juntos?*', 'big']
     ],
-    sub: 'Busco pasantía o rol trainee. Buenos Aires o remoto.',
+    sub: 'IT, web y SEO/GEO en Zentra. Buenos Aires.',
     enter: 'Entrar a la web', auto: (s) => `entrás solo en ${s}s`, autoPaused: 'en pausa',
     videos: 'Ver demos',
     credit: '♪ “You and Everyone”, Portrayal (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) · personaje generado a partir de mi foto, escenas dibujadas en código'
@@ -82,7 +82,7 @@ const COPY = {
       [46.2, 'But I’m already *building.*'],
       [49.4, 'Shall we build something *together?*', 'big']
     ],
-    sub: 'Looking for an internship or trainee role. Buenos Aires or remote.',
+    sub: 'IT, web and SEO/GEO at Zentra. Buenos Aires.',
     enter: 'Enter the site', auto: (s) => `opening in ${s}s`, autoPaused: 'paused',
     videos: 'Watch demos',
     credit: '♪ “You and Everyone”, Portrayal (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) · character generated from my photo, scenes drawn in code'

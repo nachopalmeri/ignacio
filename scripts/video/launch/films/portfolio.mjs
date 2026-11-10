@@ -156,7 +156,7 @@ export const film = {
         const end = endCard(L, {
           mark: '<span style="font:700 64px Inter;letter-spacing:-.04em;color:#05140e">IP</span>',
           markStyle: { background: 'linear-gradient(135deg,#6ee7b7,#10b981)' },
-          name: 'ignaciopalmeri<em>.dev</em>', nameSize: 120, url: 'Busco pasantía o rol trainee · Buenos Aires o remoto',
+          name: 'ignaciopalmeri<em>.dev</em>', nameSize: 120, url: 'IT, Web & SEO/GEO en Zentra · Buenos Aires',
           chips: ['Python', 'FastAPI', 'Playwright', 'Next.js', 'Agentes de IA'],
           credit: '<b style="color:var(--ink)">Ignacio Palmeri</b> · Estudiante de Gestión IT (UADE)'
         });
