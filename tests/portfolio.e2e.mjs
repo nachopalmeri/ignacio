@@ -139,7 +139,7 @@ async function main() {
           naturalHeight: img.naturalHeight
         }))
       );
-      if (archiveImages.length !== 11) throw new Error(`expected 11 archive images, got ${archiveImages.length}`);
+      if (archiveImages.length !== 14) throw new Error(`expected 14 archive images, got ${archiveImages.length}`);
       const brokenArchiveImage = archiveImages.find((image) => !image.complete || image.naturalWidth <= 0 || image.naturalHeight <= 0);
       if (brokenArchiveImage) throw new Error(`archive image did not load: ${JSON.stringify(brokenArchiveImage)}`);
       const bodyText = await page.locator('body').textContent();

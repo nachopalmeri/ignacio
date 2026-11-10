@@ -164,7 +164,7 @@ const UI_COPY = {
     },
     hackathons: {
       title: 'Hackathons',
-      body: 'Proyectos de hackathon. El premio se escribe solo si está confirmado.',
+      body: 'Dos eventos, con demo y repositorio.',
       winner: 'Ganador',
       team: 'Equipo'
     },
@@ -404,7 +404,7 @@ const UI_COPY = {
     },
     hackathons: {
       title: 'Hackathons',
-      body: 'Hackathon projects. A prize is written only when it is confirmed.',
+      body: 'Two events, each with a demo and a repository.',
       winner: 'Winner',
       team: 'Team'
     },
@@ -2423,9 +2423,20 @@ const MORE_PROJECTS = [
     hackathon: true,
     winner: true,
     title: 'onCheck',
+    media: 'project-assets/oncheck.webp',
     repo: 'https://github.com/joacolasca/hackatwin-fondo-cheques',
     href: 'https://hackatwin-fondo-cheques.vercel.app/',
     status: 'LIVE',
+    event: { es: 'HackaTwin', en: 'HackaTwin' },
+    when: { es: '7 nov 2026 · Digital House', en: '7 Nov 2026 · Digital House' },
+    line: {
+      es: 'Fondo on-chain de cheques para pymes sin aval.',
+      en: 'On-chain fund of cheques for SMEs without guarantees.'
+    },
+    outcome: {
+      es: 'Ganador · Track Blockchain (Avalanche)',
+      en: 'Winner · Blockchain track (Avalanche)'
+    },
     kind: { es: 'Hackathon · equipo', en: 'Hackathon · team' },
     description: {
       es: 'Fondo on-chain de cheques para pymes sin aval. La IA puntúa el riesgo, el contrato cumple los topes y el inversor entra en ARGt. Lo armamos en 12 horas en HackaTwin (Twin Finance, Digital House), el 7 de noviembre de 2026.',
@@ -2440,8 +2451,8 @@ const MORE_PROJECTS = [
       en: 'Team with @joacolasca_, @ramakwon_ and @faculasca. Not a solo project.'
     },
     result: {
-      es: 'Ganamos el track Blockchain, de Avalanche.',
-      en: 'We won the Blockchain track, by Avalanche.'
+      es: 'Ganador · Track Blockchain (Avalanche). Proyecto de equipo.',
+      en: 'Winner · Blockchain track (Avalanche). Team project.'
     },
     evidence: {
       es: 'Demo en vivo y repo del equipo. El post está en x.com/nachoDev5/status/2120189010026905834.',
@@ -2454,9 +2465,20 @@ const MORE_PROJECTS = [
     id: 'beca-modular',
     hackathon: true,
     title: 'Beca Modular',
+    media: 'project-assets/beca-modular.webp',
     repo: 'https://github.com/nachopalmeri/beca-modular',
     href: 'https://beca-clara.vercel.app/',
     status: 'PUBLIC',
+    event: { es: 'LABITCONF', en: 'LABITCONF' },
+    when: { es: '2026 · EDU HUB', en: '2026 · EDU HUB' },
+    line: {
+      es: 'Complementos de beca por hito, con recibo verificable.',
+      en: 'Scholarship top-ups by milestone, with a verifiable receipt.'
+    },
+    outcome: {
+      es: 'Participación · Track Inclusión Financiera',
+      en: 'Participation · Financial inclusion track'
+    },
     kind: { es: 'Hackathon · LABITCONF 2026', en: 'Hackathon · LABITCONF 2026' },
     description: {
       es: 'EduTrust / Beca Modular, track Inclusión Financiera del EDU HUB en LABITCONF 2026: complementos de beca que se pagarían por Lightning cuando el estudiante cumple un hito, con recibo verificable. El sitio es una propuesta con simulaciones: no recibe fondos ni conecta billeteras.',
@@ -2471,8 +2493,8 @@ const MORE_PROJECTS = [
       en: 'My public repo: the sats simulator, the BOLT11 receipt checker and the proposal site.'
     },
     result: {
-      es: 'Participé. Sin premio.',
-      en: 'I took part. No prize.'
+      es: 'Participación en LABITCONF 2026, track Inclusión Financiera.',
+      en: 'Participation at LABITCONF 2026, financial inclusion track.'
     },
     evidence: {
       es: 'Repo nachopalmeri/beca-modular y el sitio beca-clara.vercel.app.',
@@ -2484,6 +2506,7 @@ const MORE_PROJECTS = [
   {
     id: 'worddock',
     title: 'WordDock',
+    media: 'project-assets/worddock.webp',
     repo: 'https://github.com/nachopalmeri/vocabulary',
     status: 'PUBLIC',
     kind: { es: 'App nativa · Windows', en: 'Native app · Windows' },
@@ -2513,6 +2536,7 @@ const MORE_PROJECTS = [
   {
     id: 'kindle-offline-kit',
     title: 'Kindle Offline Kit',
+    media: 'project-assets/kindle-offline-kit.webp',
     repo: 'https://github.com/nachopalmeri/kindle-offline-kit',
     status: 'PUBLIC',
     kind: { es: 'Guía · Kindle', en: 'Guide · Kindle' },
@@ -2542,6 +2566,7 @@ const MORE_PROJECTS = [
   {
     id: 'cm',
     title: 'Cm',
+    media: 'project-assets/cm.webp',
     repo: 'https://github.com/nachopalmeri/Cm',
     status: 'PUBLIC',
     kind: { es: 'Sistema de contenido', en: 'Content system' },
@@ -2714,17 +2739,18 @@ function renderProjectCarousel() {
   const hackathonList = document.getElementById('hackathon-list');
   if (hackathonList) {
     hackathonList.innerHTML = PORTFOLIO_PROJECTS.filter((project) => project.hackathon).map((project) => {
-      const winner = project.winner ? `<span class="hackathon-winner">${escapeHtml(getCopy('hackathons.winner'))}</span>` : '';
       const live = project.href ? `<a href="${project.href}" target="_blank" rel="noopener noreferrer">${escapeHtml(getCopy('projects.open'))}</a>` : '';
       const repo = project.repo ? `<a href="${project.repo}" target="_blank" rel="noopener noreferrer">${escapeHtml(getCopy('projects.repo'))}</a>` : '';
       return `
-      <article class="hackathon-card">
-        <span class="hackathon-kicker">${winner}<span>${escapeHtml(projectField(project, 'kind'))}</span></span>
-        <strong>${escapeHtml(project.title)}</strong>
-        <p>${escapeHtml(projectField(project, 'description'))}</p>
-        <p class="hackathon-role">${escapeHtml(projectField(project, 'role'))}</p>
-        <p class="hackathon-result">${escapeHtml(projectField(project, 'result'))}</p>
-        <div class="hackathon-links">${live}${repo}</div>
+      <article class="hackathon-card${project.winner ? ' is-win' : ''}">
+        <img src="${escapeHtml(project.media)}" alt="" width="320" height="200">
+        <div class="hackathon-copy">
+          <p class="hackathon-event">${escapeHtml(projectField(project, 'event'))} <span>${escapeHtml(projectField(project, 'when'))}</span></p>
+          <h3>${escapeHtml(project.title)}</h3>
+          <p class="hackathon-line">${escapeHtml(projectField(project, 'line'))}</p>
+          <p class="hackathon-outcome">${escapeHtml(projectField(project, 'outcome'))}</p>
+          <div class="hackathon-links">${live}${repo}</div>
+        </div>
       </article>`;
     }).join('');
   }
